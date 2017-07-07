@@ -1,8 +1,10 @@
 package controllers
 
 import javax.inject._
+
 import play.api._
 import play.api.mvc._
+import play.filters.headers.SecurityHeadersFilter
 
 /**
  * This controller creates an `Action` to handle HTTP requests to the
@@ -18,7 +20,8 @@ class HomeController @Inject()(cc: ControllerComponents) extends AbstractControl
    * will be called when the application receives a `GET` request with
    * a path of `/`.
    */
-  def index() = Action { implicit request: Request[AnyContent] =>
-    Ok(views.html.index())
+  def index() = Action {
+    implicit request: Request[AnyContent] => Ok(views.html.index()).withHeaders(SecurityHeadersFilter
+      .CONTENT_SECURITY_POLICY_HEADER -> " .fontawesome.com .fonts.googleapis.com")
   }
 }

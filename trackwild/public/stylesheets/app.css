@@ -41,6 +41,7 @@ a {
     background-color: rgba(22, 116, 141, .7);
     color: white;
     border-bottom: 5px solid white;
+    font-family: 'Ubuntu', sans-serif;
 }
 
 .navbar-brand {
@@ -54,7 +55,7 @@ h1 {
 }
 
 h3 {
-    font-family: 'Lato';
+    font-family: 'Ubuntu', sans-serif;
 }
 
 .icon-bar {
