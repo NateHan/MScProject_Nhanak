@@ -3,8 +3,12 @@
 # https://www.playframework.com/documentation/latest/ScalaRouting
 # ~~~~
 
-# An example controller showing a sample home page
+# The controller for the default landing home page
 GET     /                           controllers.HomeController.index
+
+# The controller for the login and register page
+
+GET     /loginreg                           controllers.LoginRegController.loadLogin
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
