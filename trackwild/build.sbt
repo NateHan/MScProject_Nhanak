@@ -15,7 +15,10 @@ libraryDependencies += guice
 libraryDependencies ++= Seq(
   "org.scalatestplus.play" %% "scalatestplus-play" % "3.0.0" % Test,
   guice,
-  "org.webjars" % "bootstrap" % "3.3.7"
+  "org.webjars" % "bootstrap" % "3.3.7",
+  //DB drivers
+  javaJdbc,
+  "org.postgresql" % "postgresql" % "42.1.1"
 )
 
 // Adds additional packages into Twirl
