@@ -1,8 +1,9 @@
 @(activeTab : String)
 
 @isActive( liText: String ) = @{
-        if ( liText.equals(activeTab) ) "class=\"active\""  else ""
-    }
+
+        if ( liText.equals(activeTab) ) <li class="active"/> else <li/>
+}
 
 {
 
@@ -21,12 +22,12 @@
             </div>
             <div class="collapse navbar-collapse" id="navlinks">
                 <ul class="nav navbar-nav">
-                    <li @isActive("home") ><a href="#">Home</a></li>
-                    <li @isActive("about") ><a href="#">About</a></li>
-                    <li @isActive("contact") ><a href="#">Contact</a></li>
+                    @isActive("home") <a href="#">Home</a></li>
+                    @isActive("about") <a href="#">About</a></li>
+                    @isActive("contact") <a href="#">Contact</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li @isActive("login") ><a href="#">Login &#124; Register</a></li>
+                    @isActive("login") <a href="#">Login &#124; Register</a></li>
                 </ul>
             </div>
         </div>
