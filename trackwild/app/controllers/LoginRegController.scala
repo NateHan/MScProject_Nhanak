@@ -2,7 +2,7 @@ package controllers
 
 import javax.inject.{Inject, Singleton}
 
-import models.forms.UserLoginForm
+import models.forms.UserLoginData
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.mvc.{AbstractController, AnyContent, ControllerComponents, Request}
@@ -22,20 +22,25 @@ class LoginRegController @Inject()(cc: ControllerComponents) extends AbstractCon
     * a path of `/`.
     */
   def loadLogin() = Action {
-    implicit request: Request[AnyContent] => Ok(views.html.loginreg()).withHeaders(SecurityHeadersFilter
+    implicit request: Request[AnyContent] => Ok(views.html.login(loginform)).withHeaders(SecurityHeadersFilter
       .CONTENT_SECURITY_POLICY_HEADER -> " .fontawesome.com .fonts.googleapis.com")
   }
 
-}
-
-object LoginRegController {
-
-  val createloginform = Form(
+  val loginform: Form[UserLoginData] = Form(
     mapping(
-      "email" -> text,
-      "password" -> text,
-      "rememberlogin" -> boolean
-    )(UserLoginForm.apply)(UserLoginForm.unapply)
+      "inputEmail" -> nonEmptyText,
+      "inputPassword" -> nonEmptyText,
+      "rememberLogin" -> boolean
+    )(UserLoginData.apply)(UserLoginData.unapply)
   )
 
+  def attemptLogin() = Action {
+    implicit request: Request[AnyContent] =>
+      val userData : UserLoginData = loginform.bindFromRequest().get
+      OK(views.html.success)
+  }
+
+
+
 }
+
