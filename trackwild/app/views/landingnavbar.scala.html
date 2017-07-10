@@ -1,10 +1,11 @@
 @(activeTab: String)
 
+
 @isActive(liText: String) = @{
     if(liText.equals(activeTab)) "active" else "inactive"
 }
 
-    {
+
 
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
@@ -26,10 +27,8 @@
                 <li class="@isActive("contact")"><a href="#">Contact</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li class="@isActive("login")"><a href="/loginreg">Login &#124; Register</a></li>
+                <li class="@isActive("login")"><a href="/login">Login &#124; Register</a></li>
             </ul>
         </div>
     </div>
 </nav>
-
-    }

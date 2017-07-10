@@ -2,6 +2,8 @@ package controllers
 
 import javax.inject.{Inject, Singleton}
 
+import models.forms.UserLoginForm
+import play.api.data.Form
 import play.api.mvc.{AbstractController, AnyContent, ControllerComponents, Request}
 import play.filters.headers.SecurityHeadersFilter
 
@@ -22,4 +24,17 @@ class LoginRegController @Inject()(cc: ControllerComponents) extends AbstractCon
     implicit request: Request[AnyContent] => Ok(views.html.loginreg()).withHeaders(SecurityHeadersFilter
       .CONTENT_SECURITY_POLICY_HEADER -> " .fontawesome.com .fonts.googleapis.com")
   }
+
+
+}
+
+object LoginRegController {
+
+  val createloginform = Form(
+    tuple(
+      "email" -> text,
+      "password" -> text,
+      "rememberlogin" -> boolean
+    )
+  )
 }
