@@ -12,7 +12,7 @@ import play.filters.headers.SecurityHeadersFilter
   * Created by nathanhanak on 7/7/17.
   */
 @Singleton
-class LoginRegController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
+class LoginRegController @Inject()(cc: ControllerComponents) extends AbstractController(cc) with play.api.i18n.I18nSupport {
 
   /**
     * Create an Action to render an HTML page.
@@ -36,10 +36,12 @@ class LoginRegController @Inject()(cc: ControllerComponents) extends AbstractCon
 
   def attemptLogin() = Action {
     implicit request: Request[AnyContent] =>
-      val userData : UserLoginData = loginform.bindFromRequest().get
-      OK(views.html.success)
+      loginform.bindFromRequest().fold(
+        formWithErrors => BadRequest(views.html.login(formWithErrors)),
+        customer => Ok(views.html.success()).withHeaders(SecurityHeadersFilter
+          .CONTENT_SECURITY_POLICY_HEADER -> " .fontawesome.com .fonts.googleapis.com")
+      )
   }
-
 
 
 }
