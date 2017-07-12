@@ -14,7 +14,7 @@ resolvers ++= Seq(
 libraryDependencies += guice
 libraryDependencies ++= Seq(
   "org.scalatestplus.play" %% "scalatestplus-play" % "3.0.0" % Test,
-  guice,
+  guice, filters,
   "org.webjars" % "bootstrap" % "3.3.7",
   evolutions,
   //DB drivers
