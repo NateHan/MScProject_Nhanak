@@ -26,7 +26,13 @@ class LoginInputsValidator (twDB : Database, userData: UserLoginData) extends Db
       if (userNameIsValid(userData.inputEmail, stmt) && userPassIsValid(userData.inputPassword, stmt)) true else false
     }
   }
-  
+
+  /**
+    * Determines if user's entered email matches with a corresponding record in the DB
+    * @param userName the user's entered email
+    * @param stmt a statement object derived from the database
+    * @return true if there is a match, false if not
+    */
   def userNameIsValid(userName: String, stmt: Statement): Boolean = {
     val qryResult = stmt.executeQuery(s"select email from verified_users where email='$userName';")
     var result : Boolean = false
@@ -39,6 +45,12 @@ class LoginInputsValidator (twDB : Database, userData: UserLoginData) extends Db
     return result
   }
 
+  /**
+    * Determine's if a user's password corresponds to a database entry for their password
+    * @param pass the user's entered password string
+    * @param stmt a statement object derived from the database
+    * @return true if there is a match, false if not
+    */
   def userPassIsValid(pass: String, stmt: Statement): Boolean = {
     val qryResult = stmt.executeQuery(s"select password from verified_users where password='$pass';")
     var result : Boolean = false

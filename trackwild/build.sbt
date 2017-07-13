@@ -18,7 +18,8 @@ libraryDependencies ++= Seq(
   evolutions,
   //DB drivers
   javaJdbc,
-  "org.postgresql" % "postgresql" % "42.1.1"
+  "org.postgresql" % "postgresql" % "42.1.1",
+  jdbc % Test
 )
 
 // Adds additional packages into Twirl
