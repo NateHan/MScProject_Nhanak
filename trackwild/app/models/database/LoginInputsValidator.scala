@@ -1,26 +1,54 @@
 package models.database
-import javax.inject.Inject
 
-import play.api.data.Form
+import java.sql.{Connection, Statement}
+
+import models.formdata.UserLoginData
 import play.api.db.Database
 
 /**
   * Class to determine if login field inputs correlate to a user in the DB.
-  *
+  * @param twDB the current default database for the application
+  * @param userData created from user's POST request
   * Created by nathanhanak on 7/12/17.
   */
-class LoginInputsValidator[UserInputForm] (twDB : Database) extends DbInputValidator[UserInputForm] {
+class LoginInputsValidator (twDB : Database, userData: UserLoginData) extends DbInputValidator {
 
   // String representation of inputs which were not valid in the database
-  val invalidInputs : List[String] = null
+  var invalidInputs : List[String] = _
 
   /**
     * Verifies login information correctly matches a database entry
-    * @param form created from user's POST request
     * @return true if valid, false if invalid inputs > 0
     */
-  override def inputsAreValid(form: Form[UserInputForm]): Boolean = {
+  override def inputsAreValid(): Boolean = {
+    twDB.withConnection { conn =>
+      val stmt = conn.createStatement()
+      if (userNameIsValid(userData.inputEmail, stmt) && userPassIsValid(userData.inputPassword, stmt)) true else false
+    }
+  }
+  
+  def userNameIsValid(userName: String, stmt: Statement): Boolean = {
+    val qryResult = stmt.executeQuery(s"select email from verified_users where email='$userName';")
+    var result : Boolean = false
+    while(qryResult.next()) {
+      if (qryResult.getString("email").contains(userName)) result = true else {
+        invalidInputs + userName
+        result = false
+      }
+    }
+    return result
+  }
 
+  def userPassIsValid(pass: String, stmt: Statement): Boolean = {
+    val qryResult = stmt.executeQuery(s"select password from verified_users where password='$pass';")
+    var result : Boolean = false
+    while(qryResult.next()) {
+      if (qryResult.getString("password").contains(pass)) result = true else {
+        invalidInputs + pass
+        result = false
+      }
+    }
+    return result
   }
 
   /**

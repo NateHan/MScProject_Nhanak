@@ -11,7 +11,6 @@ resolvers ++= Seq(
   "webjars"    at "http://webjars.github.com/m2"
 )
 
-libraryDependencies += guice
 libraryDependencies ++= Seq(
   "org.scalatestplus.play" %% "scalatestplus-play" % "3.0.0" % Test,
   guice, filters,
