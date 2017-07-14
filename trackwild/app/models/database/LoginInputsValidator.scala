@@ -5,6 +5,8 @@ import java.sql.{Connection, Statement}
 import models.formdata.UserLoginData
 import play.api.db.Database
 
+import scala.collection.mutable.ListBuffer
+
 /**
   * Class to determine if login field inputs correlate to a user in the DB.
   * @param twDB the current default database for the application
@@ -14,7 +16,7 @@ import play.api.db.Database
 class LoginInputsValidator (twDB : Database, userData: UserLoginData) extends DbInputValidator {
 
   // String representation of inputs which were not valid in the database
-  var invalidInputs : List[String] = _
+  var invalidInputs = new ListBuffer[String]()
 
   /**
     * Verifies login information correctly matches a database entry
@@ -37,11 +39,9 @@ class LoginInputsValidator (twDB : Database, userData: UserLoginData) extends Db
     val qryResult = stmt.executeQuery(s"select email from verified_users where email='$userName';")
     var result : Boolean = false
     while(qryResult.next()) {
-      if (qryResult.getString("email").contains(userName)) result = true else {
-        invalidInputs + userName
-        result = false
+      if (qryResult.getString("email").contains(userName)) result = true
       }
-    }
+    if (!result) {invalidInputs += userName}
     return result
   }
 
@@ -55,11 +55,9 @@ class LoginInputsValidator (twDB : Database, userData: UserLoginData) extends Db
     val qryResult = stmt.executeQuery(s"select password from verified_users where password='$pass';")
     var result : Boolean = false
     while(qryResult.next()) {
-      if (qryResult.getString("password").contains(pass)) result = true else {
-        invalidInputs + pass
-        result = false
-      }
+      if (qryResult.getString("password").contains(pass)) result = true
     }
+    if (!result) {invalidInputs += pass}
     return result
   }
 
@@ -67,5 +65,5 @@ class LoginInputsValidator (twDB : Database, userData: UserLoginData) extends Db
     * retrieves list of invalid inputs entered into the login form
     * @return the List of invalid input fields in String representation
     */
-  override def getInvalidInputs(): List[String] = invalidInputs
+  override def getInvalidInputs(): List[String] = invalidInputs.toList
 }

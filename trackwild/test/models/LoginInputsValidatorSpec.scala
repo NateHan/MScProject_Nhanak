@@ -17,7 +17,7 @@ class LoginInputsValidatorSpec extends PlaySpec with GuiceOneAppPerSuite with Be
     * a connection to a test version of the database
     */
   val testDb = Databases(
-    driver = "org.postgres.jdbc.Driver",
+    driver = "org.postgresql.Driver",
     url = "postgres://twadmin:trackwild@localhost:5432/track_wild_testdb"
   )
 
@@ -36,13 +36,46 @@ class LoginInputsValidatorSpec extends PlaySpec with GuiceOneAppPerSuite with Be
   /**
     * sample data which should match to a DB entry
     */
-  val registerdUserData = UserLoginData("demo@demo.com", "demo", false)
+  val registeredUserData = UserLoginData("demo@demo.com", "demo", false)
 
-  "LoginInputsValidator inputsAreValid" should {
+  "LoginInputsValidator inputsAreValid()" should {
 
     "return true when given a valid login" in {
-      val validator = new LoginInputsValidator(testDb, registerdUserData)
+      val validator = new LoginInputsValidator(testDb, registeredUserData)
       validator.inputsAreValid() mustBe true
+    }
+
+    "return false when given an unregistered email " in {
+      val validator = new LoginInputsValidator(testDb, notRegUserGoodPassword)
+      validator.inputsAreValid() mustBe false
+    }
+
+    "return false when given a registered email with a bad password" in {
+      val validator = new LoginInputsValidator(testDb, regUserBadPassword)
+      validator.inputsAreValid() mustBe false
+    }
+  }
+
+  "LoginInputsValidator getInvalidInputs()" should {
+
+    "return a list containing an invalid email when given an invalid email" in {
+      val validator = new LoginInputsValidator(testDb, notRegUserGoodPassword)
+      validator.inputsAreValid()
+      validator.getInvalidInputs() must have size 1
+      validator.getInvalidInputs() must contain("bad@bad.com")
+    }
+
+    "return a list containing the password when passed a valid login with invalid password" in {
+      val validator = new LoginInputsValidator(testDb, regUserBadPassword)
+      validator.inputsAreValid() mustBe false
+      validator.getInvalidInputs() must have size 1
+      validator.getInvalidInputs() must contain("wrongPassword")
+    }
+
+    "return an empty list when all inputs are valid " in {
+      val validator = new LoginInputsValidator(testDb, registeredUserData)
+      validator.inputsAreValid() mustBe true
+      validator.getInvalidInputs() mustBe empty
     }
   }
 
