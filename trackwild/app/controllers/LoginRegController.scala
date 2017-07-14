@@ -32,19 +32,35 @@ class LoginRegController @Inject()(twDB : Database, cc: ControllerComponents) ex
 
   def attemptLogin() = Action {
     implicit request: Request[AnyContent] => {
-      val newform = loginform.bindFromRequest()
       loginform.bindFromRequest().fold(
         formWithErrors => BadRequest(views.html.login(formWithErrors)),
         customer => {
           val validator : DbInputValidator = new LoginInputsValidator(twDB, loginform.bindFromRequest().get)
           if (validator.inputsAreValid) {
-            Ok(views.html.success())
+            Ok(views.html.afterLogin.dashboard(loginform.bindFromRequest().get.inputEmail))
           } else {
             Ok(views.html.login(loginform))
           }
         }
 
       )
+    }
+  }
+
+  /**
+    * retrieves the user name for display in the logged in navbar
+    * @param email the successfully logged in email handle for the user
+    * @return the username in string form
+    */
+  private def getUserName(email:String): String = {
+    twDB.withConnection { conn =>
+      val qryResult = conn.createStatement.executeQuery(s"SELECT username FROM verified_users WHERE email='$email';")
+      var userName: String = ""
+      while (qryResult.next()) {
+        println("result of query is: " + qryResult.getString("username"))
+        userName = qryResult.getString("username")
+      }
+      userName
     }
   }
 

@@ -18,7 +18,7 @@ class LoginInputsValidatorSpec extends PlaySpec with GuiceOneAppPerSuite with Be
     */
   val testDb = Databases(
     driver = "org.postgresql.Driver",
-    url = "postgres://twadmin:trackwild@localhost:5432/track_wild_testdb"
+    url = "postgres://twadmin:trackwild@localhost:5432/track_wild_db"
   )
 
   override def afterAll(): Unit = {

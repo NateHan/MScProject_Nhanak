@@ -8,9 +8,12 @@ GET     /                           controllers.HomeController.index
 
 # The controller for the login and register page
 
-GET     /login                           controllers.LoginRegController.loadLogin
+GET     /login                      controllers.LoginRegController.loadLogin
 + nocsrf
-POST    /login                           controllers.LoginRegController.attemptLogin
+POST    /login                      controllers.LoginRegController.attemptLogin
+
+# The controller for the main dashboard upon signin
+GET     /dashboard                  controllers.DashboardController.index
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
