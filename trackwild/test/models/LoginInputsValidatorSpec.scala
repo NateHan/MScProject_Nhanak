@@ -36,7 +36,7 @@ class LoginInputsValidatorSpec extends PlaySpec with GuiceOneAppPerSuite with Be
   /**
     * sample data which should match to a DB entry
     */
-  val registeredUserData = UserLoginData("demo@demo.com", "demo", false)
+  val registeredUserData = UserLoginData("nathan.hanak@gmail.com", "trackwild", false)
 
   "LoginInputsValidator inputsAreValid()" should {
 
@@ -75,7 +75,9 @@ class LoginInputsValidatorSpec extends PlaySpec with GuiceOneAppPerSuite with Be
     "return an empty list when all inputs are valid " in {
       val validator = new LoginInputsValidator(testDb, registeredUserData)
       validator.inputsAreValid() mustBe true
-      validator.getInvalidInputs() mustBe empty
+      val resultList = validator.getInvalidInputs()
+      resultList.foreach(str => println("Invalid input: " + str ))
+      resultList mustBe empty
     }
   }
 

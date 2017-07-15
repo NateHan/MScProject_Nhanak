@@ -39,7 +39,7 @@ class LoginInputsValidator (twDB : Database, userData: UserLoginData) extends Db
     val qryResult = stmt.executeQuery(s"select email from verified_users where email='$userName';")
     var result : Boolean = false
     while(qryResult.next()) {
-      if (qryResult.getString("email").contains(userName)) result = true
+      if (qryResult.getString("email").equals(userName)) result = true
       }
     if (!result) {invalidInputs += userName}
     return result
@@ -53,9 +53,10 @@ class LoginInputsValidator (twDB : Database, userData: UserLoginData) extends Db
     */
   def userPassIsValid(pass: String, stmt: Statement): Boolean = {
     val qryResult = stmt.executeQuery(s"select password from verified_users where password='$pass';")
+    val meta = qryResult.getMetaData
     var result : Boolean = false
     while(qryResult.next()) {
-      if (qryResult.getString("password").contains(pass)) result = true
+      if (qryResult.getString("password").equals(pass)) result = true
     }
     if (!result) {invalidInputs += pass}
     return result
