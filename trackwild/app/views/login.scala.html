@@ -5,27 +5,32 @@
 @main("Track Wild: Login") {
 
     @landingnavbar("login")
-    <form method="post" class="col-sm-4 col-sm-offset-4" id="loginform" autocomplete="on">
-        <div class="form-group">
-            <label for="inputEmail">Email address</label>
-            <input type="email" class="form-control" id="inputEmail" name="inputEmail" placeholder="Email&#64;example.com">
+    <div class="container">
+        <div class="row">
+            <form method="post" class="col-md-6 col-sm-8 col-centered" id="loginform" autocomplete="on">
+                <div class="form-group">
+                    <label for="inputEmail">Email address</label>
+                    <input type="email" class="form-control" id="inputEmail" name="inputEmail" placeholder="Email&#64;example.com">
+                </div>
+                <div class="form-group">
+                    <label for="inputPassword">Password</label>
+                    <input type="password" class="form-control" id="inputPassword" name="inputPassword" placeholder="Password">
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input name="rememberLogin" type="checkbox" checked="checked" value="true">
+                        remember my login credentials
+                    </label>
+                </div>
+                <div class="form-group">
+                    <a href="#">Forgot your password?</a>
+                </div>
+                <button type="submit" class="btn btn-default">
+                    <i class="fa fa-user-circle-o" aria-hidden="true"></i>
+                    Login
+                </button>
+            </form>
         </div>
-        <div class="form-group">
-            <label for="inputPassword">Password</label>
-            <input type="password" class="form-control" id="inputPassword" name="inputPassword" placeholder="Password">
-        </div>
-        <div class="checkbox">
-            <label>
-                <input name="rememberLogin" type="checkbox" checked="checked" value="true"> remember my login credentials
-            </label>
-        </div>
-        <div class="form-group">
-            <a href="#">Forgot your password?</a>
-        </div>
-        <button type="submit" class="btn btn-default">
-            <i class="fa fa-user-circle-o" aria-hidden="true"></i>
-            Login
-        </button>
-    </form>
+    </div>
 
 }

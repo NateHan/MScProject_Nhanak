@@ -1,0 +1,20 @@
+@import views.html.afterLogin.projectWorkspace._
+@import views.html.afterLogin.dashboard
+
+@(projectName: String, userName: String)
+
+
+@main(s"Track Wild: $projectName") {
+
+    @loggedInNavbar("projects", userName)
+
+    @dasboard("name")
+
+    @projectToolbar()
+
+    @success
+
+    <h1>Stuff</h1>
+
+
+}

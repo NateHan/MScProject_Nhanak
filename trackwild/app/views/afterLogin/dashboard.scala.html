@@ -1,9 +1,19 @@
-@(userName:String)
+@(userName: String)
 
 @main("Track Wild: Dashboard") {
 
     @loggedInNavbar("dashboard", userName)
 
-    <h1>This is the dashboard</h1>
+    <div class="content">
+        <h1>Project Dashboard</h1>
+
+        <div class="container">
+            <h2>Click to navigate</h2>
+            <div id="dashNavButtons">
+
+            </div>
+        </div>
+    </div>
+
 
 }
