@@ -1,24 +1,65 @@
-@(projectName: String, userName: String)
+@import scala.io.Source
+@import controllers.toolRenderer
+
+@(projectName: String, userName: String)(tool: String = "none")
 
 @main(s"Track Wild: $projectName") {
 
     @loggedInNavbar("projects", userName)
 
     <div class="container" id="toolOptions">
-        <div class="row">
-            <h1>Tool Options Go Here</h1>
-        </div>
+        @toolRenderer.injectTemplateByName(tool)
     </div>
-
     <div class="container" id="currentTools">
         <div class="row">
             <div class="col-sm-2 col-xs-1">
-                @projectToolbar()
+                <!-- Project Toolbar -->
+
+                <ul class="nav nav-pills nav-stacked" id="projToolBar">
+                    <li class="active" id="toolbarheader">Project Toolbar</li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Data Sets
+                            <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Add Dataset to View</a></li>
+                            <li><a href="#">Import Data</a></li>
+                            <li><a href="#">Export Data</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Animals
+                            <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Add animal(s) to View</a></li>
+                            <li><a href="#">Add animal profile</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Collaborators
+                            <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">View project collaborators</a></li>
+                            <li><a href="#">Add collaborator</a></li>
+                            <li><a href="#">Remove collaborator</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Notes
+                            <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Add notes to project view</a></li>
+                            <li><a href="#">Add new note</a></li>
+                            <li><a href="#">Export notes</a></li>
+                        </ul>
+                    </li>
+                </ul>
             </div>
-            <div class="col-lg-7 col-xs-11" id="tablesanimals">
+            <!--Tables and Animals viewspace -->
+            <div class="col-md-7 col-xs-11" id="tablesanimals">
                 <h2>Tables and Animals</h2>
             </div>
-            <div class="col-lg-3 col-xs-11" id="notes">
+            <!-- Notes viewspace -->
+            <div class="col-md-3 col-xs-11" id="notes">
                 <h2>Notes</h2>
             </div>
         </div>

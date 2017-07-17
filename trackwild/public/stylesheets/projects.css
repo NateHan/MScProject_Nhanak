@@ -3,8 +3,8 @@ body {
 }
 
 #projToolBar {
-    border: 4px groove rgba(255, 255, 255, .8);
-    border-radius: 10px;
+    border: 4px solid rgba(255, 255, 255, .8);
+    border-radius: 7px;
     padding-top: 5%;
 }
 
@@ -24,6 +24,11 @@ li.dropdown:last-child{
 
 #toolOptions {
     margin-top: 3%;
+    height: 47%;
+}
+
+#currentTools {
+    height: 50%
 }
 
 #toolOptions, #currentTools {

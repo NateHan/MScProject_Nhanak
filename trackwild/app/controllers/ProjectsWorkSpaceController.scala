@@ -17,4 +17,9 @@ class ProjectsWorkSpaceController @Inject() (cc: ControllerComponents) extends A
       .CONTENT_SECURITY_POLICY_HEADER -> " .fontawesome.com .fonts.googleapis.com")
   }
 
+  def renderNewTableUploader() = Action {
+    implicit request: Request[AnyContent] => Ok(views.html.afterLogin.projectworkspace.newDataUploader())
+  }
+
+
 }
