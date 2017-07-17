@@ -13,9 +13,10 @@ GET     /login                      controllers.LoginRegController.loadLogin
 POST    /login                      controllers.LoginRegController.attemptLogin
 
 # The controller for the main dashboard upon signin
-GET     /dashboard                  controllers.DashboardController.index
+GET     /dashboard/:userName        controllers.DashboardController.index(userName:String)
 
-GET     /project/
+# The controller for the main project view workspace, loads default values if none found
+GET     /projectworkspace/:userName/:projectName       controllers.ProjectsWorkSpaceController.loadWorkspace(projectName:String, userName:String )
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

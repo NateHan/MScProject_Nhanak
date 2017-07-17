@@ -1,14 +1,16 @@
+@import views.html.afterLogin.new2
 
 @(projectName: String, userName: String)
-
 
 @main(s"Track Wild: $projectName") {
 
     @loggedInNavbar("projects", userName)
 
+    @new1()
+
+    @new2()
+
     @projectToolbar()
-
-
 
     <h1>Stuff</h1>
 

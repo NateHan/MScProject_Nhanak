@@ -10,8 +10,9 @@ import play.filters.headers.SecurityHeadersFilter
   */
 class ProjectsWorkSpaceController @Inject() (cc: ControllerComponents) extends AbstractController(cc){
 
-  def index() = Action {
-    implicit request: Request[AnyContent] => Ok(views.html.afterLogin.dashboard("FJJDJDDJDJDJDJDJDJDJDJDJDJD"))
+  def loadWorkspace(projectName:String, userName:String) = Action {
+    implicit request: Request[AnyContent] => Ok(views.html.afterLogin
+      .projectworkspace.projectView(projectName, userName))
       .withHeaders(SecurityHeadersFilter
       .CONTENT_SECURITY_POLICY_HEADER -> " .fontawesome.com .fonts.googleapis.com")
   }
