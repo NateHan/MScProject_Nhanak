@@ -1,18 +1,28 @@
-@import views.html.afterLogin.new2
-
 @(projectName: String, userName: String)
 
 @main(s"Track Wild: $projectName") {
 
     @loggedInNavbar("projects", userName)
 
-    @new1()
+    <div class="container" id="toolOptions">
+        <div class="row">
+            <h1>Tool Options Go Here</h1>
+        </div>
+    </div>
 
-    @new2()
+    <div class="container" id="currentTools">
+        <div class="row">
+            <div class="col-sm-2 col-xs-1">
+                @projectToolbar()
+            </div>
+            <div class="col-lg-7 col-xs-11" id="tablesanimals">
+                <h2>Tables and Animals</h2>
+            </div>
+            <div class="col-lg-3 col-xs-11" id="notes">
+                <h2>Notes</h2>
+            </div>
+        </div>
 
-    @projectToolbar()
-
-    <h1>Stuff</h1>
-
+    </div>
 
 }

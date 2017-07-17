@@ -1,0 +1,34 @@
+body {
+    font-family: 'Ubuntu', sans-serif;
+}
+
+#projToolBar {
+    border: 4px groove rgba(255, 255, 255, .8);
+    border-radius: 10px;
+    padding-top: 5%;
+}
+
+li.dropdown, #toolbarheader {
+    border-bottom: 4px solid rgba(255, 255, 255, .8);
+}
+
+li.dropdown:last-child{
+    border: 0;
+}
+
+#toolbarheader {
+    text-align: center;
+    font-size: 1.15em;
+    font-weight: 400;
+}
+
+#toolOptions {
+    margin-top: 3%;
+}
+
+#toolOptions, #currentTools {
+    margin-left: auto;
+    margin-right: auto;
+    width: 99%;
+    padding-top: 2%;
+}
