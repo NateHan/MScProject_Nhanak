@@ -18,8 +18,9 @@ li.dropdown:last-child{
 
 #toolbarheader {
     text-align: center;
-    font-size: 1.15em;
-    font-weight: 400;
+    font-size: 1.3em;
+    font-weight: 500;
+    padding: 10%;
 }
 
 #toolOptions {
