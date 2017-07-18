@@ -6,6 +6,25 @@ body {
     border: 4px solid rgba(255, 255, 255, .8);
     border-radius: 7px;
     padding-top: 5%;
+    background-color: rgba(57, 141, 162, .8);
+}
+
+ul.dropdown-menu {
+    border: 2px double white;
+    background-color: rgb(41, 101, 116);
+    cursor: pointer;
+    cursor: hand;
+    margin-top: 3px;
+    padding: 10px;
+}
+
+ul.dropdown-menu li {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+ul.dropdown-menu li:hover {
+    background-color: rgb(28, 68, 78);
 }
 
 li.dropdown, #toolbarheader {
