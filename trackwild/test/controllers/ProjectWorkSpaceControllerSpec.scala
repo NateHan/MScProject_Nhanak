@@ -26,11 +26,11 @@ class ProjectWorkSpaceControllerSpec extends PlaySpec with GuiceOneAppPerSuite w
 
   "ProjectWorkSpaceController template renderer methods " should {
     //renderDataImporter, renderNewTableUploader, renderDataAppender, renderDataViewerTool
-    "render the view dataImporterTool.scala.html with #renderDataImporter " in {
-      val dataImportTool = controller.renderDataImporter().apply(FakeRequest(GET, "/projectworkspace/dataImporter"))
+    "render the view dataImporterSelector.scala.htmlhtml with #renderDataImporterSelector " in {
+      val importerSelector = controller.renderDataImporterSelector().apply(FakeRequest(GET, "/projectworkspace/dataImportSelector"))
 
-      status(dataImportTool) mustBe OK
-      contentType(dataImportTool) mustBe Some("text/html")
+      status(importerSelector) mustBe OK
+      contentType(importerSelector) mustBe Some("text/html")
     }
 
     "render the newDataUploader.scala.html template with #renderNewTableUploader" in {

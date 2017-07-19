@@ -29,8 +29,8 @@ class ProjectsWorkSpaceController @Inject()(cc: ControllerComponents) extends Ab
     * Will eventually nest a newDataUploader or dataAppender inside
     * @return an HTTP response containing the HTML for the table data uploader
     */
-  def renderDataImporter() = Action {
-    implicit request: Request[AnyContent] => Ok(views.html.afterLogin.projectworkspace.dataImporterTool())
+  def renderDataImporterSelector() = Action {
+    implicit request: Request[AnyContent] => Ok(views.html.afterLogin.projectworkspace.dataImporterSelector())
   }
 
   /**

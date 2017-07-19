@@ -1,40 +1,42 @@
-@(projectName: String, userName: String)(implicit request: RequestHeader )
+@(projectName: String, userName: String)(implicit request: RequestHeader)
 
-@main(s"Track Wild: $projectName") {
+    @main(s"Track Wild: $projectName") {
 
-    @loggedInNavbar("projects", userName)
+        @loggedInNavbar("projects", userName)
 
-    <div class="container" id="toolOptions">
-        <script type="application/javascript">
-                function loadDoc(myUrl) {
-                    var xhttp = new XMLHttpRequest();
-                    xhttp.onreadystatechange = function () {
-                        if (this.readyState == 4 && this.status == 200) {
-                            document.getElementById("toolOptions").innerHTML =
-                                    this.responseText;
+        <div class="container" id="toolOptions">
+            <div class="row">
+                <script type="application/javascript">
+                        function loadDoc(myUrl) {
+                            var xhttp = new XMLHttpRequest();
+                            xhttp.onreadystatechange = function () {
+                                if (this.readyState == 4 && this.status == 200) {
+                                    document.getElementById("toolOptions").innerHTML =
+                                            this.responseText;
+                                }
+                            };
+                            xhttp.open("GET", myUrl, true);
+                            xhttp.send();
                         }
-                    };
-                    xhttp.open("GET", myUrl, true);
-                    xhttp.send();
-                }
-        </script>
-    </div>
-    <div class="container" id="currentTools">
-        <div class="row">
-            <div class="col-sm-2 col-xs-1">
-            @projectToolbar()
-            </div>
-                <!--Tables and Animals viewspace -->
-            <div class="col-md-7 col-xs-11" id="tablesanimals">
-                <h2>Tables and Animals</h2>
-            </div>
-                <!-- Notes viewspace -->
-            <div class="col-md-3 col-xs-11" id="notes">
-                <h2>Notes</h2>
+                </script>
             </div>
         </div>
+        <div class="container" id="currentTools">
+            <div class="row">
+                <div class="col-sm-2 col-xs-1">
+                @projectToolbar()
+                </div>
+                    <!--Tables and Animals viewspace -->
+                <div class="col-md-7 col-xs-11" id="tablesanimals">
+                    <h2>Tables and Animals</h2>
+                </div>
+                    <!-- Notes viewspace -->
+                <div class="col-md-3 col-xs-11" id="notes">
+                    <h2>Notes</h2>
+                </div>
+            </div>
 
-    </div>
+        </div>
 
 
-}
+    }

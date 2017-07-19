@@ -1,0 +1,13 @@
+@()
+
+<div class="row" id="dataImporterRow">
+    <h2 class="tooltitles">Data Importer Tool</h2>
+</div>
+<div class="row" id="dataImporterWorkArea">
+    <div class="col-xs-6">
+        <input type="button" class="importButton" onclick="loadDoc('@routes.ProjectsWorkSpaceController.renderNewTableUploader()')" value="Upload New Data Table">
+    </div>
+    <div class="col-xs-6">
+        <input type="button" class="importButton" onclick="loadDoc('@routes.ProjectsWorkSpaceController.renderDataAppender()')" value="Upload New Data to Pre-Existing Table">
+    </div>
+</div>
