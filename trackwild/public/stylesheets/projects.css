@@ -48,7 +48,10 @@ li.dropdown:last-child{
 }
 
 #currentTools {
-    height: 50%
+    margin-left: .5%;
+    margin-right: .5%;
+    height: 50%;
+    margin-top: 3px;
 }
 
 #toolOptions, #currentTools {
@@ -56,4 +59,11 @@ li.dropdown:last-child{
     margin-right: auto;
     width: 99%;
     padding-top: 2%;
+}
+
+.fromLoadDoc {
+    border: 4px double white;
+    border-radius: 15px;
+    padding: 2%;
+    background-color: rgba(57, 141, 162, .8)
 }
