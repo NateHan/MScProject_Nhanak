@@ -22,4 +22,7 @@ class ProjectsWorkSpaceController @Inject()(cc: ControllerComponents) extends Ab
     implicit request: Request[AnyContent] => Ok(views.html.afterLogin.projectworkspace.newDataUploader())
   }
 
+  def renderDataAppender() = Action {
+    implicit request: Request[AnyContent] => Ok(views.html.afterLogin.projectworkspace.dataAppender())
+  }
 }
