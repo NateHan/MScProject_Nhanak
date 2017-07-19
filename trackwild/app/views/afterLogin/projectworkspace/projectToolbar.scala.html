@@ -8,8 +8,8 @@
         <a class="dropdown-toggle" data-toggle="dropdown" href="#">Data Sets
             <span class="caret"></span></a>
         <ul class="dropdown-menu">
-            <li onclick="loadDoc(&quot;@routes.ProjectsWorkSpaceController.renderNewTableUploader()&quot;)">Add Dataset to View</li>
-            <li onclick="loadDoc()">Import Data</li>
+            <li onclick="loadDoc('@routes.ProjectsWorkSpaceController.renderDataViewerTool()')">View Your Data</li>
+            <li onclick="loadDoc('@routes.ProjectsWorkSpaceController.renderDataImporter()')">Import New Data</li>
             <li onclick="loadDoc()">Export Data</li>
         </ul>
     </li>

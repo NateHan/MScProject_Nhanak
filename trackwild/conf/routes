@@ -19,7 +19,8 @@ GET     /dashboard/:userName        controllers.DashboardController.index(userNa
 GET     /projectworkspace/:userName/:projectName       controllers.ProjectsWorkSpaceController.loadWorkspace(userName:String, projectName:String )
 GET     /projectworkspace/datauploader  controllers.ProjectsWorkSpaceController.renderNewTableUploader
 GET     /projectworkspace/dataAppender  controllers.ProjectsWorkSpaceController.renderDataAppender
-
+GET     /projectworkspace/dataViewer    controllers.ProjectsWorkSpaceController.renderDataViewerTool
+GET     /projectworkspace/dataImporter  controllers.ProjectsWorkSpaceController.renderDataImporter
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
 

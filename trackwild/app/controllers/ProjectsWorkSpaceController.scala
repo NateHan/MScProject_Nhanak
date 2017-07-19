@@ -10,6 +10,12 @@ import play.filters.headers.SecurityHeadersFilter
   */
 class ProjectsWorkSpaceController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
 
+  /**
+    * loads main project workspace page
+    * @param projectName the name of the current project of the user
+    * @param userName the currently logged in user
+    * @return an HTTP response containing the HTML for the project workspace
+    */
   def loadWorkspace(projectName: String, userName: String) = Action {
     implicit request: Request[AnyContent] =>
       Ok(views.html.afterLogin
@@ -18,11 +24,39 @@ class ProjectsWorkSpaceController @Inject()(cc: ControllerComponents) extends Ab
           .CONTENT_SECURITY_POLICY_HEADER -> " .fontawesome.com .fonts.googleapis.com")
   }
 
+  /**
+    * Loads the template which will allows the user to add new .csv or .xls data to their database
+    * Will eventually nest a newDataUploader or dataAppender inside
+    * @return an HTTP response containing the HTML for the table data uploader
+    */
+  def renderDataImporter() = Action {
+    implicit request: Request[AnyContent] => Ok(views.html.afterLogin.projectworkspace.dataImporterTool())
+  }
+
+  /**
+    * Loads the template which allows the user to load a new table in .csv or .xls
+    * form and add it to their database
+    * @return an HTTP response containing the HTML for the table uploader
+    */
   def renderNewTableUploader() = Action {
     implicit request: Request[AnyContent] => Ok(views.html.afterLogin.projectworkspace.newDataUploader())
   }
 
+  /**
+    * Loads the template which allows the user to add new .csv or .xls data to their database,
+    * appending it to an already-existing table
+    * @return an HTTP response containing the HTML for the table data appender
+    */
   def renderDataAppender() = Action {
     implicit request: Request[AnyContent] => Ok(views.html.afterLogin.projectworkspace.dataAppender())
+  }
+
+  /**
+    * Loads a template which will allow a user to select their data saved in the DB
+    * and view it in the project workspace
+    * @return
+    */
+  def renderDataViewerTool() = Action {
+    implicit request: Request[AnyContent] => Ok(views.html.afterLogin.projectworkspace.dataViewerTool())
   }
 }
