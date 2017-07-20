@@ -1,16 +1,16 @@
 @()
 
 <div class="fromLoadDoc">
-    <div class="row" class="dataImporterTitleRow">
+    <div class="row dataImporterTitleRow">
         <h2 class="tooltitles">Data Importer Tool</h2>
         <h3 class="toolSubtitles">Choose How to Import New Data</h3>
     </div>
-    <div class="row" id="dataImporterWorkArea">
-        <div class="col-xs-6">
-            <input type="button" class="importButton" onclick="loadDoc('@routes.ProjectsWorkSpaceController.renderNewTableUploader()') value="Upload New Data Table">
+    <div class="row workrow" id="dataImporterWorkArea">
+        <div class="col-md-6 col-sm-12">
+            <input type="button" class="importButton btn-primary btn-block" onclick="loadDoc('@routes.ProjectsWorkSpaceController.renderNewTableUploader()')" value="Upload New Data Table">
         </div>
-        <div class="col-xs-6">
-            <input type="button" class="importButton" onclick="loadDoc('@routes.ProjectsWorkSpaceController.renderDataAppender()')" value="Upload New Data to Pre-Existing Table">
+        <div class="col-md-6 col-sm-12">
+            <input type="button" class="importButton btn-primary btn-block" onclick="loadDoc('@routes.ProjectsWorkSpaceController.renderDataAppender()')" value="Upload New Data to Pre-Existing Table">
         </div>
     </div>
 </div>

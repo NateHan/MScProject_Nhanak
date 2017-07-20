@@ -64,6 +64,28 @@ li.dropdown:last-child{
 .fromLoadDoc {
     border: 4px double white;
     border-radius: 15px;
-    padding: 2%;
-    background-color: rgba(57, 141, 162, .8)
+    background-color: rgba(57, 141, 162, .8);
+}
+
+.dataImporterTitleRow {
+    text-align: center;
+    margin: 0px;
+    border-bottom: 4px double white;
+}
+
+.tooltitles {
+    margin: 0px 2px 2px 2px;
+}
+
+.toolSubtitles {
+    margin: 2px;
+    font-size: 15px;
+}
+
+.workrow {
+    margin: 5px 10px 5px 10px;
+}
+
+.importButton {
+    min-height: 50px;
 }
