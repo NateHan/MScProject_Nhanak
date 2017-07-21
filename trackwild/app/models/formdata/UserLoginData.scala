@@ -1,7 +1,5 @@
 package models.formdata
 
-import models.database.{DbInputValidator, LoginInputsValidator}
-
 /**
   * Created by nathanhanak on 7/10/17.
   */

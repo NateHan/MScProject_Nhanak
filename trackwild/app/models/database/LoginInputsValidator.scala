@@ -10,10 +10,10 @@ import scala.collection.mutable.ListBuffer
 /**
   * Class to determine if login field inputs correlate to a user in the DB.
   * @param twDB the current default database for the application
-  * @param userData created from user's POST request
+  * @param userLoginInput created from user's POST request
   * Created by nathanhanak on 7/12/17.
   */
-class LoginInputsValidator (twDB : Database, userData: UserLoginData) extends DbInputValidator {
+class LoginInputsValidator (twDB : Database, userLoginInput: UserLoginData) extends DbInputValidator {
 
   // String representation of inputs which were not valid in the database
   var invalidInputs = new ListBuffer[String]()
@@ -25,7 +25,7 @@ class LoginInputsValidator (twDB : Database, userData: UserLoginData) extends Db
   override def inputsAreValid(): Boolean = {
     twDB.withConnection { conn =>
       val stmt = conn.createStatement()
-      if (userNameIsValid(userData.inputEmail, stmt) && userPassIsValid(userData.inputPassword, stmt)) true else false
+      if (userNameIsValid(userLoginInput.inputEmail, stmt) && userPassIsValid(userLoginInput.inputPassword, stmt)) true else false
     }
   }
 
