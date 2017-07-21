@@ -53,6 +53,12 @@ class LoginRegController @Inject()(twDB: Database, cc: ControllerComponents) ext
   }
 
   /**
+    * Brings user to landing page, giving them a new session cookie to fully logout.
+    * @return
+    */
+  def logOut = Action { Ok(views.html.index()).withNewSession}
+
+  /**
     * retrieves the user name for display in the logged in navbar
     *
     * @param email the successfully logged in email handle for the user
@@ -60,11 +66,10 @@ class LoginRegController @Inject()(twDB: Database, cc: ControllerComponents) ext
     */
   private def getUserName(email: String): String = {
     twDB.withConnection { conn =>
-      val qryResult = conn.createStatement.executeQuery(s"SELECT username FROM verified_users WHERE email='$email';")
+      val qryResult = conn.createStatement.executeQuery(s"SELECT userName FROM verified_users WHERE uemail='$email';")
       var userName: String = ""
       while (qryResult.next()) {
-        println("result of query is: " + qryResult.getString("username"))
-        userName = qryResult.getString("username")
+        userName = qryResult.getString("userName")
       }
       userName
     }

@@ -36,10 +36,10 @@ class LoginInputsValidator (twDB : Database, userLoginInput: UserLoginData) exte
     * @return true if there is a match, false if not
     */
   def userNameIsValid(userName: String, stmt: Statement): Boolean = {
-    val qryResult = stmt.executeQuery(s"select email from verified_users where email='$userName';")
+    val qryResult = stmt.executeQuery(s"select uemail from verified_users where uemail='$userName';")
     var result : Boolean = false
     while(qryResult.next()) {
-      if (qryResult.getString("email").equals(userName)) result = true
+      if (qryResult.getString("uemail").equals(userName)) result = true
       }
     if (!result) {invalidInputs += userName}
     return result
@@ -52,11 +52,11 @@ class LoginInputsValidator (twDB : Database, userLoginInput: UserLoginData) exte
     * @return true if there is a match, false if not
     */
   def userPassIsValid(pass: String, stmt: Statement): Boolean = {
-    val qryResult = stmt.executeQuery(s"select password from verified_users where password='$pass';")
+    val qryResult = stmt.executeQuery(s"select upassword from verified_users where upassword='$pass';")
     val meta = qryResult.getMetaData
     var result : Boolean = false
     while(qryResult.next()) {
-      if (qryResult.getString("password").equals(pass)) result = true
+      if (qryResult.getString("upassword").equals(pass)) result = true
     }
     if (!result) {invalidInputs += pass}
     return result
