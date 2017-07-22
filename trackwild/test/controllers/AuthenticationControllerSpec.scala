@@ -2,6 +2,7 @@ package controllers
 
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice.GuiceOneAppPerTest
+import play.api.mvc.{Action, Result}
 import play.api.test.Helpers.stubControllerComponents
 import play.api.test.{FakeRequest, Injecting}
 import play.api.test.Helpers._
@@ -48,6 +49,26 @@ class AuthenticationControllerSpec extends PlaySpec with GuiceOneAppPerTest with
 
   }
 
-  "AuthenticationController#"
+  "AuthenticationController#returnDesiredPageIfAuthenticated " should {
+
+    "return an Ok Result containing the expected view in an authorized session" in {
+      implicit val validRequest = FakeRequest(GET, "/dashboard")
+        .withSession("authenticated" -> "true", "username" -> "testuser")
+      val authController = new AuthenticationController(stubControllerComponents())
+
+      val result = authController.returnDesiredPageIfAuthenticated(validRequest, views.html.afterLogin.dashboard())
+
+      result.header.status mustBe 200
+    }
+
+    "return an unauthorized Result containing the invalidSession.html page for an unauthorized session" in {
+      implicit val invalidRequest = FakeRequest(GET, "/dashboard")
+      val authController = new AuthenticationController(stubControllerComponents())
+
+      val result = authController.returnDesiredPageIfAuthenticated(invalidRequest, views.html.afterLogin.dashboard())
+
+      result.header.status mustBe 401
+    }
+  }
 
 }
