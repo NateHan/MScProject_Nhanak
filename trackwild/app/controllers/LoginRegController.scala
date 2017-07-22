@@ -33,6 +33,8 @@ class LoginRegController @Inject()(twDB: Database, cc: ControllerComponents) ext
 
   /**
     * runs when user clicks login, sending a post request with the data from the login fields
+    * Runs user through authentication check, if passes attaches user details to
+    * session cookie
     * @return the Action for the resulting page
     */
   def attemptLogin() = Action {
@@ -43,7 +45,8 @@ class LoginRegController @Inject()(twDB: Database, cc: ControllerComponents) ext
           val validator: DbInputValidator = new LoginInputsValidator(twDB, loginform.bindFromRequest().get)
           if (validator.inputsAreValid) {
             val userEmail = loginform.bindFromRequest().get.inputEmail
-            Ok(views.html.afterLogin.dashboard(getUserName(userEmail)))
+            Ok(views.html.afterLogin.dashboard())
+              .withSession("authenticated" -> "true", "username" -> getUserName(userEmail))
           } else {
             BadRequest(views.html.login(loginform))
           }

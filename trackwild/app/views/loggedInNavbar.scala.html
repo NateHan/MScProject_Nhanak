@@ -1,9 +1,11 @@
-@(activeTab: String, userName:String)
+@(activeTab: String)(implicit request: RequestHeader)
 
 
 @isActive(liText: String) = @{
     if(liText.equals(activeTab)) "active" else "inactive"
 }
+
+@userName() = @{request.session.get("username").getOrElse("Unable to Retrieve User Name")}
 
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
@@ -20,13 +22,13 @@
         </div>
         <div class="collapse navbar-collapse" id="navlinks">
             <ul class="nav navbar-nav">
-                <li class="@isActive("dashboard")"><a href="/dashboard/@userName">Dashboard</a></li>
+                <li class="@isActive("dashboard")"><a href="/dashboard/@userName()">Dashboard</a></li>
                 <li class="@isActive("projects")"><a href="#">Projects</a></li>
                 <li class="@isActive("animals")"><a href="#">Animals</a></li>
                 <li class="@isActive("collaborators")"><a href="#">Collaborators</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li class="inactive"><a href="#">Logged in as @userName</a></li>
+                <li class="inactive"><a href="#">Logged in as @userName()</a></li>
                 <li class="@isActive("Profile")"><a href="#">Profile</a></li>
                 <li class="inactive"><a href="/logout">Sign Out</a></li>
             </ul>

@@ -14,7 +14,7 @@ GET     /logout                     controllers.LoginRegController.logOut
 POST    /login                      controllers.LoginRegController.attemptLogin
 
 # The controller for the main dashboard upon signin
-GET     /dashboard/:userName        controllers.DashboardController.index(userName:String)
+GET     /dashboard        controllers.DashboardController.index
 
 # The controller for the main project view workspace, loads default values if none found
 GET     /projectworkspace/:userName/:projectName       controllers.ProjectsWorkSpaceController.loadWorkspace(userName:String, projectName:String )

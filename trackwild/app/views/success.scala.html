@@ -1,8 +1,8 @@
-@()
+@()(implicit request: RequestHeader)
 
 @main("success") {
 
-    @loggedInNavbar("dashboard", "Congrats, You've Done it!")
+    @loggedInNavbar("dashboard")
 
     <h1>VICTORY</h1>
 }
