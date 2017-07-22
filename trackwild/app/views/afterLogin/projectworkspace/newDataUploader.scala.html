@@ -6,12 +6,12 @@
         <h2 class="tooltitles">Data Importer Tool</h2>
         <h3 class="toolSubtitles">Upload Data to Create a New Table</h3>
     </div>
-    <div class="row workrow">
+    <div class="row workrow" id="newDataUploadRow">
         @helper.form(action = controllers.routes.DataUploadController.uploadNewTable  , 'enctype -> "multipart/form-data") {
             @CSRF.formField
-            <input type="file" name="fileUpload">
+            <input type="file" name="fileUpload"> <br>
             <p>
-                <input type="submit" value="Upload">
+                <input type="submit" value="Upload"> <br>
                 Upload data in .csv or .xls format
             </p>
         }
