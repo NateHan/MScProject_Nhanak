@@ -3,7 +3,6 @@ package controllers
 import javax.inject.{Inject, Singleton}
 
 import play.api.mvc.{AbstractController, AnyContent, ControllerComponents, Request}
-import play.filters.headers.SecurityHeadersFilter
 
 /**
   * Created by nathanhanak on 7/14/17.

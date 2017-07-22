@@ -13,13 +13,12 @@ class ProjectsWorkSpaceController @Inject()(cc: ControllerComponents) extends Ab
   /**
     * loads main project workspace page
     * @param projectName the name of the current project of the user
-    * @param userName the currently logged in user
     * @return an HTTP response containing the HTML for the project workspace
     */
-  def loadWorkspace(projectName: String, userName: String) = Action {
+  def loadWorkspace(projectName: String) = Action {
     implicit request: Request[AnyContent] =>
       Ok(views.html.afterLogin
-        .projectworkspace.projectView(projectName, userName))
+        .projectworkspace.projectView(projectName))
         .withHeaders(SecurityHeadersFilter
           .CONTENT_SECURITY_POLICY_HEADER -> " .fontawesome.com .fonts.googleapis.com")
   }

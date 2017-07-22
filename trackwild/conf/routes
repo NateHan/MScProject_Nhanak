@@ -17,11 +17,15 @@ POST    /login                      controllers.LoginRegController.attemptLogin
 GET     /dashboard        controllers.DashboardController.index
 
 # The controller for the main project view workspace, loads default values if none found
-GET     /projectworkspace/:userName/:projectName       controllers.ProjectsWorkSpaceController.loadWorkspace(userName:String, projectName:String )
 GET     /projectworkspace/datauploader  controllers.ProjectsWorkSpaceController.renderNewTableUploader
 GET     /projectworkspace/dataAppender  controllers.ProjectsWorkSpaceController.renderDataAppender
 GET     /projectworkspace/dataViewer    controllers.ProjectsWorkSpaceController.renderDataViewerTool
 GET     /projectworkspace/dataImportSelector  controllers.ProjectsWorkSpaceController.renderDataImporterSelector
+GET     /projectworkspace/:projectName       controllers.ProjectsWorkSpaceController.loadWorkspace(projectName:String )
+
+# Controller which handles file upload
+POST    /projectworkspace/uploadNewTable controllers.DataUploadController.uploadNewTable
+
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
 

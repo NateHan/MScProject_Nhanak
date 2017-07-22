@@ -1,10 +1,19 @@
-@()
+@import helper.{form, CSRF}
+
+@()(implicit request: RequestHeader)
 <div class="fromLoadDoc">
     <div class="row dataImporterTitleRow">
         <h2 class="tooltitles">Data Importer Tool</h2>
         <h3 class="toolSubtitles">Upload Data to Create a New Table</h3>
     </div>
     <div class="row workrow">
-        Here's where the actual things go
+        @helper.form(action = controllers.routes.DataUploadController.uploadNewTable  , 'enctype -> "multipart/form-data") {
+            @CSRF.formField
+            <input type="file" name="fileUpload">
+            <p>
+                <input type="submit" value="Upload">
+                Upload data in .csv or .xls format
+            </p>
+        }
     </div>
 </div>

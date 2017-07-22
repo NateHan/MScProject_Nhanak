@@ -1,4 +1,4 @@
-@(projectName: String, userName: String)(implicit request: RequestHeader)
+@(projectName: String)(implicit request: RequestHeader)
 
     @main(s"Track Wild: $projectName") {
 
@@ -7,7 +7,7 @@
         <div class="container" id="toolOptions">
             <div class="row" id="toolsrow">
                 <script type="application/javascript">
-                        function loadDoc(myUrl) {
+                        function loadToolDoc(myUrl) {
                             var xhttp = new XMLHttpRequest();
                             xhttp.onreadystatechange = function () {
                                 if (this.readyState == 4 && this.status == 200) {

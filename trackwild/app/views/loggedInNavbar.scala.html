@@ -5,7 +5,7 @@
     if(liText.equals(activeTab)) "active" else "inactive"
 }
 
-@userName() = @{request.session.get("username").getOrElse("Unable to Retrieve User Name")}
+@userName() = @{request.session.get("username")}
 
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
