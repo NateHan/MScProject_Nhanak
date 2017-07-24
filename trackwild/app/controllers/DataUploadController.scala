@@ -46,10 +46,8 @@ class DataUploadController @Inject()(authController: AuthenticationController, c
       if (authController.sessionIsAuthenticated(request.session)) {
         val filename = dataFile.filename
         val saveToPath: String = s"/Users/nathanhanak/GithubRepos/MScProject_Nhanak/trackwild/public/tmp/$filename"
-        if(filename.endsWith(".csv") || filename.endsWith(".xls")) {
           dataFile.ref.moveTo(new File(saveToPath))
           Ok(views.html.afterLogin.projectworkspace.projectView("REPLACE PROJECT NAME"))
-        } else NotAcceptable("File Was not in .csv or .xls format")
       } else Unauthorized(views.html.invalidSession("Your session expired or you logged out"))
     }getOrElse( NotFound("Something Happened Along the way"))
   }
