@@ -1,7 +1,7 @@
 @import helper.CSRF
 @import models.formdata.NewDataTableInfo
 
-@(tableUploadForm: Form[NewDataTableInfo], request: RequestHeader)(implicit messages: MessagesProvider)
+@(tableUploadForm: Form[NewDataTableInfo])(implicit request: RequestHeader, messages: Messages)
 
 <div class="fromLoadDoc">
     <div class="row dataImporterTitleRow">
@@ -9,15 +9,30 @@
         <h3 class="toolSubtitles">Upload Data to Create a New Table</h3>
     </div>
     <div class="row workrow" id="newDataUploadRow">
-        @helper.form(action = controllers.routes.DataUploadController.uploadNewTable  , 'enctype -> "multipart/form-data") {
-            @CSRF.formField
-            <input type="file" name="fileUpload"> <br>
-            @helper.inputText(tableUploadForm("tableName"), 'placeholder -> "Enter Table Name Here: Letters, Digits")
-            <input type="text hidden" name="uploadingUser" value="@request.session.get("username")">
-            <p>
-                <input type="submit" value="Upload"> <br>
-                Upload data in .csv or .xls format
-            </p>
-        }
+        <div class="col-xs-3"></div>
+        <div class="col-xs-6">
+            @helper.form(action = controllers.routes.DataUploadController.uploadNewTable, 'enctype -> "multipart/form-data") {
+                @CSRF.formField
+                <label for="browsebutton">Select file from your computer</label>
+                <input type="file" name="fileUpload" id="browsebutton" accept=".csv, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" title="Select one file in .csv .xls or .xlsx format" required>
+                <br>
+                @helper.inputText(tableUploadForm("tableName"),
+                    'placeholder -> "Enter Table Name Here",
+                    '_label -> "Enter Table Name",
+                    'pattern -> "^[A-Za-z]{1}[a-zA-Z0-9._ -]{3,}$",
+                    'class -> "toolTextInputBox",
+                    'required -> "required",
+                    'title -> ("Table name must follow these rules: \n -First character must be a letter" +
+                            "\n -Must be at least 4 characters long" +
+                            "\n -Can only contain letters, numbers, spaces,  -  .  or  _")
+                )
+                <input type="hidden" name="uploadingUser" value="@request.session.get("username")">
+                <p>
+                    <input type="submit" class="importButton btn-primary btn-block" value="Upload Table">
+                    <msg>Data must be in .csv or .xls format</msg>
+                </p>
+            }
+        </div>
+        <div class="col-xs-3"></div>
     </div>
 </div>

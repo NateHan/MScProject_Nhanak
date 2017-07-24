@@ -89,3 +89,13 @@ li.dropdown:last-child{
 .importButton {
     min-height: 50px;
 }
+
+.toolTextInputBox {
+    background-color: rgba(33, 79, 89, .8);
+    width: 100%;
+}
+
+#newDataUploadRow {
+    font-size: 1.2em;
+    width: 80%;
+}

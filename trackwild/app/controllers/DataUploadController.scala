@@ -23,7 +23,7 @@ class DataUploadController @Inject()(authController: AuthenticationController, c
     * @return an HTTP response containing the HTML for the table uploader
     */
   def renderNewTableUploader() = Action {
-    implicit request: Request[AnyContent] => Ok(views.html.afterLogin.projectworkspace.newDataUploader(tableUploadForm, request) )
+    implicit request: Request[AnyContent] => Ok(views.html.afterLogin.projectworkspace.newDataUploader(tableUploadForm))
   }
 
   val tableUploadForm = Form(
