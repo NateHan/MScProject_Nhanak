@@ -32,14 +32,6 @@ class ProjectsWorkSpaceController @Inject()(cc: ControllerComponents) extends Ab
     implicit request: Request[AnyContent] => Ok(views.html.afterLogin.projectworkspace.dataImporterSelector())
   }
 
-  /**
-    * Loads the template which allows the user to load a new table in .csv or .xls
-    * form and add it to their database
-    * @return an HTTP response containing the HTML for the table uploader
-    */
-  def renderNewTableUploader() = Action {
-    implicit request: Request[AnyContent] => Ok(views.html.afterLogin.projectworkspace.newDataUploader())
-  }
 
   /**
     * Loads the template which allows the user to add new .csv or .xls data to their database,

@@ -1,6 +1,8 @@
-@import helper.{form, CSRF}
+@import helper.CSRF
+@import models.formdata.NewDataTableInfo
 
-@()(implicit request: RequestHeader)
+@(tableUploadForm: Form[NewDataTableInfo], request: RequestHeader)(implicit messages: MessagesProvider)
+
 <div class="fromLoadDoc">
     <div class="row dataImporterTitleRow">
         <h2 class="tooltitles">Data Importer Tool</h2>
@@ -10,6 +12,8 @@
         @helper.form(action = controllers.routes.DataUploadController.uploadNewTable  , 'enctype -> "multipart/form-data") {
             @CSRF.formField
             <input type="file" name="fileUpload"> <br>
+            @helper.inputText(tableUploadForm("tableName"), 'placeholder -> "Enter Table Name Here: Letters, Digits")
+            <input type="text hidden" name="uploadingUser" value="@request.session.get("username")">
             <p>
                 <input type="submit" value="Upload"> <br>
                 Upload data in .csv or .xls format
