@@ -8,6 +8,7 @@ import play.filters.headers.SecurityHeadersFilter
 /**
   * Created by nathanhanak on 7/16/17.
   */
+@Singleton
 class ProjectsWorkSpaceController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
 
   /**

@@ -5,8 +5,9 @@ import java.io.File
 
 trait FileToDBParser {
 
-  def parseFileToDB(file:File): Unit
+  def parseFileToNewRelation(file: File, tableName:String): Boolean
 
-  def parseWasSuccesful: Boolean
+  def appendFileToExistingRelation(file: File, tableName:String): Boolean
+
 
 }

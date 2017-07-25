@@ -6,6 +6,7 @@ import play.api.mvc._
 import play.filters.headers.SecurityHeadersFilter
 import play.twirl.api.Html
 
+@Singleton
 class AuthenticationController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
 
   /**
