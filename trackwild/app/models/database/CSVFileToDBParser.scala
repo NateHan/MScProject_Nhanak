@@ -69,12 +69,15 @@ class CSVFileToDBParser @Inject() (twDB:Database) extends FileToDBParser {
   /**
     * Examines the first row of content in headerNames -> content format and
     * runs a matching algorithm to determine the content's SQL data type, returning a map
-    * of strings representing: columnName -> datatype
+    * of strings representing: columnName -> datatype.
+    * Also runs the column names through a "cleaner" which ensures the headers will be in
+    * legal SQL column name format
     * @param firstRow the first row of content from a CSV file mapped with headerName -> content
     * @return alters the value of the original map to be string representation of datatype of the column
     */
   private def mapHeadersToSQLDataTypes(firstRow: Map[String, String]): Map[String, String] = {
-    for( (k,v) <- firstRow ) yield (k,typeFinder(v.toLowerCase))
+    for( (k,v) <- firstRow )
+      yield (SQLStringFormatter.returnStringInSQLNameFormat(k),typeFinder(v.toLowerCase))
 
     def typeFinder(value: String): String = value match {
       case value if value.matches("[a-z]+") && !value.matches(".*([0-2]{1}[0-9]{1}:{1}[0-5]{1}[0-9]{1})+.*") => "text"  // if contains letters but no 'num:num'
@@ -86,17 +89,34 @@ class CSVFileToDBParser @Inject() (twDB:Database) extends FileToDBParser {
   }
 
   /**
-    *
-    * @param file
-    * @param tableName
-    * @param stmt
+    * Assumes file will always have headers
+    * Adds data from a CSV file to an existing table in the default database
+    * @param file the CSV file with data to append - must have a header matching PSQL table's column names
+    * @param tableName the name of the PSQL table in the database
+    * @param stmt the statement from the current DB connection
     * @return True if table is larger after operation, false if not
     */
   override def addDataRowsToTable(file:File, tableName:String, stmt:Statement): Boolean = {
     val csvReader = CSVReader.open(file)
     val data = csvReader.allWithHeaders()
-    val
+    val queryBuilder = StringBuilder.newBuilder
+    for (headToContentMap <- data ) {
+      queryBuilder.append(s"INSERT INTO $tableName(")
+      for( (header,content) <- headToContentMap) {
+        queryBuilder.append(s"$header, ") // creates all column name values
+      }
+      queryBuilder.deleteCharAt(queryBuilder.length()-2) // removes erroneous last comma
+      queryBuilder.append(") VALUES (")
+      for( (header,content) <- headToContentMap) {
+        queryBuilder.append(s"$content, ") // creates all content values to insert
+      }
+      queryBuilder.deleteCharAt(queryBuilder.length()-2) // removes erroneous last comma
+      queryBuilder.append(");") // closes query
+    }
+    val result =  stmt.executeQuery(queryBuilder.toString())
+    // don't forget to get size of table BEFORE and AFTER executing this insert, make that the return statement
   }
-// { will be able to skip the top line: bufferedSource.getLines.drop(1) }
+
+
 
 }
