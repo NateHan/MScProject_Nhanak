@@ -5,11 +5,13 @@ import scala.io.{BufferedSource, Source}
 import java.sql.{Connection, ResultSet, Statement}
 import javax.inject.Inject
 import javax.inject.Singleton
-import com.github.tototoshi.csv._
+
+import com.github.tototoshi.csv.CSVReader
 import play.api.db.Database
 
 @Singleton
 class CSVFileToDBParser @Inject() (twDB:Database) extends FileToDBParser {
+
 
   override def parseFileToNewRelation(file: File, tableName:String): Boolean = {
     twDB.withConnection { conn =>
@@ -61,7 +63,7 @@ class CSVFileToDBParser @Inject() (twDB:Database) extends FileToDBParser {
     val headersToTypes = mapHeadersToSQLDataTypes(firstContentLine)
     val queryBuilder = StringBuilder.newBuilder.append(s"CREATE TABLE $tableName (")
     for ((colName,dataType) <- headersToTypes ) queryBuilder.append(s" $colName $dataType, ")
-    queryBuilder.deleteCharAt(queryBuilder.length()-1) // removes erroneous last comma
+    queryBuilder.deleteCharAt(queryBuilder.length()-2) // removes erroneous last comma
     queryBuilder.append(");")
     stmt.executeQuery(queryBuilder.toString())
   }
@@ -91,6 +93,8 @@ class CSVFileToDBParser @Inject() (twDB:Database) extends FileToDBParser {
   /**
     * Assumes file will always have headers
     * Adds data from a CSV file to an existing table in the default database
+    * Opens a CSV file, extracts the data as (headers -> content) map
+    * Builds a series of queries
     * @param file the CSV file with data to append - must have a header matching PSQL table's column names
     * @param tableName the name of the PSQL table in the database
     * @param stmt the statement from the current DB connection
@@ -100,10 +104,11 @@ class CSVFileToDBParser @Inject() (twDB:Database) extends FileToDBParser {
     val csvReader = CSVReader.open(file)
     val data = csvReader.allWithHeaders()
     val queryBuilder = StringBuilder.newBuilder
+    val rowTotalBefore = stmt.executeQuery(s"SELECT COUNT(*) FROM $tableName;")
     for (headToContentMap <- data ) {
       queryBuilder.append(s"INSERT INTO $tableName(")
       for( (header,content) <- headToContentMap) {
-        queryBuilder.append(s"$header, ") // creates all column name values
+        queryBuilder.append(s"${SQLStringFormatter.returnStringInSQLNameFormat(header)}, ") // creates all column name values
       }
       queryBuilder.deleteCharAt(queryBuilder.length()-2) // removes erroneous last comma
       queryBuilder.append(") VALUES (")
@@ -113,9 +118,16 @@ class CSVFileToDBParser @Inject() (twDB:Database) extends FileToDBParser {
       queryBuilder.deleteCharAt(queryBuilder.length()-2) // removes erroneous last comma
       queryBuilder.append(");") // closes query
     }
-    val result =  stmt.executeQuery(queryBuilder.toString())
-    // don't forget to get size of table BEFORE and AFTER executing this insert, make that the return statement
+    stmt.executeQuery(queryBuilder.toString())
+    val rowTotalAfter = stmt.executeQuery(s"SELECT COUNT(*) FROM $tableName")
+    var operationAddedData: Boolean = false
+    while(rowTotalBefore.next() && rowTotalAfter.next()) {
+      if (rowTotalBefore.getString("count").toInt < rowTotalAfter.getString("count").toInt) operationAddedData = true
+    }
+    operationAddedData
   }
+
+
 
 
 

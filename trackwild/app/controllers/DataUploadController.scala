@@ -9,6 +9,7 @@ import models.formdata.NewDataTableInfo
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.mvc._
+import models.database.{CSVFileToDBParser, FileToDBParser}
 
 /**
   * class which controls the upload of new data files
@@ -42,13 +43,14 @@ class DataUploadController @Inject()(authController: AuthenticationController, c
     * Maybe just have it flash an error if it doesn't work?
     * @return
     */
-  def uploadNewTable = Action(parse.multipartFormData) {implicit request =>
+  def uploadNewTable(fileToDBParser: FileToDBParser) = Action(parse.multipartFormData) {implicit request =>
     request.body.file("fileUpload").map { dataFile =>
       if (authController.sessionIsAuthenticated(request.session)) {
         val filename = dataFile.filename
         // temporary holding place, may have to alter path for user as time goes on
         val saveToPath: String = s"/Users/nathanhanak/GithubRepos/MScProject_Nhanak/trackwild/public/tmp/$filename"
-        dataFile.ref.moveTo(new File(saveToPath))
+        val file = dataFile.ref.moveTo(new File(saveToPath))
+        fileToDBParser.parseFileToNewRelation(file, "delete_test") // CHANGE table name from form submit info
           Ok(views.html.afterLogin.projectworkspace.projectView("REPLACE PROJECT NAME"))
       } else Unauthorized(views.html.invalidSession("Your session expired or you logged out"))
     }getOrElse( NotFound("Something Happened Along the way"))
