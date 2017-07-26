@@ -1,6 +1,7 @@
 package controllers
 
 import javax.inject.Inject
+import javax.inject.Singleton
 
 import play.api.mvc._
 import play.filters.headers.SecurityHeadersFilter
@@ -39,4 +40,3 @@ class AuthenticationController @Inject()(cc: ControllerComponents) extends Abstr
 
 }
 
-//don't forget with headers in success response. define an object carrying all good headers, in a list?

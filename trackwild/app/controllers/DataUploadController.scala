@@ -3,6 +3,7 @@ package controllers
 import java.io.File
 import java.nio.file.Paths
 import javax.inject.Inject
+import javax.inject.Singleton
 
 import models.formdata.NewDataTableInfo
 import play.api.data.Form

@@ -16,7 +16,7 @@ class ProjectWorkSpaceControllerSpec extends PlaySpec with GuiceOneAppPerSuite w
   "ProjectWorkSpaceController GET " should {
 
     "render the index page from the application" in {
-      val workSpace = controller.loadWorkspace(projectName, "userName").apply(FakeRequest(GET, s"/projectworkspace/:userName/$projectName "))
+      val workSpace = controller.loadWorkspace(projectName).apply(FakeRequest(GET, s"/projectworkspace/:userName/$projectName "))
 
       status(workSpace) mustBe OK
       contentType(workSpace) mustBe Some("text/html")
@@ -33,12 +33,15 @@ class ProjectWorkSpaceControllerSpec extends PlaySpec with GuiceOneAppPerSuite w
       contentType(importerSelector) mustBe Some("text/html")
     }
 
+    /**
+      * Reformatted class - this should be a test for the DataUploadController instead
     "render the newDataUploader.scala.html template with #renderNewTableUploader" in {
       val newDataUploader = controller.renderNewTableUploader().apply(FakeRequest(GET, "/projectworkspace/datauploader"))
 
       status(newDataUploader) mustBe OK
       contentType(newDataUploader) mustBe Some("text/html")
     }
+      */
 
     "render the view dataAppender.scala.html with #renderDataAppender " in {
       val dataAppender = controller.renderDataAppender().apply(FakeRequest(GET, "/projectworkspace/dataAppender"))

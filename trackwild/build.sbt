@@ -19,7 +19,8 @@ libraryDependencies ++= Seq(
   //DB drivers
   javaJdbc,
   "org.postgresql" % "postgresql" % "42.1.1",
-  jdbc % Test
+  jdbc % Test,
+  "com.github.tototoshi" %% "scala-csv" % "1.3.4"
 )
 
 // Adds additional packages into Twirl

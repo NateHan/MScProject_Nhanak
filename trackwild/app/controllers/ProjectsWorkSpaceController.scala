@@ -1,6 +1,7 @@
 package controllers
 
 import javax.inject.Inject
+import javax.inject.Singleton
 
 import play.api.mvc.{AbstractController, AnyContent, ControllerComponents, Request}
 import play.filters.headers.SecurityHeadersFilter
