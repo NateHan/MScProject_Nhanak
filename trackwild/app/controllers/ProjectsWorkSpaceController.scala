@@ -10,7 +10,7 @@ import play.filters.headers.SecurityHeadersFilter
   * Created by nathanhanak on 7/16/17.
   */
 @Singleton
-class ProjectsWorkSpaceController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
+class ProjectsWorkSpaceController @Inject()(authController: AuthenticationController, cc: ControllerComponents) extends AbstractController(cc) {
 
   /**
     * loads main project workspace page
@@ -19,10 +19,8 @@ class ProjectsWorkSpaceController @Inject()(cc: ControllerComponents) extends Ab
     */
   def loadWorkspace(projectName: String) = Action {
     implicit request: Request[AnyContent] =>
-      Ok(views.html.afterLogin
-        .projectworkspace.projectView(projectName))
-        .withHeaders(SecurityHeadersFilter
-          .CONTENT_SECURITY_POLICY_HEADER -> " .fontawesome.com .fonts.googleapis.com")
+      val desiredPage = views.html.afterLogin.projectworkspace.projectView(projectName)
+      authController.returnDesiredPageIfAuthenticated(request, desiredPage)
   }
 
   /**
