@@ -47,12 +47,16 @@ class DataUploadController @Inject()(csvFileToDBParser: CSVFileToDBParser,
     * @return
     */
   def uploadNewTable() = Action(parse.multipartFormData) {implicit request =>
+    val newTableForm : Option[NewDataTableInfo] = tableUploadForm.bindFromRequest().fold(
+      errorForm => None,
+      successForm => Some(successForm)
+    )
     request.body.file("fileUpload").map { dataFile =>
       if (authController.sessionIsAuthenticated(request.session)) {
         // temporary holding place, may have to alter path for user as time goes on
         val saveToPath: String = s"/Users/nathanhanak/GithubRepos/MScProject_Nhanak/trackwild/public/tmp/${dataFile.filename}"
         val file = dataFile.ref.moveTo(new File(saveToPath))
-        csvFileToDBParser.parseFileToNewRelation(file, "delete_test") // CHANGE table name from form submit info
+        csvFileToDBParser.parseFileToNewRelation(file, newTableForm.get.getTableNameSQLFormat)
           Ok(views.html.afterLogin.projectworkspace.projectView("REPLACE PROJECT NAME"))
       } else Unauthorized(views.html.invalidSession("Your session expired or you logged out"))
     }getOrElse( NotFound("Something Happened Along the way"))
