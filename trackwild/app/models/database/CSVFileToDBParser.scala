@@ -65,7 +65,7 @@ class CSVFileToDBParser @Inject() (twDB:Database) extends FileToDBParser {
     for ((colName,dataType) <- headersToTypes ) queryBuilder.append(s" $colName $dataType, ")
     queryBuilder.deleteCharAt(queryBuilder.length()-2) // removes erroneous last comma
     queryBuilder.append(");")
-    stmt.executeQuery(queryBuilder.toString())
+    stmt.executeUpdate(queryBuilder.toString())
   }
 
   /**
@@ -78,8 +78,6 @@ class CSVFileToDBParser @Inject() (twDB:Database) extends FileToDBParser {
     * @return alters the value of the original map to be string representation of datatype of the column
     */
   private def mapHeadersToSQLDataTypes(firstRow: Map[String, String]): Map[String, String] = {
-    for( (k,v) <- firstRow )
-      yield (SQLStringFormatter.returnStringInSQLNameFormat(k),typeFinder(v.toLowerCase))
 
     def typeFinder(value: String): String = value match {
       case value if value.matches("[a-z]+") && !value.matches(".*([0-2]{1}[0-9]{1}:{1}[0-5]{1}[0-9]{1})+.*") => "text"  // if contains letters but no 'num:num'
@@ -88,6 +86,10 @@ class CSVFileToDBParser @Inject() (twDB:Database) extends FileToDBParser {
       case value if value.matches(".*([0-2]{1}[0-9]{1}:{1}[0-5]{1}[0-9]{1})+.*") => "timestamp"// if contains num num :num num
       case _ => "text"
     }
+
+    for( (k,v) <- firstRow )
+      yield (SQLStringFormatter.returnStringInSQLNameFormat(k),typeFinder(v.toLowerCase))
+
   }
 
   /**
@@ -116,9 +118,9 @@ class CSVFileToDBParser @Inject() (twDB:Database) extends FileToDBParser {
         queryBuilder.append(s"$content, ") // creates all content values to insert
       }
       queryBuilder.deleteCharAt(queryBuilder.length()-2) // removes erroneous last comma
-      queryBuilder.append(");") // closes query
+      queryBuilder.append("); \n") // closes query
     }
-    stmt.executeQuery(queryBuilder.toString())
+    stmt.executeUpdate(queryBuilder.toString())
     val rowTotalAfter = stmt.executeQuery(s"SELECT COUNT(*) FROM $tableName")
     var operationAddedData: Boolean = false
     while(rowTotalBefore.next() && rowTotalAfter.next()) {

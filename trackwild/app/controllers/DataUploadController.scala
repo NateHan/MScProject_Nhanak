@@ -18,7 +18,10 @@ import models.database.{CSVFileToDBParser, FileToDBParser}
   * @param cc             controller components
   */
 @Singleton
-class DataUploadController @Inject()(authController: AuthenticationController, cc: ControllerComponents) extends AbstractController(cc) with play.api.i18n.I18nSupport {
+class DataUploadController @Inject()(csvFileToDBParser: CSVFileToDBParser,
+                                     authController: AuthenticationController,
+                                     cc: ControllerComponents)
+  extends AbstractController(cc) with play.api.i18n.I18nSupport {
 
   /**
     * Loads the template which allows the user to load a new table in .csv or .xls
@@ -43,14 +46,13 @@ class DataUploadController @Inject()(authController: AuthenticationController, c
     * Maybe just have it flash an error if it doesn't work?
     * @return
     */
-  def uploadNewTable(fileToDBParser: FileToDBParser) = Action(parse.multipartFormData) {implicit request =>
+  def uploadNewTable() = Action(parse.multipartFormData) {implicit request =>
     request.body.file("fileUpload").map { dataFile =>
       if (authController.sessionIsAuthenticated(request.session)) {
-        val filename = dataFile.filename
         // temporary holding place, may have to alter path for user as time goes on
-        val saveToPath: String = s"/Users/nathanhanak/GithubRepos/MScProject_Nhanak/trackwild/public/tmp/$filename"
+        val saveToPath: String = s"/Users/nathanhanak/GithubRepos/MScProject_Nhanak/trackwild/public/tmp/${dataFile.filename}"
         val file = dataFile.ref.moveTo(new File(saveToPath))
-        fileToDBParser.parseFileToNewRelation(file, "delete_test") // CHANGE table name from form submit info
+        csvFileToDBParser.parseFileToNewRelation(file, "delete_test") // CHANGE table name from form submit info
           Ok(views.html.afterLogin.projectworkspace.projectView("REPLACE PROJECT NAME"))
       } else Unauthorized(views.html.invalidSession("Your session expired or you logged out"))
     }getOrElse( NotFound("Something Happened Along the way"))

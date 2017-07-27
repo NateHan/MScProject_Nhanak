@@ -13,7 +13,7 @@
     <div class="row workrow" id="newDataUploadRow">
         <div class="col-xs-3"></div>
         <div class="col-xs-6">
-            @helper.form(action = controllers.routes.DataUploadController.uploadNewTable(new CSVFileToDBParser(DefaultDataBase.getApplicationDataBase)), 'enctype -> "multipart/form-data") {
+            @helper.form(action = controllers.routes.DataUploadController.uploadNewTable, 'enctype -> "multipart/form-data") {
                 @CSRF.formField
                 <label for="browsebutton">Select file from your computer</label>
                 <input type="file" name="fileUpload" id="browsebutton" accept=".csv, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" title="Select one file in .csv .xls or .xlsx format" required>
