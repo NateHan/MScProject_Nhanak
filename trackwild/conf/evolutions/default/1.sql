@@ -3,9 +3,9 @@
 # --- !Ups
 
 CREATE TABLE verified_users (
-    uEmail varchar(255) NOT NULL,
+    uEmail varchar(255) NOT NULL UNIQUE,
     uPassword varchar(255) NOT NULL,
-    userName varchar(255) NOT NULL,
+    userName varchar(255) NOT NULL UNIQUE,
     firstName varchar(255) NOT NULL,
     surName varchar(255) NOT NULL,
     organization varchar(255),
