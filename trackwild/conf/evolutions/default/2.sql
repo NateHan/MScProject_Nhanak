@@ -19,11 +19,11 @@ CREATE TABLE collaborations(
 
 CREATE TABLE project_notes(
     note_id  bigserial PRIMARY KEY,
-    project_title text NOT NULL REFERENCES all_project(project_title)
+    project_title text NOT NULL REFERENCES all_projects(project_title)
        ON DELETE CASCADE
        ON UPDATE CASCADE,
-    note_title text DEFAULT (CURRENT_TIMESTAMP, 'YYYY:MM:DD:HH:MM')
-    note_author text NOT NULL REFERENCES collaborations(userName),
+    note_title text DEFAULT (CURRENT_TIMESTAMP, 'YYYY:MM:DD:HH:MM'),
+    note_author text NOT NULL REFERENCES verified_users(userName),
     note_content text NOT NULL,
     note_date timestamp default current_timestamp
 );
@@ -38,6 +38,7 @@ INSERT INTO project_notes(project_title, note_author, note_content)
 
 # --- !Downs
 
-DROP TABLE all_projects;
 DROP TABLE collaborations;
 DROP TABLE project_notes;
+DROP TABLE all_projects CASCADE;
+

@@ -12,4 +12,4 @@ CREATE TABLE all_data_tables(
 
 # --- !Downs
 
-DROP TABLE all_data_tables;
+DROP TABLE all_data_tables CASCADE;
