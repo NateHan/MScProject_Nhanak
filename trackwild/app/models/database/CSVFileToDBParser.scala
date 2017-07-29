@@ -14,12 +14,12 @@ import play.api.db.Database
 class CSVFileToDBParser @Inject()(twDB: Database) extends FileToDBParser {
 
 
-  override def parseFileToNewRelation(file: File, tableName: String): Boolean = {
+  override def parseFileToNewRelation(file: File, tableInfo: Map[String,String]): Boolean = {
     twDB.withConnection { conn =>
       val stmt = conn.createStatement()
-      val finalTableName = returnUniqueTableName(tableName, conn)
+      val finalTableName = returnUniqueTableName(tableInfo.getOrElse("tableName", "Unspecified Table Name"), conn)
       createNewTable(file, finalTableName, stmt)
-      addDataRowsToTable(file, finalTableName, stmt)
+      addDataRowsToTable(file, tableInfo, stmt)
     }
   }
 
@@ -66,8 +66,7 @@ class CSVFileToDBParser @Inject()(twDB: Database) extends FileToDBParser {
     val headersToTypes = mapHeadersToSQLDataTypes(firstContentLine)
     val queryBuilder = StringBuilder.newBuilder.append(s"CREATE TABLE $tableName (")
     for ((colName, dataType) <- headersToTypes) queryBuilder.append(s" $colName $dataType, ")
-    queryBuilder.deleteCharAt(queryBuilder.length() - 2) // removes erroneous last comma
-    queryBuilder.append(");")
+    queryBuilder.append("uploaded_by text, date_added timestamp DEFAULT DATE_TRUNC('second', NOW()) );")
     stmt.executeUpdate(queryBuilder.toString())
   }
 
@@ -103,25 +102,24 @@ class CSVFileToDBParser @Inject()(twDB: Database) extends FileToDBParser {
     * Builds a series of queries
     *
     * @param file      the CSV file with data to append - must have a header matching PSQL table's column names
-    * @param tableName the name of the PSQL table in the database
+    * @param tableInfo info about PSQL table in the database from the request. Keys are "userName" and "tableName"
     * @param stmt      the statement from the current DB connection
     * @return True if table is larger after operation, false if not
     */
-  override def addDataRowsToTable(file: File, tableName: String, stmt: Statement): Boolean = {
+  override def addDataRowsToTable(file: File, tableInfo: Map[String, String], stmt: Statement): Boolean = {
     val csvReader = CSVReader.open(file)
     val data = csvReader.allWithHeaders()
     val queryBuilder = StringBuilder.newBuilder
     val rowTotalBefore = {
-      val result = stmt.executeQuery(s"SELECT COUNT(*) AS count FROM $tableName;")
+      val result = stmt.executeQuery(s"SELECT COUNT(*) AS count FROM ${tableInfo("tableName")};")
       if (result.next()) result.getString("count").toInt else 0
     }
     for (headToContentMap <- data) {
-      queryBuilder.append(s"INSERT INTO $tableName(")
+      queryBuilder.append(s"INSERT INTO ${tableInfo("tableName")}(")
       for ((header, content) <- headToContentMap) {
         queryBuilder.append(s"${SQLStringFormatter.returnStringInSQLNameFormat(header)}, ") // creates all column name values
       }
-      queryBuilder.deleteCharAt(queryBuilder.length() - 2) // removes erroneous last comma
-      queryBuilder.append(") VALUES (")
+      queryBuilder.append("uploaded_by) VALUES (")
       for ((header, content) <- headToContentMap) {
         dataTypeFinder(content) match { // some datatypes require ' ' around inputs
           case "text" => queryBuilder.append (s"'$content', ")
@@ -130,11 +128,10 @@ class CSVFileToDBParser @Inject()(twDB: Database) extends FileToDBParser {
           case _ => queryBuilder.append (s"$content, ")
         }
       }
-      queryBuilder.deleteCharAt(queryBuilder.length() - 2) // removes erroneous last comma
-      queryBuilder.append("); \n") // closes query
+      queryBuilder.append(s"'${tableInfo("userName")}'); \n") // closes query
     }
     stmt.executeUpdate(queryBuilder.toString())
-    val rowTotalAfter = stmt.executeQuery(s"SELECT COUNT(*) as count FROM $tableName")
+    val rowTotalAfter = stmt.executeQuery(s"SELECT COUNT(*) as count FROM ${tableInfo("tableName")}")
     var operationAddedData: Boolean = false
     while (rowTotalAfter.next()) {
       if (rowTotalBefore < rowTotalAfter.getString("count").toInt) operationAddedData = true

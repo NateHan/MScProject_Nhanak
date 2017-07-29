@@ -21,5 +21,5 @@ CREATE TABLE animals_data(
 
 # --- !Downs
 
-DROP TABLE all_animals;
-DROP TABLE animals_data;
+DROP TABLE all_animals CASCADE;
+DROP TABLE animals_data CASCADE;
