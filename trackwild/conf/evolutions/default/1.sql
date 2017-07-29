@@ -6,8 +6,7 @@ CREATE TABLE verified_users (
     uEmail varchar(255) NOT NULL UNIQUE,
     uPassword varchar(255) NOT NULL,
     userName varchar(255) NOT NULL UNIQUE,
-    firstName varchar(255) NOT NULL,
-    surName varchar(255) NOT NULL,
+    fullName varchar(255) NOT NULL,
     organization varchar(255),
     verified boolean NOT NULL DEFAULT false,
     PRIMARY KEY (username)
@@ -18,8 +17,7 @@ insert into verified_users values (
     'nathan.hanak@gmail.com',
     'trackwild',
     'nhanak',
-    'Nathan',
-    'Hanak',
+    'Nathan Hanak',
     'Birkbeck',
     true
 );
@@ -28,8 +26,7 @@ insert into verified_users values (
     'demo@demo.com',
     'demo',
     'DemoUser',
-    'Demo',
-    'User',
+    'Demo User',
     'Wide World of Science',
     true
 )

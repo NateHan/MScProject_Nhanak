@@ -1,0 +1,39 @@
+@import models.formdata.RegistrationData
+
+@(loginform: Form[RegistrationData])(implicit messages: MessagesProvider)
+
+@main("Track Wild: Register") {
+
+    @landingnavbar("register")
+    <div class="container">
+        <div class="row">
+            <form method="post" class="col-md-6 col-sm-8 col-centered" id="registrationForm" autocomplete="on">
+                <div class="form-group">
+                    <label for="uEmail">Email address</label>
+                    <input type="email" class="form-control" id="uEmail" name="uEmail" placeholder="Email&#64;example.com">
+                </div>
+                <div class="form-group">
+                    <label for="uPassword">Password</label>
+                    <input type="password" class="form-control" id="uPassword" name="uPassword" placeholder="Password">
+                </div>
+                <div class="form-group">
+                    <label for="userName">User Name</label>
+                    <input type="text" class="form-control" id="userName" name="userName" placeholder="Username: 6-12 letters, numbers, or spaces">
+                </div>
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <input type="text" class="form-control" id="fullName" name="fullName" placeholder="Firstname Lastname">
+                </div>
+                <div class="form-group">
+                    <label for="organization">Organization  <sup>*optional field</sup></label>
+                    <input type="text" class="form-control" id="organization" name="organization" placeholder="Institution, Group, Company">
+                </div>
+
+                <button type="submit" class="btn btn-default">
+                    <i class="fa fa-handshake-o" aria-hidden="true"></i>
+                Login
+                </button>
+            </form>
+        </div>
+    </div>
+}

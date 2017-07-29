@@ -3,7 +3,7 @@ package controllers
 import javax.inject.{Inject, Singleton}
 
 import models.database.{DbInputValidator, LoginInputsValidator}
-import models.formdata.UserLoginData
+import models.formdata.{RegistrationData, UserLoginData}
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.db.Database
@@ -56,12 +56,6 @@ class LoginRegController @Inject()(twDB: Database, cc: ControllerComponents) ext
   }
 
   /**
-    * Brings user to landing page, giving them a new session cookie to fully logout.
-    * @return
-    */
-  def logOut = Action { Ok(views.html.index()).withNewSession}
-
-  /**
     * retrieves the user name for display in the logged in navbar
     *
     * @param email the successfully logged in email handle for the user
@@ -77,6 +71,30 @@ class LoginRegController @Inject()(twDB: Database, cc: ControllerComponents) ext
       userName
     }
   }
+
+  val regForm: Form[RegistrationData] = Form(
+    mapping(
+      "uEmail" -> nonEmptyText,
+      "uPassword" -> nonEmptyText,
+      "userName" -> nonEmptyText,
+      "fullName" -> nonEmptyText,
+      "organization" -> text
+    )(RegistrationData.apply)(RegistrationData.unapply)
+  )
+
+  def loadRegistrationPage() = Action {
+    implicit request: Request[AnyContent] =>
+      Ok(views.html.register(regForm)).withHeaders(SecurityHeadersFilter
+        .CONTENT_SECURITY_POLICY_HEADER -> " .fontawesome.com .fonts.googleapis.com")
+  }
+
+  /**
+    * Brings user to landing page, giving them a new session cookie to fully logout.
+    * @return
+    */
+  def logOut = Action { Ok(views.html.index()).withNewSession}
+
+
 
 }
 

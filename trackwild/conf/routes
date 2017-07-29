@@ -9,6 +9,7 @@ GET     /                           controllers.HomeController.index
 # The controller for the login and register page
 
 GET     /login                      controllers.LoginRegController.loadLogin
+GET     /register                   controllers.LoginRegController.loadRegistrationPage
 GET     /logout                     controllers.LoginRegController.logOut
 + nocsrf
 POST    /login                      controllers.LoginRegController.attemptLogin
