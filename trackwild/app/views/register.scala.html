@@ -8,30 +8,38 @@
     <div class="container">
         <div class="row">
             <form method="post" class="col-md-6 col-sm-8 col-centered" id="registrationForm" autocomplete="on">
+                <h1 align="center" id="regHeader">REGISTRATION</h1>
+                <hr id="regHR">
                 <div class="form-group">
                     <label for="uEmail">Email address</label>
-                    <input type="email" class="form-control" id="uEmail" name="uEmail" placeholder="Email&#64;example.com">
+                    <input type="email" class="form-control" id="uEmail" name="uEmail" placeholder="Email&#64;example.com" required>
                 </div>
                 <div class="form-group">
-                    <label for="uPassword">Password</label>
-                    <input type="password" class="form-control" id="uPassword" name="uPassword" placeholder="Password">
+                    <label for="uPassword">Password <sub>(case-sensitive)</sub></label>
+                    <input type="password" class="form-control" id="uPassword" name="uPassword"
+                    placeholder="Password: 6 + letters, numbers, or characters ! # $ % ^ & *"
+                    pattern="^[a-zA-Z0-9!#$%^&*]{6,}$" required>
                 </div>
                 <div class="form-group">
                     <label for="userName">User Name</label>
-                    <input type="text" class="form-control" id="userName" name="userName" placeholder="Username: 6-12 letters, numbers, or spaces">
+                    <input type="text" class="form-control" id="userName" name="userName"
+                    placeholder="Username: 6-12 letters, numbers, or underscores"
+                    pattern="^[a-zA-Z0-9_]{6,12}$" required>
                 </div>
                 <div class="form-group">
                     <label for="fullName">Full Name</label>
-                    <input type="text" class="form-control" id="fullName" name="fullName" placeholder="Firstname Lastname">
+                    <input type="text" class="form-control" id="fullName" name="fullName"
+                    placeholder="Firstname Lastname" pattern="[A-Za-z ]{2,}" required>
                 </div>
                 <div class="form-group">
                     <label for="organization">Organization  <sup>*optional field</sup></label>
-                    <input type="text" class="form-control" id="organization" name="organization" placeholder="Institution, Group, Company">
+                    <input type="text" class="form-control" id="organization" name="organization"
+                    placeholder="Institution, Group, Company" pattern="[a-zA-Z0-9!:-#$%^&*]*">
                 </div>
 
                 <button type="submit" class="btn btn-default">
                     <i class="fa fa-handshake-o" aria-hidden="true"></i>
-                Login
+                Register
                 </button>
             </form>
         </div>

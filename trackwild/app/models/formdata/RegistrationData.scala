@@ -4,6 +4,6 @@ case class RegistrationData(uEmail:String,
                             uPassword:String,
                             userName:String,
                             fullName:String,
-                            organization:String) {
+                            organization:String = "left blank") {
 
 }

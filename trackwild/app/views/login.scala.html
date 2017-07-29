@@ -8,13 +8,16 @@
     <div class="container">
         <div class="row">
             <form method="post" class="col-md-6 col-sm-8 col-centered" id="loginform" autocomplete="on">
+                <h1 align="center" id="loginHeader">LOGIN</h1>
+                <hr id="logHR">
                 <div class="form-group">
                     <label for="inputEmail">Email address</label>
                     <input type="email" class="form-control" id="inputEmail" name="inputEmail" placeholder="Email&#64;example.com">
                 </div>
                 <div class="form-group">
-                    <label for="inputPassword">Password</label>
-                    <input type="password" class="form-control" id="inputPassword" name="inputPassword" placeholder="Password">
+                    <label for="inputPassword">Password  <sub>(case-sensitive)</sub> </label>
+                    <input type="password" class="form-control" id="inputPassword"
+                    pattern="^[a-zA-Z0-9!#$%^&*]{6,}$" name="inputPassword" placeholder="Password">
                 </div>
                 <div class="checkbox">
                     <label>

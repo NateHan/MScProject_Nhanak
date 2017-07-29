@@ -1,0 +1,41 @@
+@()
+
+@main("Track Wild: Registration Confirmed") {
+
+    @landingnavbar("register")
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="content">
+
+                        <!-- Welcome text -->
+                    <h1>Thank You!</h1>
+                    <h3><p>Your information has been stored</p>
+                        <p>Please check your email for a verification link.</p>
+                        <p>Click and return to <a href="/login" class="links">login</a></p>
+                    </h3>
+
+                    <hr>
+                    <h3>You will be redirected to the <a href="/login" class="links">login</a> page in...</h3>
+
+                    <h1>
+                        <div id="counter">5</div>
+                    </h1>
+
+                    <script type="application/javascript">
+                            setInterval(function () {
+                                var div = document.querySelector("#counter");
+                                var count = div.textContent * 1 - 1;
+                                div.textContent = count;
+                                if (count <= 0) {
+                                    window.location = '@routes.LoginRegController.loadLogin()'
+                                }
+                            }, 1000);
+                    </script>
+
+                </div>
+            </div>
+        </div>
+    </div>
+}

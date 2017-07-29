@@ -17,6 +17,21 @@ a {
     color: white;
 }
 
+a.links {
+    color: #00faff;
+}
+
+#regHeader, #loginHeader {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    font-size: 350%;
+}
+
+#regHR, #logHR {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
 .content {
     text-align: center;
     padding-top: 15%;
@@ -74,9 +89,9 @@ hr {
     border-bottom: 4px solid rgba(0,0,0,0.4),
 }
 
-#loginform {
+#loginform, #registrationForm {
     text-align: left;
-    margin-top: 15%;
+    margin-top: 10%;
     padding: 2%;
     background-color: rgba(22, 116, 141, .4);
     border: 3px solid white;

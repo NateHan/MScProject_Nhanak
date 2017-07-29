@@ -10,6 +10,8 @@ GET     /                           controllers.HomeController.index
 
 GET     /login                      controllers.LoginRegController.loadLogin
 GET     /register                   controllers.LoginRegController.loadRegistrationPage
++ nocsrf
+POST    /register                   controllers.LoginRegController.registerSubmit
 GET     /logout                     controllers.LoginRegController.logOut
 + nocsrf
 POST    /login                      controllers.LoginRegController.attemptLogin

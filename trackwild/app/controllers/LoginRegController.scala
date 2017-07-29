@@ -1,5 +1,6 @@
 package controllers
 
+import java.sql.Statement
 import javax.inject.{Inject, Singleton}
 
 import models.database.{DbInputValidator, LoginInputsValidator}
@@ -20,7 +21,7 @@ class LoginRegController @Inject()(twDB: Database, cc: ControllerComponents) ext
   def loadLogin() = Action {
     implicit request: Request[AnyContent] =>
       Ok(views.html.login(loginform)).withHeaders(SecurityHeadersFilter
-        .CONTENT_SECURITY_POLICY_HEADER -> " .fontawesome.com .fonts.googleapis.com")
+        .CONTENT_SECURITY_POLICY_HEADER -> " .fontawesome.com .fonts.googleapis.com").withNewSession
   }
 
   val loginform: Form[UserLoginData] = Form(
@@ -82,10 +83,49 @@ class LoginRegController @Inject()(twDB: Database, cc: ControllerComponents) ext
     )(RegistrationData.apply)(RegistrationData.unapply)
   )
 
+  /**
+    * Loads the view containing the registration form
+    * @return the view containing the registration form
+    */
   def loadRegistrationPage() = Action {
     implicit request: Request[AnyContent] =>
       Ok(views.html.register(regForm)).withHeaders(SecurityHeadersFilter
         .CONTENT_SECURITY_POLICY_HEADER -> " .fontawesome.com .fonts.googleapis.com")
+  }
+
+  /**
+    * The method called by POST to URL: /register
+    * Receives user-input from form and adds it to the database of verified_users
+    * @return reloads the page on a bad request, brings to login on a good request
+    */
+  def registerSubmit() = Action { implicit request: Request[AnyContent] =>
+    regForm.bindFromRequest().fold(
+      formWithErrors => BadRequest(views.html.register(regForm)).withHeaders(SecurityHeadersFilter
+        .CONTENT_SECURITY_POLICY_HEADER -> " .fontawesome.com .fonts.googleapis.com"),
+      successfulForm => {
+        val result = inputRegInfoToDB(successfulForm)
+        if (result == 1) {
+          Ok(views.html.regThanksRedirect()).withHeaders(SecurityHeadersFilter
+            .CONTENT_SECURITY_POLICY_HEADER -> " .fontawesome.com .fonts.googleapis.com").withNewSession
+        } else {
+          BadRequest(views.html.register(regForm)).withHeaders(SecurityHeadersFilter
+            .CONTENT_SECURITY_POLICY_HEADER -> " .fontawesome.com .fonts.googleapis.com"),
+        }
+      }
+    )
+  }
+
+  /**
+    * enters the registration form data into the DB.
+    * @param userData the data extracted from the user form
+    */
+  private def inputRegInfoToDB(userData:RegistrationData): Int = {
+    twDB.withConnection { conn =>
+      val stmt: Statement = conn.createStatement()
+      val line = "INSERT INTO verified_users(uemail, upassword, username, fullname, organization)" +
+        s" VALUES('${userData.uEmail}', '${userData.uPassword}', '${userData.userName}', '${userData.fullName}', '${userData.organization}');"
+      stmt.executeUpdate(line)
+    }
   }
 
   /**

@@ -8,7 +8,7 @@ CREATE TABLE verified_users (
     userName varchar(255) NOT NULL UNIQUE,
     fullName varchar(255) NOT NULL,
     organization varchar(255),
-    verified boolean NOT NULL DEFAULT false,
+    verified boolean NOT NULL DEFAULT TRUE,
     PRIMARY KEY (username)
 );
 
