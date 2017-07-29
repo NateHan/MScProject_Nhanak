@@ -10,9 +10,17 @@ import play.api.mvc.{AbstractController, AnyContent, ControllerComponents, Reque
 @Singleton
 class DashboardController @Inject()(authController: AuthenticationController, cc: ControllerComponents) extends AbstractController(cc) {
 
-
+  /**
+    * The first page to load after a user logs in
+    * @return a Result containing the dashboard home page
+    */
   def index() = Action {
     implicit request: Request[AnyContent] => authController.returnDesiredPageIfAuthenticated(
       request, views.html.afterLogin.dashboard(), "Login failed")
+  }
+
+  def loadUserProjects() = Action {
+    implicit request: Request[AnyContent] => authController.returnDesiredPageIfAuthenticated(
+      request, views.html.afterLogin.userProjects(), "Credentials Expired")
   }
 }

@@ -1,0 +1,41 @@
+@()(implicit request: RequestHeader)
+
+@main("Track Wild: Dashboard") {
+
+    @loggedInNavbar("projects")
+
+    <script>
+            $(document).ready(function(){
+                $("#flip").click(function(){
+                    $("#panel").slideToggle("slow");
+                });
+            });
+    </script>
+<!--
+    <div id="flip">Click to slide the panel down or up</div>
+    <div id="panel">Hello world!</div>
+-->
+    <div class="container-fluid" id="userProjectsSelectors">
+        <div class="row-fluid">
+            <div class="col-xs-1"></div>
+            <div class="col-xs-10">
+                <h2>Projects</h2>
+                <div class="projectSliders">
+                    <span>
+                    <i class="fa fa-paw" aria-hidden="true"></i>  <h3>View Projects You Lead</h3>
+                    </span>
+                </div>
+                <div class="projectSliders">
+                    <span><i class="fa fa-users" aria-hidden="true"></i>  <h3>View Your Collaborated Projects</h3></span>
+                </div>
+                <div class="projectSliders">
+                    <span><i class="fa fa-plus-square-o" aria-hidden="true"></i><h3>Create a New Project</h3></span>
+                </div>
+            </div>
+            <div class="col-xs-1"></div>
+        </div>
+
+    </div>
+
+    </ul>
+}

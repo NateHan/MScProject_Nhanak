@@ -19,6 +19,8 @@ POST    /login                      controllers.LoginRegController.attemptLogin
 # The controller for the main dashboard upon signin
 GET     /dashboard        controllers.DashboardController.index
 
+GET     /dashboard/projects controllers.DashboardController.loadUserProjects
+
 # The controller for the main project view workspace, loads default values if none found
 GET     /projectworkspace/datauploader/new  controllers.DataUploadController.renderNewTableUploader
 GET     /projectworkspace/datauploader/append  controllers.ProjectsWorkSpaceController.renderDataAppender
