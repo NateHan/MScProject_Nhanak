@@ -5,6 +5,46 @@
 i.fa {
     float: left;
     border: 2px solid white;
+    border-radius: 3px;
     margin: 1%;
-    padding: 1%;
+    padding: 3px;
+    font-size: 1.6em;
+    text-shadow: 0px 4px 3px rgba(0,0,0,0.4),
+    0px 8px 13px rgba(0,0,0,0.1),
+    0px 18px 23px rgba(0,0,0,0.1);
+}
+
+i+h3 {
+    display: inline-block;
+}
+
+#projSlidersHeader {
+    border-bottom: 5px double white;
+    text-align: center;
+    font-family: animal-fantastic;
+    margin: 0px;
+    padding-top: 15px;
+    padding-bottom: 7px;
+    background: rgba(23, 137, 159, 0.8);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5), /* Exterior Shadow */ inset 0 1px rgba(255, 255, 255, 0.3), /* Top light Line */ inset 0 10px rgba(255, 255, 255, 0.2), /* Top Light Shadow */ inset 0 10px 20px rgba(255, 255, 255, 0.25), /* Sides Light Shadow */ inset 0 -15px 30px rgba(0, 0, 0, 0.3); /* Dark Background */
+}
+
+#allSlidersContainer {
+    border: 5px double white;
+    border-radius: 10px;
+    padding: 0%;
+}
+
+.projectSliders {
+    background: rgba(0,0,0,0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5), /* Exterior Shadow */ inset 0 1px rgba(255, 255, 255, 0.3), /* Top light Line */ inset 0 10px rgba(255, 255, 255, 0.2), /* Top Light Shadow */ inset 0 10px 20px rgba(255, 255, 255, 0.25), /* Sides Light Shadow */ inset 0 -15px 30px rgba(0, 0, 0, 0.3); /* Dark Background */
+}
+
+.projectSliders:hover {
+    background: rgba(0,0,0,0.25);
+    cursor: pointer;
+}
+
+#projleadSlider, #projCollabSlider {
+    border-bottom: 4px solid white;
 }
