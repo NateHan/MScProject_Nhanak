@@ -46,7 +46,7 @@ class LoginRegController @Inject()(twDB: Database, cc: ControllerComponents) ext
           val validator: DbInputValidator = new LoginInputsValidator(twDB, loginform.bindFromRequest().get)
           if (validator.inputsAreValid) {
             val userEmail = loginform.bindFromRequest().get.inputEmail
-            Ok(views.html.afterLogin.dashboard())
+            Ok(views.html.afterLogin.dashboardviews.dashboard())
               .withSession("authenticated" -> "true", "username" -> getUserName(userEmail))
           } else {
             BadRequest(views.html.login(loginform))

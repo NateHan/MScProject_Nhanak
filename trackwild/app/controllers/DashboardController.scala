@@ -16,11 +16,30 @@ class DashboardController @Inject()(authController: AuthenticationController, cc
     */
   def index() = Action {
     implicit request: Request[AnyContent] => authController.returnDesiredPageIfAuthenticated(
-      request, views.html.afterLogin.dashboard(), "Login failed")
+      request, views.html.afterLogin.dashboardviews.dashboard(), "Login failed")
   }
 
+  /**
+    * Loads the page which contains the options for users to interact with their projects:
+    * The projects they lead
+    * The projects they are invited to collaborate on
+    * Or create a new project
+    * @return
+    */
   def loadUserProjects() = Action {
     implicit request: Request[AnyContent] => authController.returnDesiredPageIfAuthenticated(
-      request, views.html.afterLogin.userProjects(), "Credentials Expired")
+      request, views.html.afterLogin.dashboardviews.userProjects(), "Credentials Expired")
   }
+
+  def projectOptionPicker(page:String) = Action {
+    implicit request: Request[AnyContent] =>
+      val pageToLoad = page match {
+        case "userLead" => views.html.afterLogin.dashboardviews.userLeadProjects()
+        case "userCollab" => views.html.afterLogin.dashboardviews.userCollabProjects()
+        case "newProject" => views.html.afterLogin.dashboardviews.newProjectCreator()
+      }
+    authController.returnDesiredPageIfAuthenticated(request, pageToLoad, "Credentials Expired")
+  }
+
+
 }
