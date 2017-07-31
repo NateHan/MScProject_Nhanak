@@ -4,7 +4,6 @@
 * two arguments, a `String` for the title of the page and an `Html`
 * object to insert into the body of the page.
 *@
-
 @(title: String)(content: Html)
 
 <!DOCTYPE html>
@@ -31,7 +30,8 @@
 
         @content
 
-    <script src="@routes.Assets.versioned("jquery/jquery-3.2.1.js")" type="text/javascript"></script>
-    <script src="@routes.Assets.versioned("bootstrap/bootstrap-3.3.7-dist/js/bootstrap.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.versioned("jquery/jquery-3.2.1.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.versioned("bootstrap/bootstrap-3.3.7-dist/js/bootstrap.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.versioned("javascripts/main.js")" type="text/javascript"></script>
     </body>
 </html>
