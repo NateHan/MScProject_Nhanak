@@ -17,9 +17,9 @@ $(document).ready(function () {
     $('.projectSliders').on('click', function () {
         var targetArea = $(this).next('.projSliderContent');
         var urlToPass = $(targetArea).attr('url');
-        var idOftarget = $(targetArea).attr('id');
-        $.when(loadDoc(urlToPass, idOftarget)).done(
-            $(this).next('.projSliderContent').slideToggle("slow")
+        targetArea.load(urlToPass, function(){
+                $(this).slideToggle()
+            }
         );
     });
 });

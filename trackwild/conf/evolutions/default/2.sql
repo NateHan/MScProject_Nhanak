@@ -4,7 +4,7 @@
 
 CREATE TABLE all_projects(
  project_title text NOT NULL PRIMARY KEY UNIQUE,
- created_date timestamp NOT NULL,
+ created_date timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
  project_lead text NOT NULL REFERENCES verified_users(userName),
  isActive boolean NOT NULL
 );
