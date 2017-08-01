@@ -1,4 +1,4 @@
-#userProjectsSelectors{
+#userProjectsSelectors {
     margin-top: 10%;
 }
 
@@ -9,12 +9,12 @@ i.fa {
     margin: 1%;
     padding: 3px;
     font-size: 1.6em;
-    text-shadow: 0px 4px 3px rgba(0,0,0,0.4),
-    0px 8px 13px rgba(0,0,0,0.1),
-    0px 18px 23px rgba(0,0,0,0.1);
+    text-shadow: 0px 4px 3px rgba(0, 0, 0, 0.4),
+    0px 8px 13px rgba(0, 0, 0, 0.1),
+    0px 18px 23px rgba(0, 0, 0, 0.1);
 }
 
-i+h3 {
+i + h3 {
     display: inline-block;
 }
 
@@ -36,16 +36,26 @@ i+h3 {
 }
 
 .projectSliders, .dashbutton {
-    background: rgba(0,0,0,0.1);
+    background: rgba(0, 0, 0, 0.1);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5), /* Exterior Shadow */ inset 0 1px rgba(255, 255, 255, 0.3), /* Top light Line */ inset 0 10px rgba(255, 255, 255, 0.2), /* Top Light Shadow */ inset 0 10px 20px rgba(255, 255, 255, 0.25), /* Sides Light Shadow */ inset 0 -15px 30px rgba(0, 0, 0, 0.3); /* Dark Background */
 }
 
-.dashbutton {
+.projSliderContent {
+    text-align: center;
+    padding: 2%;
+    background-color: rgba(11, 87, 102, .8);
+    text-shadow: 0px 4px 3px rgba(0,0,0,0.4),
+    0px 8px 13px rgba(0,0,0,0.1),
+    0px 18px 23px rgba(0,0,0,0.1);
+}
 
+.dashbutton {
+    color: white;
+    text-shadow: 0px 1px 0px rgba(255, 255, 255, .3), 0px -1px 0px rgba(0, 0, 0, .7);
 }
 
 .projectSliders:hover {
-    background: rgba(0,0,0,0.25);
+    background: rgba(0, 0, 0, 0.25);
     cursor: pointer;
 }
 

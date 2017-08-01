@@ -1,6 +1,7 @@
 @import models.formdata.RegistrationData
+@import helper._
 
-@(loginform: Form[RegistrationData])(implicit messages: MessagesProvider)
+@(loginform: Form[RegistrationData])(implicit messages: MessagesProvider, request:RequestHeader)
 
 @main("Track Wild: Register") {
 
@@ -8,6 +9,7 @@
     <div class="container">
         <div class="row">
             <form method="post" class="col-md-6 col-sm-8 col-centered" id="registrationForm" autocomplete="on">
+                @CSRF.formField
                 <h1 align="center" id="regHeader">REGISTRATION</h1>
                 <hr id="regHR">
                 <div class="form-group">

@@ -6,7 +6,7 @@ CREATE TABLE all_projects(
  project_title text NOT NULL PRIMARY KEY UNIQUE,
  created_date timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
  project_lead text NOT NULL REFERENCES verified_users(userName),
- isActive boolean NOT NULL
+ isActive boolean NOT NULL DEFAULT TRUE
 );
 
 CREATE TABLE collaborations(
@@ -25,7 +25,7 @@ CREATE TABLE project_notes(
     note_title text DEFAULT ('Note from: ', CURRENT_TIMESTAMP),
     note_author text NOT NULL REFERENCES verified_users(userName),
     note_content text NOT NULL,
-    note_date timestamp default current_timestamp
+    note_date timestamp DEFAULT current_timestamp
 );
 
 -- sample data for demoing

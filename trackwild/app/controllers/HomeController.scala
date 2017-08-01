@@ -24,4 +24,6 @@ class HomeController @Inject()(cc: ControllerComponents) extends AbstractControl
     implicit request: Request[AnyContent] => Ok(views.html.index()).withHeaders(SecurityHeadersFilter
       .CONTENT_SECURITY_POLICY_HEADER -> " .fontawesome.com .fonts.googleapis.com")
   }
+
+
 }

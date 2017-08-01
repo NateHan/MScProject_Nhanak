@@ -132,7 +132,7 @@ class LoginRegController @Inject()(twDB: Database, cc: ControllerComponents) ext
     * Brings user to landing page, giving them a new session cookie to fully logout.
     * @return
     */
-  def logOut = Action { Ok(views.html.index()).withNewSession}
+  def logOut = Action { implicit request: Request[AnyContent] => Ok(views.html.index()).withNewSession}
 
 
 

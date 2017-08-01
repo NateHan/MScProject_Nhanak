@@ -2,13 +2,17 @@ package controllers
 
 import javax.inject.{Inject, Singleton}
 
+import models.formdata.NewProjectData
+import play.api.data.Form
+import play.api.data.Forms._
+import play.api.db.Database
 import play.api.mvc.{AbstractController, AnyContent, ControllerComponents, Request}
 
 /**
   * Created by nathanhanak on 7/14/17.
   */
 @Singleton
-class DashboardController @Inject()(authController: AuthenticationController, cc: ControllerComponents) extends AbstractController(cc) {
+class DashboardController @Inject()(twDB: Database, authController: AuthenticationController, cc: ControllerComponents) extends AbstractController(cc) {
 
   /**
     * The first page to load after a user logs in
@@ -39,6 +43,23 @@ class DashboardController @Inject()(authController: AuthenticationController, cc
         case "newProject" => views.html.afterLogin.dashboardviews.newProjectCreator()
       }
     authController.returnDesiredPageIfAuthenticated(request, pageToLoad, "Credentials Expired")
+  }
+
+  val newProjForm: Form[NewProjectData] = Form {
+    mapping(
+      "title" -> nonEmptyText,
+      "userName" -> nonEmptyText,
+      "initialNote" -> nonEmptyText
+    )(NewProjectData.apply)(NewProjectData.unapply)
+  }
+
+  def postNewProject() = Action {
+    implicit request: Request[AnyContent] => newProjForm.bindFromRequest().fold(
+      errorForm => BadRequest("Project Creation Failed"),
+      successForm => {
+
+        Ok("Project Created")}
+    )
   }
 
 

@@ -10,23 +10,24 @@ GET     /                           controllers.HomeController.index
 
 GET     /login                      controllers.LoginRegController.loadLogin
 GET     /register                   controllers.LoginRegController.loadRegistrationPage
-+ nocsrf
+
 POST    /register                   controllers.LoginRegController.registerSubmit
 GET     /logout                     controllers.LoginRegController.logOut
 + nocsrf
 POST    /login                      controllers.LoginRegController.attemptLogin
 
 # The controller for the main dashboard upon signin
-GET     /dashboard                  controllers.DashboardController.index
-GET     /dashboard/projects         controllers.DashboardController.loadUserProjects
-GET     /dashboard/projects/:option controllers.DashboardController.projectOptionPicker(option:String)
+GET     /dashboard                      controllers.DashboardController.index
+GET     /dashboard/projects             controllers.DashboardController.loadUserProjects
+GET     /dashboard/projects/:option     controllers.DashboardController.projectOptionPicker(option:String)
+POST    /dashboard/projects/newProject  controllers.DashboardController.postNewProject
 
 # The controller for the main project view workspace, loads default values if none found
-GET     /projectworkspace/datauploader/new  controllers.DataUploadController.renderNewTableUploader
-GET     /projectworkspace/datauploader/append  controllers.ProjectsWorkSpaceController.renderDataAppender
-GET     /projectworkspace/dataViewer    controllers.ProjectsWorkSpaceController.renderDataViewerTool
-GET     /projectworkspace/dataImportSelector  controllers.ProjectsWorkSpaceController.renderDataImporterSelector
-GET     /projectworkspace/:projectName       controllers.ProjectsWorkSpaceController.loadWorkspace(projectName:String )
+GET     /projectworkspace/datauploader/new      controllers.DataUploadController.renderNewTableUploader
+GET     /projectworkspace/datauploader/append   controllers.ProjectsWorkSpaceController.renderDataAppender
+GET     /projectworkspace/dataViewer            controllers.ProjectsWorkSpaceController.renderDataViewerTool
+GET     /projectworkspace/dataImportSelector    controllers.ProjectsWorkSpaceController.renderDataImporterSelector
+GET     /projectworkspace/:projectName          controllers.ProjectsWorkSpaceController.loadWorkspace(projectName:String )
 
 # Controller which handles file upload
 POST    /projectworkspace/uploadNewTable controllers.DataUploadController.uploadNewTable

@@ -34,7 +34,7 @@ class AuthenticationController @Inject()(cc: ControllerComponents) extends Abstr
       request.session.get("authenticated") match {
         case Some(value) if value.equals("true") => Ok(successPage).withHeaders(SecurityHeadersFilter
           .CONTENT_SECURITY_POLICY_HEADER -> " .fontawesome.com .fonts.googleapis.com")
-        case _ => Unauthorized(views.html.invalidSession(errorMessage))
+        case _ => Unauthorized(views.html.invalidSession(errorMessage)(request)).withNewSession
       }
     }
 

@@ -1,5 +1,6 @@
 package controllers
 
+import models.database.DefaultDataBase
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice.GuiceOneAppPerTest
 import play.api.mvc.{Action, Result}
@@ -21,8 +22,8 @@ class AuthenticationControllerSpec extends PlaySpec with GuiceOneAppPerTest with
 
 
       // testing by running through a controller
-      val controller = new DashboardController(new AuthenticationController(stubControllerComponents()),
-        stubControllerComponents())
+      //twDB: Database, authController: AuthenticationController, cc: ControllerComponents
+      val controller = inject[DashboardController]
       val dashRequest = controller.index().apply(FakeRequest(GET, "/dashboard")
         .withSession("authenticated" -> "true", "username" -> "testuser"))
 
@@ -39,8 +40,7 @@ class AuthenticationControllerSpec extends PlaySpec with GuiceOneAppPerTest with
       authController.sessionIsAuthenticated(invalidRequest.session) mustBe false
 
       // testing by running through a controller
-      val controller = new DashboardController(new AuthenticationController(stubControllerComponents()),
-        stubControllerComponents())
+      val controller = inject[DashboardController]
       val badDashRequest= controller.index().apply(FakeRequest(GET, "/dashboard"))
 
       status(badDashRequest) mustBe UNAUTHORIZED
@@ -56,7 +56,7 @@ class AuthenticationControllerSpec extends PlaySpec with GuiceOneAppPerTest with
         .withSession("authenticated" -> "true", "username" -> "testuser")
       val authController = new AuthenticationController(stubControllerComponents())
 
-      val result = authController.returnDesiredPageIfAuthenticated(validRequest, views.html.afterLogin.dashboard())
+      val result = authController.returnDesiredPageIfAuthenticated(validRequest, views.html.afterLogin.dashboardviews.dashboard())
 
       result.header.status mustBe 200
     }
@@ -65,7 +65,7 @@ class AuthenticationControllerSpec extends PlaySpec with GuiceOneAppPerTest with
       implicit val invalidRequest = FakeRequest(GET, "/dashboard")
       val authController = new AuthenticationController(stubControllerComponents())
 
-      val result = authController.returnDesiredPageIfAuthenticated(invalidRequest, views.html.afterLogin.dashboard())
+      val result = authController.returnDesiredPageIfAuthenticated(invalidRequest, views.html.afterLogin.dashboardviews.dashboard())
 
       result.header.status mustBe 401
     }

@@ -1,6 +1,6 @@
 @import models.formdata.UserLoginData
 
-@(loginform: Form[UserLoginData])(implicit messages: MessagesProvider)
+@(loginform: Form[UserLoginData])(implicit messages: MessagesProvider, request: RequestHeader)
 
 @main("Track Wild: Login") {
 
