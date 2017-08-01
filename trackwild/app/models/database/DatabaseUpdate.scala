@@ -1,6 +1,6 @@
 package models.database
 
-import java.sql.{DatabaseMetaData, ResultSet}
+import java.sql.{DatabaseMetaData, ResultSet, Statement}
 
 import models.database.DefaultDataBase
 import play.api.db.Database
@@ -16,28 +16,24 @@ object DatabaseUpdate {
     * @param expectedRows How many rows are expected to be affected by the insert, used for validation
     * @return Int the number of rows which were affected
     */
-  def insertInto(tableName:String, columnsToVals:Map[String,String], expectedRows:Int): Int = {
+  def insertInto(tableName:String, columnsToVals:Map[String,String]): Int = {
     val db: Database = DefaultDataBase.getApplicationDataBase
     val columnBuilder = new StringBuilder
     val valueBuilder = new StringBuilder
     db.withConnection{ conn =>
-      val dbMetaData = conn.getMetaData
+      val stmt = conn.createStatement()
       for( (k,v)  <- columnsToVals) {
         columnBuilder.append(k + ", ");
-        val colType: Int = getColumnTypes(dbMetaData, k)
-        if colType = TODO // if it matches a texttual type append with ' ' else append without
-        valueBuilder.append(v + ", ")
+        if (v.startsWith("'") && v.endsWith("'")) {
+          valueBuilder.append(v + ", ")
+        } else {
+          valueBuilder.append("'" + v + "', ")
+        }
       }
       columnBuilder.deleteCharAt(columnBuilder.length-2) //remove erroneous commas
       valueBuilder.deleteCharAt(valueBuilder.length-2) //remove erroneous commas
-     val stmt = conn.createStatement()
       stmt.executeUpdate(s"INSERT INTO $tableName(${columnBuilder.toString()}) VALUES(${valueBuilder.toString()});")
     }
-  }
-
-  private def getColumnTypes(metaData:DatabaseMetaData, colName:String): Int = {
-    TODO
-    //SEE: "Listing Columns in a Table: http://tutorials.jenkov.com/jdbc/databasemetadata.html#listing-columns-in-a-table "
   }
 
 }

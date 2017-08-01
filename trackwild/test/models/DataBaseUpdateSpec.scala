@@ -18,11 +18,25 @@ class DataBaseUpdateSpec extends PlaySpec with GuiceOneAppPerSuite with BeforeAn
       val columnsAndValues = Map("project_title" -> "'Track Sharks 848305439'", "project_lead" -> "'DemoUser'")
       val expectedReturn = 1
 
-      DatabaseUpdate.insertInto(tableName, columnsAndValues, expectedReturn) mustBe 1
+      DatabaseUpdate.insertInto(tableName, columnsAndValues) mustBe 1
       // remove test data
       twDB.withTransaction { conn =>
         val stmt = conn.createStatement
         val query = "DELETE FROM all_projects WHERE project_title='Track Sharks 848305439';"
+        stmt.executeUpdate(query) mustBe 1
+      }
+    }
+
+    "add ' ''s to an input value without ' ''s and return a value of 1 when inserting a single value" in {
+      val tableName = "all_projects"
+      val columnsAndValues = Map("project_title" -> "Track Dogs 123456", "project_lead" -> "DemoUser")
+      val expectedReturn = 1
+
+      DatabaseUpdate.insertInto(tableName, columnsAndValues) mustBe 1
+      // remove test data
+      twDB.withTransaction { conn =>
+        val stmt = conn.createStatement
+        val query = "DELETE FROM all_projects WHERE project_title='Track Dogs 123456';"
         stmt.executeUpdate(query) mustBe 1
       }
     }
