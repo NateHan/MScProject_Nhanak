@@ -29,8 +29,8 @@ object DatabaseUpdate {
           valueBuilder.append("'" + v + "', ")
         }
       }
-      columnBuilder.deleteCharAt(columnBuilder.length - 2) //remove erroneous commas
-      valueBuilder.deleteCharAt(valueBuilder.length - 2) //remove erroneous commas
+      columnBuilder.deleteCharAt(columnBuilder.length - 2) //remove erroneous comma
+      valueBuilder.deleteCharAt(valueBuilder.length - 2) //remove erroneous comma
       stmt.executeUpdate(s"INSERT INTO $tableName(${columnBuilder.toString()}) VALUES(${valueBuilder.toString()});")
     }
   }

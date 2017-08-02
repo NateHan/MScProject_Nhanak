@@ -1,8 +1,35 @@
-@()(implicit request: RequestHeader)
+@import models.formdata.NewProjectData
+@import helper._
 
-<div class="container-fluid">
-    <div class="row">
+@(newProjForm: Form[NewProjectData])(implicit messages: MessagesProvider, request: RequestHeader)
 
-    </div>
+
+<div class="row">
+    <form method="post" class="sliderForms" id="createProjectForm" action="@routes.DashboardController.postNewProject()" autocomplete="off">
+        @CSRF.formField
+        <div class="col-md-6 col-sm-12" id="newProjectTitleRow">
+        @inputText(newProjForm("projectName"),
+            'placeholder -> "Enter the name of your new project",
+            '_label -> "New Project Name",
+            'class -> "sliderTextInputBox",
+            'required -> "required",
+            'title -> "Title must be 6-150 characters long and cannot contain ' or \" ",
+            'pattern -> "^[^'\"]*$",
+            'min -> "6",
+            'max -> "150"
+        )
+        </div>
+        <div class="col-md-6 col-sm-12" id="newProjectNoteRow">
+            <label for="initNotebox">Enter a note about your new project</label>
+            <textarea rows="10" cols="40" form="createProjectForm" class="sliderTextInputBox" id="initNoteBox" name="initialNote" placeholder="Enter a note here" required>
+            </textarea>
+        </div>
+        <input type="hidden" name="userName" value="@request.session.get("username")">
+        <br>
+        <button type="submit" class="btn btn-default btn-lg">
+            <i class="fa fa-plus-square" aria-hidden="true"></i>
+            Create New Project
+        </button>
+    </form>
 </div>
 

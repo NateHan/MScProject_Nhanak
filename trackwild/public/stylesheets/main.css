@@ -102,7 +102,7 @@ hr {
     0px 18px 23px rgba(0,0,0,0.1);
 }
 
-.btn-lg {
+.btn-lg, #loginButton {
     background: rgba(0, 0, 0, 0.1);
     box-shadow:
             0 2px 8px rgba(0, 0, 0, 0.5),        /* Exterior Shadow */

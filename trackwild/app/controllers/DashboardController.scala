@@ -14,7 +14,8 @@ import play.api.mvc.{AbstractController, AnyContent, ControllerComponents, Reque
   * Created by nathanhanak on 7/14/17.
   */
 @Singleton
-class DashboardController @Inject()(twDB: Database, authController: AuthenticationController, cc: ControllerComponents) extends AbstractController(cc) {
+class DashboardController @Inject()(twDB: Database, authController: AuthenticationController, cc: ControllerComponents) extends AbstractController(cc)
+  with play.api.i18n.I18nSupport {
 
   /**
     * The first page to load after a user logs in
@@ -46,7 +47,7 @@ class DashboardController @Inject()(twDB: Database, authController: Authenticati
       val pageToLoad = page match {
         case "userLead" => views.html.afterLogin.dashboardviews.userLeadProjects()
         case "userCollab" => views.html.afterLogin.dashboardviews.userCollabProjects()
-        case "newProject" => views.html.afterLogin.dashboardviews.newProjectCreator()
+        case "newProject" => views.html.afterLogin.dashboardviews.newProjectCreator(newProjForm)
       }
       authController.returnDesiredPageIfAuthenticated(request, pageToLoad, "Credentials Expired")
   }

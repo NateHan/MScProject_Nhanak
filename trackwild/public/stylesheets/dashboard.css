@@ -62,3 +62,12 @@ i + h3 {
 #projleadSlider, #projCollabSlider {
     border-bottom: 4px solid white;
 }
+
+.sliderTextInputBox {
+    background: rgba(6, 47, 55, .9);
+    width: 100%;
+}
+
+#newProjectTitleRow {
+    float: left;
+}
