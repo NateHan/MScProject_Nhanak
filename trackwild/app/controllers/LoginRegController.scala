@@ -21,7 +21,7 @@ class LoginRegController @Inject()(twDB: Database, cc: ControllerComponents) ext
   def loadLogin() = Action {
     implicit request: Request[AnyContent] =>
       Ok(views.html.login(loginform)).withHeaders(SecurityHeadersFilter
-        .CONTENT_SECURITY_POLICY_HEADER -> " .fontawesome.com .fonts.googleapis.com").withNewSession
+        .CONTENT_SECURITY_POLICY_HEADER -> " .fontawesome.com .fonts.googleapis.com")
   }
 
   val loginform: Form[UserLoginData] = Form(
@@ -43,11 +43,11 @@ class LoginRegController @Inject()(twDB: Database, cc: ControllerComponents) ext
       loginform.bindFromRequest().fold(
         formWithErrors => BadRequest(views.html.login(formWithErrors)),
         successfulForm => {
-          val validator: DbInputValidator = new LoginInputsValidator(twDB, loginform.bindFromRequest().get)
+          val validator: DbInputValidator = new LoginInputsValidator(twDB, successfulForm)
           if (validator.inputsAreValid) {
-            val userEmail = loginform.bindFromRequest().get.inputEmail
+            val userEmail = successfulForm.inputEmail
             Ok(views.html.afterLogin.dashboardviews.dashboard())
-              .withSession("authenticated" -> "true", "username" -> getUserName(userEmail))
+              .withSession( request.session + ("authenticated" -> "true") + ("username" -> getUserName(userEmail)))
           } else {
             BadRequest(views.html.login(loginform))
           }
@@ -132,9 +132,10 @@ class LoginRegController @Inject()(twDB: Database, cc: ControllerComponents) ext
     * Brings user to landing page, giving them a new session cookie to fully logout.
     * @return
     */
-  def logOut = Action { implicit request: Request[AnyContent] => Ok(views.html.index()).withNewSession}
-
-
-
+  def logOut = Action { implicit request: Request[AnyContent] => Ok(views.html.index())
+    .withNewSession
+    .withHeaders(SecurityHeadersFilter
+    .CONTENT_SECURITY_POLICY_HEADER -> " .fontawesome.com .fonts.googleapis.com")
+  }
 }
 

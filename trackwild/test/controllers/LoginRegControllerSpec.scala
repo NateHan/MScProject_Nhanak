@@ -11,6 +11,7 @@ import play.api.test.Helpers.{BAD_REQUEST, GET, OK, contentAsString, contentType
 import play.api.test.{FakeRequest, Injecting}
 
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
   * Created by nathanhanak on 7/14/17.
@@ -34,7 +35,7 @@ class LoginRegControllerSpec extends PlaySpec with GuiceOneAppPerSuite with Inje
 
       status(loginPage) mustBe OK
       contentType(loginPage) mustBe Some("text/html")
-      contentAsString(loginPage) must include ("Track Wild: Login")
+      contentAsString(loginPage) must include("Track Wild: Login")
     }
 
     "render the login page from the application" in {
@@ -43,7 +44,7 @@ class LoginRegControllerSpec extends PlaySpec with GuiceOneAppPerSuite with Inje
 
       status(loginPage) mustBe OK
       contentType(loginPage) mustBe Some("text/html")
-      contentAsString(loginPage) must include ("Track Wild: Login")
+      contentAsString(loginPage) must include("Track Wild: Login")
     }
 
   }
@@ -52,30 +53,56 @@ class LoginRegControllerSpec extends PlaySpec with GuiceOneAppPerSuite with Inje
 
     "return a BadRequest if user submits parameters in wrong format" in {
       implicit val request = FakeRequest("POST", "/login")
-        .withFormUrlEncodedBody( "inputEmail" -> "notAnEmail", "inputPassword" -> "valid")
+        .withFormUrlEncodedBody("inputEmail" -> "notAnEmail", "inputPassword" -> "valid")
 
-      val result : Future[Result] = controller.attemptLogin().apply(request)
+      val result: Future[Result] = controller.attemptLogin().apply(request)
       status(result) mustBe BAD_REQUEST
     }
 
     "return a BadRequest if user submits a login not found in the database" in {
       implicit val request = FakeRequest("POST", "/login")
-        .withFormUrlEncodedBody( "inputEmail" -> "does@notexist.com", "inputPassword" -> "nope")
+        .withFormUrlEncodedBody("inputEmail" -> "does@notexist.com", "inputPassword" -> "nope")
 
-      val result : Future[Result] = controller.attemptLogin().apply(request)
+      val result: Future[Result] = controller.attemptLogin().apply(request)
       status(result) mustBe BAD_REQUEST
     }
 
     "return OK if a user submits a valid login" in {
-      implicit val request= FakeRequest("Post", "/login")
-        .withFormUrlEncodedBody("inputEmail" -> "demo@demo.com", "inputPassword" -> "demo")
-      val result : Future[Result] = controller.attemptLogin().apply(request)
+      implicit val request = FakeRequest("Post", "/login")
+        .withFormUrlEncodedBody("inputEmail" -> "demo@demo.com", "inputPassword" -> "demopassword")
+      val result: Future[Result] = controller.attemptLogin().apply(request)
       status(result) mustBe OK
 
-      implicit val request2= FakeRequest("Post", "/login")
+      implicit val request2 = FakeRequest("Post", "/login")
         .withFormUrlEncodedBody("inputEmail" -> "nathan.hanak@gmail.com", "inputPassword" -> "trackwild")
-      val result2 : Future[Result] = controller.attemptLogin().apply(request2)
+      val result2: Future[Result] = controller.attemptLogin().apply(request2)
       status(result2) mustBe OK
+    }
+
+    "return a session containing expected header values " in {
+      implicit val request = FakeRequest("Post", "/login")
+        .withFormUrlEncodedBody("inputEmail" -> "demo@demo.com", "inputPassword" -> "demopassword")
+      val futResult: Future[Result] = controller.attemptLogin().apply(request)
+      var authenticated: String = ""
+      var userName: String = ""
+      futResult.map(result => authenticated = result.session.get("authenticated").getOrElse("Nope"))
+      futResult.map(result => userName = result.session.get("username").getOrElse("no username"))
+
+      authenticated mustBe "true"
+      userName mustBe "DemoUser"
+    }
+      // check again to be safe
+    "return a session containing expected header values (second check) " in {
+      implicit val request2 = FakeRequest("Post", "/login")
+        .withFormUrlEncodedBody("inputEmail" -> "nathan.hanak@gmail.com", "inputPassword" -> "trackwild")
+      val futResult2: Future[Result] = controller.attemptLogin().apply(request2)
+      var authenticated2: String = ""
+      var userName2: String = ""
+      futResult2.map(result => authenticated2 = result.session.get("authenticated").getOrElse("Nope"))
+      futResult2.map(result => userName2 = result.session.get("username").getOrElse("no username"))
+
+      authenticated2 mustBe "true"
+      userName2 mustBe "nhanak"
     }
 
   }

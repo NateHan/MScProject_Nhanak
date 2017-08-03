@@ -20,7 +20,9 @@ POST    /login                      controllers.LoginRegController.attemptLogin
 GET     /dashboard                      controllers.DashboardController.index
 GET     /dashboard/projects             controllers.DashboardController.loadUserProjects
 GET     /dashboard/projects/:option     controllers.DashboardController.projectOptionPicker(option:String)
-POST    /dashboard/projects/newProject  controllers.DashboardController.postNewProject
+GET     /dashboard/projects/sliderSubmitResponse/:response    controllers.DashboardController.getSliderResponse(response: String)
++ nocsrf
+POST    /dashboard/projects             controllers.DashboardController.postNewProject
 
 # The controller for the main project view workspace, loads default values if none found
 GET     /projectworkspace/datauploader/new      controllers.DataUploadController.renderNewTableUploader

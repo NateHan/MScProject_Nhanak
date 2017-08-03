@@ -7,11 +7,13 @@
 <div class="row">
     <form method="post" class="sliderForms" id="createProjectForm" action="@routes.DashboardController.postNewProject()" autocomplete="off">
         @CSRF.formField
+        <div class="row">
         <div class="col-md-6 col-sm-12" id="newProjectTitleRow">
         @inputText(newProjForm("projectName"),
             'placeholder -> "Enter the name of your new project",
             '_label -> "New Project Name",
             'class -> "sliderTextInputBox",
+            'id -> "projectTitleInputBox",
             'required -> "required",
             'title -> "Title must be 6-150 characters long and cannot contain ' or \" ",
             'pattern -> "^[^'\"]*$",
@@ -25,11 +27,13 @@
             </textarea>
         </div>
         <input type="hidden" name="userName" value="@request.session.get("username")">
-        <br>
-        <button type="submit" class="btn btn-default btn-lg">
-            <i class="fa fa-plus-square" aria-hidden="true"></i>
-            Create New Project
-        </button>
+        </div>
+        <div class="row">
+            <button type="submit" class="btn btn-default btn-lg">
+                <i class="fa fa-plus-square" aria-hidden="true"></i>
+                Create New Project
+            </button>
+        </div>
     </form>
 </div>
 

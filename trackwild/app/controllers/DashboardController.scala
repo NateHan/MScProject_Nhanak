@@ -69,7 +69,7 @@ class DashboardController @Inject()(twDB: Database, authController: Authenticati
   def postNewProject() = Action {
     implicit request: Request[AnyContent] =>
       newProjForm.bindFromRequest().fold(
-        errorForm => BadRequest("Project Creation Failed"),
+        errorForm => BadRequest(s"Project Creation Failed: Form Data Did Not Bind"),
         successForm => {
           val colsToValsProjects: Map[String, String] = Map("project_title" -> successForm.title,
             "project_lead" -> successForm.userName)
@@ -84,12 +84,21 @@ class DashboardController @Inject()(twDB: Database, authController: Authenticati
             if (rowsInsertedProjects == 1 && rowsInsertedNotes == 1) {
               Ok("Project Created")
             }
-            else (BadRequest("Project Creation Failed"))
+            else BadRequest(s"Project Creation Failed: Did not get expected SQL Response")
           } catch {
             case e: SQLException => e.printStackTrace; BadRequest("Project Creation Failed - SQL Error")
-            case unknown => unknown.printStackTrace; BadRequest("Project Creation Failed - SQL Error")
+            case unknown : Throwable => unknown.printStackTrace; BadRequest("Project Creation Failed - SQL Error")
           }
         }
       )
+  }
+
+  def getSliderResponse(response:String) = Action {
+    implicit request: Request[AnyContent] =>
+      response match {
+        case "newProjSuccess" => Ok(views.html.afterLogin.dashboardviews.sliderResponse(response))
+        case "newProjFail" => Ok(views.html.afterLogin.dashboardviews.sliderResponse(response))
+        case _ => Ok(views.html.afterLogin.dashboardviews.sliderResponse(response))
+      }
   }
 }

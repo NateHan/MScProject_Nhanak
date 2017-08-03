@@ -1,0 +1,17 @@
+@(result: String)(implicit request: RequestHeader)
+
+@getResult(rowType: String) = @{
+    if(rowType.equals(result)) "" else "display: none"
+}
+
+<div class="row">
+
+</div>
+
+<div class="row" style="@getResult("newProjSuccess")" id="displayCreateProjSuccess">
+    <h1>Project Created</h1>
+</div>
+<div class="row" style="@getResult("newProjFail")" id="displayCreateProjFail">
+    <h1>Project Did Not Create</h1>
+</div>
+

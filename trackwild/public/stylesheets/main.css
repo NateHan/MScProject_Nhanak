@@ -102,6 +102,10 @@ hr {
     0px 18px 23px rgba(0,0,0,0.1);
 }
 
+label {
+    letter-spacing: 1px;
+}
+
 .btn-lg, #loginButton {
     background: rgba(0, 0, 0, 0.1);
     box-shadow:

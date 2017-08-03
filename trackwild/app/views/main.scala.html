@@ -1,4 +1,3 @@
-
 @(title: String)(content: Html)(implicit req: play.api.mvc.RequestHeader)
 
 <!DOCTYPE html>
@@ -17,9 +16,10 @@
         <link type="text/css" rel="stylesheet" href="@routes.Assets.versioned("stylesheets/projects.css")">
         <link type="text/css" rel="stylesheet" href="@routes.Assets.versioned("stylesheets/dashboard.css")">
         <link rel="shortcut icon" type="image/png" href="@routes.Assets.versioned("images/dolphin-icon.png")">
-        <!-- add any new JS scripts that GET or POST to controllers below -->
+            <!-- add any new JS scripts that GET or POST to controllers below -->
         @helper.javascriptRouter("jsRoutes")(
-            routes.javascript.DashboardController.postNewProject
+            routes.javascript.DashboardController.postNewProject,
+            routes.javascript.DashboardController.getSliderResponse
         )
 
     </head>

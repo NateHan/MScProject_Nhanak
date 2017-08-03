@@ -1,5 +1,6 @@
 @()(implicit request: RequestHeader)
 
+
 @main("Track Wild: Dashboard") {
 
     @loggedInNavbar("dashboard")
@@ -10,7 +11,7 @@
         <div class="container">
             <h2>Click to navigate</h2>
             <div id="dashNavButtons">
-                <button type="button" class="btn btn-lg btn-default dashbutton" onclick="window.location.href='/dashboard/projects'">
+                <button type="button" class="btn btn-lg btn-default dashbutton" onclick="window.location.href='@routes.DashboardController.loadUserProjects()'">
                     Projects
                 </button>
                 <button type="button" class="btn btn-lg btn-default dashbutton">

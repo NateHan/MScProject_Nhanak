@@ -30,7 +30,7 @@ class AuthenticationController @Inject()(cc: ControllerComponents) extends Abstr
     * @return Action containing the response of the operation
     */
   def returnDesiredPageIfAuthenticated(request: Request[AnyContent], successPage: Html,
-                                       errorMessage: String = "Must be logged in to access"):Result = {
+                                       errorMessage: String = "Track Wild Msg: Must be logged in to access"):Result = {
       request.session.get("authenticated") match {
         case Some(value) if value.equals("true") => Ok(successPage).withHeaders(SecurityHeadersFilter
           .CONTENT_SECURITY_POLICY_HEADER -> " .fontawesome.com .fonts.googleapis.com")
