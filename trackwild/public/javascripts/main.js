@@ -33,18 +33,24 @@ $(document).ready(function () {
 $(document).on('submit', '.sliderForms', function (event) {
 
     event.preventDefault();
-    var content = $('#projectTitleInputBox').val();
-    var content2 = $('#initNoteBox').val();
-    window.alert("Made it to the ajax call with: " + content + '<<<>>> ' + content2);
-
-    var myRoute = jsRoutes.controllers.DashboardController.postNewProject()
+    var data = {
+        title: $('#projectTitleInputBox').val(),
+        userName: $('#sessionUserName').val(),
+        initialNote: $('#initNoteBox').val()
+    }
+    var route = jsRoutes.controllers.DashboardController.postNewProject()
     $.ajax({
-
-    });
-    /*
-    jsRoutes.controllers.DashboardController.postNewProject().ajax({
-        success: function() { loadDoc('/dashboard/projects/sliderSubmitResponse/newProjSuccess', 'createNewProjectDiv') },
-        fail: function() { loadDoc('/dashboard/projects/sliderSubmitResponse/newProjFail', 'createNewProjectDiv') }
+        url: route.url,
+        type: route.type,
+        data : JSON.stringify(data),
+        contentType : 'application/json',
+        success: function () {
+            loadDoc('/dashboard/projects/sliderSubmitResponse/newProjSuccess', 'createNewProjectDiv')
+        },
+        error: function () {
+            loadDoc('/dashboard/projects/sliderSubmitResponse/newProjFail', 'createNewProjectDiv')
+        }
     })
-*/
+
+
 });
