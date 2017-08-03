@@ -30,7 +30,7 @@ $(document).ready(function () {
 
 // Listens for a submission of a sliderForm (in the dasboard)
 // Linking with the jsRoutes method, it will post the form and return the result in the targeted area.
-$(document).on('submit', '.sliderForms', function (event) {
+$(document).on('submit', '#createProjectForm', function (event) {
 
     event.preventDefault();
     var data = {
@@ -38,17 +38,28 @@ $(document).on('submit', '.sliderForms', function (event) {
         userName: $('#sessionUserName').val(),
         initialNote: $('#initNoteBox').val()
     }
+
+    var token =  $('input[name="csrfToken"]').attr('value')
+    $.ajaxSetup({
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader('Csrf-Token', token);
+        }
+    });
+
     var route = jsRoutes.controllers.DashboardController.postNewProject()
     $.ajax({
         url: route.url,
         type: route.type,
         data : JSON.stringify(data),
         contentType : 'application/json',
-        success: function () {
-            loadDoc('/dashboard/projects/sliderSubmitResponse/newProjSuccess', 'createNewProjectDiv')
+        headers: {'X-CSRF-TOKEN': $('input[name=csrfToken]').attr('value')},
+        success: function (data) {
+            var projName = JSON.stringify(data.newProjectName);
+            var successURL = "/dashboard/projects/sliderSubmitResponse/newProjSuccess/" + projName;
+            loadDoc(successURL, 'createNewProjectDiv')
         },
-        error: function () {
-            loadDoc('/dashboard/projects/sliderSubmitResponse/newProjFail', 'createNewProjectDiv')
+        error: function (data) {
+            loadDoc('/dashboard/projects/sliderSubmitResponse/newProjFail/NoProjectCreated', 'createNewProjectDiv')
         }
     })
 

@@ -71,3 +71,7 @@ i + h3 {
 #newProjectTitleRow {
     float: left;
 }
+
+#createProjectForm {
+    margin: 5px;
+}

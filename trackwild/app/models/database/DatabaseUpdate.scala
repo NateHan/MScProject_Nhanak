@@ -1,9 +1,7 @@
 package models.database
 
-import java.sql.{ResultSet, Statement}
-
-import models.database.DefaultDataBase
 import play.api.db.Database
+
 
 object DatabaseUpdate {
 
@@ -16,7 +14,7 @@ object DatabaseUpdate {
     * @return Int the number of rows which were affected
     */
   def insertInto(tableName: String, columnsToVals: Map[String, String]): Int = {
-    val db: Database = DefaultDataBase.getApplicationDataBase
+    val db: Database = TrackWildDatabaseGrabber.getApplicationDataBase
     val columnBuilder = new StringBuilder
     val valueBuilder = new StringBuilder
     db.withConnection { conn =>

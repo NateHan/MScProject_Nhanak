@@ -8,6 +8,7 @@ import models.formdata.NewProjectData
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.db.Database
+import play.api.libs.json.Json
 import play.api.mvc.{AbstractController, AnyContent, ControllerComponents, Request}
 
 /**
@@ -42,6 +43,12 @@ class DashboardController @Inject()(twDB: Database, authController: Authenticati
         request, views.html.afterLogin.dashboardviews.userProjects(), "Credentials Expired")
   }
 
+  /**
+    * Method is response to when user clicks a slider, returns a page to be loaded
+    * into the slider's content div
+    * @param page one of the possible options to load in the userProjects.scala.html sliders
+    * @return the  dashboardviews.___ templates to return
+    */
   def projectOptionPicker(page: String) = Action {
     implicit request: Request[AnyContent] =>
       val pageToLoad = page match {
@@ -71,9 +78,11 @@ class DashboardController @Inject()(twDB: Database, authController: Authenticati
       newProjForm.bindFromRequest().fold(
         errorForm => BadRequest(s"Project Creation Failed: Form Data Did Not Bind"),
         successForm => {
-          val colsToValsProjects: Map[String, String] = Map("project_title" -> successForm.title,
+          val colsToValsProjects: Map[String, String] = Map(
+            "project_title" -> successForm.title,
             "project_lead" -> successForm.userName)
-          val colsToValsNotes: Map[String, String] = Map("project_title" -> successForm.title,
+          val colsToValsNotes: Map[String, String] = Map(
+            "project_title" -> successForm.title,
             "note_title" -> s"${successForm.userName} created project.",
             "note_author" -> successForm.userName,
             "note_content" -> successForm.initialNote
@@ -82,23 +91,23 @@ class DashboardController @Inject()(twDB: Database, authController: Authenticati
             val rowsInsertedProjects = DatabaseUpdate.insertInto("all_projects", colsToValsProjects)
             val rowsInsertedNotes = DatabaseUpdate.insertInto("project_notes", colsToValsNotes)
             if (rowsInsertedProjects == 1 && rowsInsertedNotes == 1) {
-              Ok("Project Created")
+              Ok(Json.obj("newProjectName" -> successForm.title))
             }
             else BadRequest(s"Project Creation Failed: Did not get expected SQL Response")
           } catch {
             case e: SQLException => e.printStackTrace; BadRequest("Project Creation Failed - SQL Error")
-            case unknown : Throwable => unknown.printStackTrace; BadRequest("Project Creation Failed - SQL Error")
+            case unknown : Throwable => unknown.printStackTrace; BadRequest(s"Project Creation Failed - Unknown Error: ${unknown.getCause.toString}")
           }
         }
       )
   }
 
-  def getSliderResponse(response:String) = Action {
+  def getSliderResponse(response:String, projectTitle:String) = Action {
     implicit request: Request[AnyContent] =>
       response match {
-        case "newProjSuccess" => Ok(views.html.afterLogin.dashboardviews.sliderResponse(response))
-        case "newProjFail" => Ok(views.html.afterLogin.dashboardviews.sliderResponse(response))
-        case _ => Ok(views.html.afterLogin.dashboardviews.sliderResponse(response))
+        case "newProjSuccess" => Ok(views.html.afterLogin.dashboardviews.sliderResponse(response, projectTitle))
+        case "newProjFail" => Ok(views.html.afterLogin.dashboardviews.sliderResponse(response, projectTitle))
+        case _ => Ok(views.html.afterLogin.dashboardviews.sliderResponse(response, projectTitle))
       }
   }
 }

@@ -1,4 +1,4 @@
-@(result: String)(implicit request: RequestHeader)
+@(result: String, projectName:String)(implicit request: RequestHeader)
 
 @getResult(rowType: String) = @{
     if(rowType.equals(result)) "" else "display: none"
@@ -9,12 +9,12 @@
 </div>
 
 <div class="row" style="@getResult("newProjSuccess")" id="displayCreateProjSuccess">
-    <h2>Project Created <br>
-        Click <a href="">here</a> to begin working on it</h2>
+    <h2>Created Project: @projectName<br>
+        Click <a href="/projectworkspace/@projectName" class="links">here</a> to begin working on it</h2>
 </div>
 <div class="row" style="@getResult("newProjFail")" id="displayCreateProjFail">
     <h2>Project Did Not Create <br>
-        Click <a href="">here</a> to try again.
+        Click <a onclick="loadDoc('@routes.DashboardController.projectOptionPicker("newProject")', 'createNewProjectDiv')" class="links">here</a> to try again.
     </h2>
 </div>
 

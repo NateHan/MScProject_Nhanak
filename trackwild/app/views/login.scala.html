@@ -11,6 +11,7 @@
                 <h1 align="center" id="loginHeader">LOGIN</h1>
                 <hr id="logHR">
                 <div class="form-group">
+                    @helper.CSRF.formField
                     <label for="inputEmail">Email address</label>
                     <input type="email" class="form-control" id="inputEmail" name="inputEmail" placeholder="Email&#64;example.com">
                 </div>
