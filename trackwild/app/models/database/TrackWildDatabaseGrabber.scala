@@ -9,3 +9,5 @@ object TrackWildDatabaseGrabber {
 
   def getApplicationDataBase:Database = Databases(driver, url)
 }
+
+

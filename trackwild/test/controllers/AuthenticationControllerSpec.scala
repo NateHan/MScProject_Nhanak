@@ -1,6 +1,5 @@
 package controllers
 
-import models.database.DefaultDataBase
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice.GuiceOneAppPerTest
 import play.api.mvc.{Action, Result}

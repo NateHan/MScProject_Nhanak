@@ -28,8 +28,8 @@ $(document).ready(function () {
     });
 });
 
-// Listens for a submission of a sliderForm (in the dasboard)
-// Linking with the jsRoutes method, it will post the form and return the result in the targeted area.
+// Listens for a submission of #createProjectForm (in the dasboard)
+// Linking with the jsRoutes method, it will POST the form and return the result in the targeted area.
 $(document).on('submit', '#createProjectForm', function (event) {
 
     event.preventDefault();
@@ -54,7 +54,7 @@ $(document).on('submit', '#createProjectForm', function (event) {
         contentType : 'application/json',
         headers: {'X-CSRF-TOKEN': $('input[name=csrfToken]').attr('value')},
         success: function (data) {
-            var projName = JSON.stringify(data.newProjectName);
+            var projName = JSON.stringify(data.newProjectName).replace(/^"(.*)"$/, '$1');
             var successURL = "/dashboard/projects/sliderSubmitResponse/newProjSuccess/" + projName;
             loadDoc(successURL, 'createNewProjectDiv')
         },

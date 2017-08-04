@@ -10,6 +10,7 @@ import play.api.data.Form
 import play.api.data.Forms._
 import play.api.mvc._
 import models.database.{CSVFileToDBParser, FileToDBParser}
+import play.api.db.Database
 
 /**
   * class which controls the upload of new data files
@@ -18,18 +19,19 @@ import models.database.{CSVFileToDBParser, FileToDBParser}
   * @param cc             controller components
   */
 @Singleton
-class DataUploadController @Inject()(csvFileToDBParser: CSVFileToDBParser,
+class DataUploadController @Inject()(csvFileToDBParser: CSVFileToDBParser, twDB: Database,
                                      authController: AuthenticationController,
                                      cc: ControllerComponents)
   extends AbstractController(cc) with play.api.i18n.I18nSupport {
 
   /**
     * Loads the template which allows the user to load a new table in .csv or .xls
-    * form and add it to their database
+    * form and add it to their database3
     * @return an HTTP response containing the HTML for the table uploader
     */
   def renderNewTableUploader() = Action {
-    implicit request: Request[AnyContent] => Ok(views.html.afterLogin.projectworkspace.newDataUploader(tableUploadForm))
+    implicit request: Request[AnyContent] =>
+      Ok(views.html.afterLogin.projectworkspace.newDataUploader(tableUploadForm))
   }
 
   val tableUploadForm = Form(

@@ -88,20 +88,28 @@ class DashboardController @Inject()(twDB: Database, authController: Authenticati
             "note_content" -> successForm.initialNote
           )
           try {
-            val rowsInsertedProjects = DatabaseUpdate.insertInto("all_projects", colsToValsProjects)
-            val rowsInsertedNotes = DatabaseUpdate.insertInto("project_notes", colsToValsNotes)
+            val rowsInsertedProjects = DatabaseUpdate.insertInto(twDB, "all_projects", colsToValsProjects)
+            val rowsInsertedNotes = DatabaseUpdate.insertInto(twDB, "project_notes", colsToValsNotes)
             if (rowsInsertedProjects == 1 && rowsInsertedNotes == 1) {
               Ok(Json.obj("newProjectName" -> successForm.title))
             }
             else BadRequest(s"Project Creation Failed: Did not get expected SQL Response")
           } catch {
-            case e: SQLException => e.printStackTrace; BadRequest("Project Creation Failed - SQL Error")
+            case e: SQLException => e.printStackTrace; BadRequest(s"Project Creation Failed - SQL Error: ${e.getCause.toString}")
             case unknown : Throwable => unknown.printStackTrace; BadRequest(s"Project Creation Failed - Unknown Error: ${unknown.getCause.toString}")
           }
         }
       )
   }
 
+  /**
+    * Returns the template needed for when a User attempts to create a new project. Template
+    * is dynamic and constructor of template determines which type of message to display to user
+    * based on the response
+    * @param response the response for whether or not the project failed or succeeded
+    * @param projectTitle the name of the project which the user attempted to create
+    * @return the sliderResponse template, loaded with the resulting constructor
+    */
   def getSliderResponse(response:String, projectTitle:String) = Action {
     implicit request: Request[AnyContent] =>
       response match {
@@ -110,4 +118,12 @@ class DashboardController @Inject()(twDB: Database, authController: Authenticati
         case _ => Ok(views.html.afterLogin.dashboardviews.sliderResponse(response, projectTitle))
       }
   }
+
+  def loadUserLeadProjectsView() = Action {
+    implicit request: Request[AnyContent] =>
+
+      Ok("REPLACE LATER")
+  }
+
+
 }
