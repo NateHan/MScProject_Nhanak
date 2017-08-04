@@ -1,6 +1,6 @@
 package models.formdata
 
-case class UserLeadProjectsData(userName:String, projectsList:List[Map[String,String]]) {
+case class UserLeadProjectsData(userName:String, projectsList:List[Array[String]]) {
 
 }
 

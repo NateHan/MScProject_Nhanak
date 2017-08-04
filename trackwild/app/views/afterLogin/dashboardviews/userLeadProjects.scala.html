@@ -1,3 +1,22 @@
-@()
+@(rows:List[Array[String]])
 
-<h1>Projects the user lead go here:</h1>
+<table id="userLeadProjectsTable">
+
+    <tr id="userLeadTableHeaderRow">
+        <th>Project Title</th>
+        <th>Created Date</th>
+        <th>Currently Active</th>
+        <th>Go to Project Workspace</th>
+    </tr>
+    @for(row <- rows) {
+        <tr class="userLeadTableContentRow">
+            @for(cell <- row) {
+                <td>@cell</td>
+            }
+            <td><i class="fa fa-eye" aria-hidden="true"
+            onclick="@routes.ProjectsWorkSpaceController.loadWorkspace(row(0))"
+            title="Click to go to the Workspace for your project"></i></td>
+        </tr>
+    }
+
+</table>

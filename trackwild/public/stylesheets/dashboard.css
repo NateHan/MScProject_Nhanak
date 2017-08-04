@@ -75,3 +75,21 @@ i + h3 {
 #createProjectForm {
     margin: 5px;
 }
+
+#userLeadProjectsTable {
+    text-align: center;
+    width: 95%;
+}
+
+#userLeadTableHeaderRow, #userLeadTableHeaderRow td {
+    background-color: rgb(2, 36, 51);
+    text-transform: uppercase;
+    font-size: 1.1em;
+    border: 3px solid white;
+    border-radius: 7px;
+    height: 20px;
+}
+
+#userLeadProjectsTable tr td {
+    border: 2px solid white;
+}

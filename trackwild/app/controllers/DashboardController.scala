@@ -3,13 +3,14 @@ package controllers
 import java.sql.SQLException
 import javax.inject.{Inject, Singleton}
 
-import models.database.DatabaseUpdate
+import models.database.{DatabaseUpdate, ProjectsUserLeads}
 import models.formdata.NewProjectData
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.db.Database
 import play.api.libs.json.Json
 import play.api.mvc.{AbstractController, AnyContent, ControllerComponents, Request}
+import play.twirl.api.HtmlFormat
 
 /**
   * Created by nathanhanak on 7/14/17.
@@ -52,7 +53,7 @@ class DashboardController @Inject()(twDB: Database, authController: Authenticati
   def projectOptionPicker(page: String) = Action {
     implicit request: Request[AnyContent] =>
       val pageToLoad = page match {
-        case "userLead" => views.html.afterLogin.dashboardviews.userLeadProjects()
+        case "userLead" => loadUserLeadProjectsView(request.session.get("username").getOrElse("not logged in"))
         case "userCollab" => views.html.afterLogin.dashboardviews.userCollabProjects()
         case "newProject" => views.html.afterLogin.dashboardviews.newProjectCreator(newProjForm)
       }
@@ -119,10 +120,10 @@ class DashboardController @Inject()(twDB: Database, authController: Authenticati
       }
   }
 
-  def loadUserLeadProjectsView() = Action {
-    implicit request: Request[AnyContent] =>
-
-      Ok("REPLACE LATER")
+  def loadUserLeadProjectsView(userName : String) = {
+      val allProjects = ProjectsUserLeads.getAll(userName, twDB)
+    println(s">>>>>>>>>>>>>>>>>>>>>>We retrieved this many rows from $userName: ${allProjects.length}")
+      views.html.afterLogin.dashboardviews.userLeadProjects(allProjects)
   }
 
 

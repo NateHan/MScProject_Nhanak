@@ -13,19 +13,20 @@ object ProjectsUserLeads {
     * @param db the default database for the application
     * @return the List of Maps of rows from the resulting PSQL query
     */
-  def getAll(userName:String, db: Database): List[Map[String,String]] = {
-    val query = s"SELECT * FROM all_projects WHERE project_lead='$userName' ORDER BY created_date DESC;"
+  def getAll(userName:String, db: Database): List[Array[String]] = {
+    val query = s"SELECT project_title, created_date, isActive FROM all_projects WHERE project_lead='$userName' ORDER BY created_date DESC;"
     db.withConnection{ conn =>
       val stmt = conn.createStatement()
       val qryResult = stmt.executeQuery(query)
       val resMetaData = qryResult.getMetaData
-      var returnResult = new ListBuffer[Map[String, String]]
+      var returnResult = new ListBuffer[Array[String]]
       while (qryResult.next()) {
         for (i <- 1 to resMetaData.getColumnCount ) {
 
-        } yield Map[String, String]
+        }
       }
     }
+    List(Array[String]())
   }
 
 }
