@@ -27,7 +27,12 @@ object DatabaseUpdate {
     }
     columnBuilder.deleteCharAt(columnBuilder.length - 2) //remove erroneous comma
     valueBuilder.deleteCharAt(valueBuilder.length - 2) //remove erroneous comma
+    val insertQuery = "INSERT INTO ?(?) VALUES(?);"
     db.withConnection { conn =>
+      val prepStmt = conn.prepareStatement(insertQuery)
+      prepStmt.setString(1, tableName)
+      prepStmt.setString(2, ???) // TODO
+      prepStmt.setString(3, ???) // TODO
       val stmt = conn.createStatement()
       rowsUpdated = stmt.executeUpdate(s"INSERT INTO $tableName(${columnBuilder.toString()}) VALUES(${valueBuilder.toString()});")
     }
