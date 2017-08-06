@@ -46,7 +46,7 @@ class LoginRegController @Inject()(twDB: Database, cc: ControllerComponents) ext
         successfulForm => {
           val validator: DbInputValidator = new LoginInputsValidator(twDB, successfulForm)
           if (validator.inputsAreValid) {
-            val userName = getUserName(successfulForm.inputEmail)
+            val userName = getUserName(successfulForm.inputEmail.toLowerCase)
             Ok(views.html.afterLogin.dashboardviews.dashboard())
               .withSession(request.session + ("authenticated" -> "true") + ("username" -> userName))
           } else {
@@ -65,7 +65,9 @@ class LoginRegController @Inject()(twDB: Database, cc: ControllerComponents) ext
     */
   private def getUserName(email: String): String = {
     twDB.withConnection { conn =>
-      val qryResult = conn.createStatement.executeQuery(s"SELECT userName FROM verified_users WHERE uemail='$email';")
+      val prepStmt = conn.prepareStatement("SELECT userName FROM verified_users WHERE uemail=?")
+      prepStmt.setString(1, email)
+      val qryResult = prepStmt.executeQuery()
       var userName: String = ""
       while (qryResult.next()) {
         userName = qryResult.getString("userName")
@@ -120,17 +122,19 @@ class LoginRegController @Inject()(twDB: Database, cc: ControllerComponents) ext
   }
 
   /**
-    * enters the registration form data into the DB.
+    * Enters the registration form data into the DB.
     *
     * @param userData the data extracted from the user form
+    * @return the number of rows inserted in the DB, should only be 1
     */
   private def inputRegInfoToDB(userData: RegistrationData): Int = {
     DatabaseUpdate.insertRowInto(twDB, "verified_users",
-      Map("uemail" -> userData.uEmail,
+      Map("uemail" -> userData.uEmail.toLowerCase,
         "upassword" -> userData.uPassword,
         "username" -> userData.userName,
         "fullname" -> userData.fullName,
         "organization" -> userData.organization)
+    )
   }
 
   /**

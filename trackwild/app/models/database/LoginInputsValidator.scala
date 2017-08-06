@@ -25,7 +25,7 @@ class LoginInputsValidator (twDB : Database, userLoginInput: UserLoginData) exte
   override def inputsAreValid(): Boolean = {
     twDB.withConnection { conn =>
       val stmt = conn.createStatement()
-      if (userNameIsValid(userLoginInput.inputEmail, stmt) && userPassIsValid(userLoginInput.inputPassword, stmt)) true else false
+      if (userNameIsValid(userLoginInput.inputEmail.toLowerCase, stmt) && userPassIsValid(userLoginInput.inputPassword, stmt)) true else false
     }
   }
 
