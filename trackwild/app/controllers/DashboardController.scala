@@ -89,8 +89,8 @@ class DashboardController @Inject()(twDB: Database, authController: Authenticati
             "note_content" -> successForm.initialNote
           )
           try {
-            val rowsInsertedProjects = DatabaseUpdate.insertInto(twDB, "all_projects", colsToValsProjects)
-            val rowsInsertedNotes = DatabaseUpdate.insertInto(twDB, "project_notes", colsToValsNotes)
+            val rowsInsertedProjects = DatabaseUpdate.insertRowInto(twDB, "all_projects", colsToValsProjects)
+            val rowsInsertedNotes = DatabaseUpdate.insertRowInto(twDB, "project_notes", colsToValsNotes)
             if (rowsInsertedProjects == 1 && rowsInsertedNotes == 1) {
               Ok(Json.obj("newProjectName" -> successForm.title))
             }
@@ -120,9 +120,13 @@ class DashboardController @Inject()(twDB: Database, authController: Authenticati
       }
   }
 
+  /**
+    * Retrieves the view which contains all user lead projects
+    * @param userName the current user from the session
+    * @return an HTML view template which will be a table of all the projects the user leads
+    */
   def loadUserLeadProjectsView(userName : String) = {
       val allProjects = ProjectsUserLeads.getAll(userName, twDB)
-    println(s">>>>>>>>>>>>>>>>>>>>>>We retrieved this many rows from $userName: ${allProjects.length}")
       views.html.afterLogin.dashboardviews.userLeadProjects(allProjects)
   }
 

@@ -3,7 +3,7 @@ package controllers
 import java.sql.Statement
 import javax.inject.{Inject, Singleton}
 
-import models.database.{DbInputValidator, LoginInputsValidator}
+import models.database.{DatabaseUpdate, DbInputValidator, LoginInputsValidator}
 import models.formdata.{RegistrationData, UserLoginData}
 import play.api.data.Form
 import play.api.data.Forms._
@@ -36,6 +36,7 @@ class LoginRegController @Inject()(twDB: Database, cc: ControllerComponents) ext
     * runs when user clicks login, sending a post request with the data from the login fields
     * Runs user through authentication check, if passes attaches user details to
     * session cookie
+    *
     * @return the Action for the resulting page
     */
   def attemptLogin() = Action {
@@ -47,7 +48,7 @@ class LoginRegController @Inject()(twDB: Database, cc: ControllerComponents) ext
           if (validator.inputsAreValid) {
             val userName = getUserName(successfulForm.inputEmail)
             Ok(views.html.afterLogin.dashboardviews.dashboard())
-              .withSession( request.session + ("authenticated" -> "true") + ("username" -> userName))
+              .withSession(request.session + ("authenticated" -> "true") + ("username" -> userName))
           } else {
             BadRequest(views.html.login(loginform))
           }
@@ -85,6 +86,7 @@ class LoginRegController @Inject()(twDB: Database, cc: ControllerComponents) ext
 
   /**
     * Loads the view containing the registration form
+    *
     * @return the view containing the registration form
     */
   def loadRegistrationPage() = Action {
@@ -96,6 +98,7 @@ class LoginRegController @Inject()(twDB: Database, cc: ControllerComponents) ext
   /**
     * The method called by POST to URL: /register
     * Receives user-input from form and adds it to the database of verified_users
+    *
     * @return reloads the page on a bad request, brings to login on a good request
     */
   def registerSubmit() = Action { implicit request: Request[AnyContent] =>
@@ -109,7 +112,8 @@ class LoginRegController @Inject()(twDB: Database, cc: ControllerComponents) ext
             .CONTENT_SECURITY_POLICY_HEADER -> " .fontawesome.com .fonts.googleapis.com").withNewSession
         } else {
           BadRequest(views.html.register(regForm)).withHeaders(SecurityHeadersFilter
-            .CONTENT_SECURITY_POLICY_HEADER -> " .fontawesome.com .fonts.googleapis.com"),
+            .CONTENT_SECURITY_POLICY_HEADER -> " .fontawesome.com .fonts.googleapis.com")
+          ,
         }
       }
     )
@@ -117,25 +121,28 @@ class LoginRegController @Inject()(twDB: Database, cc: ControllerComponents) ext
 
   /**
     * enters the registration form data into the DB.
+    *
     * @param userData the data extracted from the user form
     */
-  private def inputRegInfoToDB(userData:RegistrationData): Int = {
-    twDB.withConnection { conn =>
-      val stmt: Statement = conn.createStatement()
-      val line = "INSERT INTO verified_users(uemail, upassword, username, fullname, organization)" +
-        s" VALUES('${userData.uEmail}', '${userData.uPassword}', '${userData.userName}', '${userData.fullName}', '${userData.organization}');"
-      stmt.executeUpdate(line)
-    }
+  private def inputRegInfoToDB(userData: RegistrationData): Int = {
+    DatabaseUpdate.insertRowInto(twDB, "verified_users",
+      Map("uemail" -> userData.uEmail,
+        "upassword" -> userData.uPassword,
+        "username" -> userData.userName,
+        "fullname" -> userData.fullName,
+        "organization" -> userData.organization)
   }
 
   /**
     * Brings user to landing page, giving them a new session cookie to fully logout.
+    *
     * @return
     */
-  def logOut = Action { implicit request: Request[AnyContent] => Ok(views.html.index())
-    .withNewSession
-    .withHeaders(SecurityHeadersFilter
-    .CONTENT_SECURITY_POLICY_HEADER -> " .fontawesome.com .fonts.googleapis.com")
+  def logOut = Action { implicit request: Request[AnyContent] =>
+    Ok(views.html.index())
+      .withNewSession
+      .withHeaders(SecurityHeadersFilter
+        .CONTENT_SECURITY_POLICY_HEADER -> " .fontawesome.com .fonts.googleapis.com")
   }
 }
 
