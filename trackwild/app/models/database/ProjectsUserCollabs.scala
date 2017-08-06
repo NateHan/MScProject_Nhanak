@@ -30,7 +30,7 @@ object ProjectsUserCollabs {
         returnResult += row
       }
     }
-    returnResult.foreach( row => replaceIntWithDescription(row(3).toInt)) // replaces the INT level with a description
+    returnResult.foreach( row => row(2) = replaceIntWithDescription(row(2).toInt)) // replaces the INT level with a description
     returnResult.toList
   }
 
