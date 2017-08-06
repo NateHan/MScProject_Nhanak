@@ -16,7 +16,7 @@ object ProjectsUserLeads {
     */
   def getAll(userName: String, db: Database): List[Array[String]] = {
     val tablesQuery = s"SELECT project_title, created_date, isActive FROM all_projects WHERE project_lead=? ORDER BY created_date DESC;"
-    var returnResult = new ListBuffer[Array[String]]
+    val returnResult = new ListBuffer[Array[String]]
     db.withConnection { conn =>
       val ps = conn.prepareStatement(tablesQuery)
       ps.setString(1, userName)

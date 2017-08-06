@@ -1,3 +1,26 @@
-@()
+@(rows: List[Array[String]])
 
-<h1>Projects the user collabs on here</h1>
+<table class="userProjectsTable" id="userCollabProjectsTable">
+
+    <tr class="userPojectsRow" id="userCollabTableHeaderRow">
+        <th>Project Title</th>
+        <th>Project Lead</th>
+        <th>Collaboration Permissions</th>
+        <th>Project is Open</th>
+        <th>Go to Project Workspace</th>
+    </tr>
+    @for(row <- rows) {
+        <tr class="userProjectsTableContentRow">
+            @for(cell <- row) {
+                <td>@cell</td>
+            }
+        <td class="userProjectsTableContentRow">
+            <a href="@routes.ProjectsWorkSpaceController.loadWorkspace(row(0))" class="links">
+                <i class="fa fa-eye tableIcon" aria-hidden="true"
+                title="Click to go to the Workspace for the project"></i>
+            </a>
+        </td>
+        </tr>
+    }
+
+</table>

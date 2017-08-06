@@ -1,10 +1,11 @@
-@(rows:List[Array[String]])
+@(rows: List[Array[String]])
 
-<table id="userLeadProjectsTable">
+<table class="userProjectsTable" id="userLeadProjectsTable">
 
-    <tr id="userLeadTableHeaderRow">
+    <tr class="userPojectsHeaderRow" id="userLeadTableHeaderRow">
         <th>Project Title</th>
         <th>Created Date</th>
+        <th>Project Leader</th>
         <th>Currently Active</th>
         <th>Go to Project Workspace</th>
     </tr>
@@ -13,9 +14,12 @@
             @for(cell <- row) {
                 <td>@cell</td>
             }
-            <td><i class="fa fa-eye" aria-hidden="true"
-            onclick="@routes.ProjectsWorkSpaceController.loadWorkspace(row(0))"
-            title="Click to go to the Workspace for your project"></i></td>
+        <td class="userProjectsTableContentRow">
+            <a href="@routes.ProjectsWorkSpaceController.loadWorkspace(row(0))" class="tableicon links">
+                <i class="fa fa-eye tableIcon" aria-hidden="true"
+                title="Click to go to the Workspace for your project"></i>
+            </a>
+        </td>
         </tr>
     }
 

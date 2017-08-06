@@ -76,12 +76,12 @@ i + h3 {
     margin: 5px;
 }
 
-#userLeadProjectsTable {
+.userProjectsTable {
     text-align: center;
     width: 95%;
 }
 
-#userLeadTableHeaderRow, #userLeadTableHeaderRow td {
+#userProjectsTableHeaderRow, .userProjectsTableHeaderRow td {
     background-color: rgb(2, 36, 51);
     text-transform: uppercase;
     font-size: 1.1em;
@@ -90,6 +90,11 @@ i + h3 {
     height: 20px;
 }
 
-#userLeadProjectsTable tr td {
+.userProjectsTable tr td {
     border: 2px solid white;
+}
+
+.tableIcon:hover {
+    float: none;
+    cursor: pointer;
 }

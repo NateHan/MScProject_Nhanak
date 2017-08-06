@@ -49,6 +49,8 @@ class LoginRegController @Inject()(twDB: Database, cc: ControllerComponents) ext
             val userName = getUserName(successfulForm.inputEmail.toLowerCase)
             Ok(views.html.afterLogin.dashboardviews.dashboard())
               .withSession(request.session + ("authenticated" -> "true") + ("username" -> userName))
+              .withHeaders(SecurityHeadersFilter
+                .CONTENT_SECURITY_POLICY_HEADER -> " .fontawesome.com .fonts.googleapis.com")
           } else {
             BadRequest(views.html.login(loginform))
           }

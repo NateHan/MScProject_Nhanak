@@ -3,7 +3,7 @@ package controllers
 import java.sql.SQLException
 import javax.inject.{Inject, Singleton}
 
-import models.database.{DatabaseUpdate, ProjectsUserLeads}
+import models.database.{DatabaseUpdate, ProjectsUserCollabs, ProjectsUserLeads}
 import models.formdata.NewProjectData
 import play.api.data.Form
 import play.api.data.Forms._
@@ -54,7 +54,7 @@ class DashboardController @Inject()(twDB: Database, authController: Authenticati
     implicit request: Request[AnyContent] =>
       val pageToLoad = page match {
         case "userLead" => loadUserLeadProjectsView(request.session.get("username").getOrElse("not logged in"))
-        case "userCollab" => views.html.afterLogin.dashboardviews.userCollabProjects()
+        case "userCollab" => loadUserCollabProjectsView(request.session.get("username").getOrElse("not logged in"))
         case "newProject" => views.html.afterLogin.dashboardviews.newProjectCreator(newProjForm)
       }
       authController.returnDesiredPageIfAuthenticated(request, pageToLoad, "Credentials Expired")
@@ -126,8 +126,18 @@ class DashboardController @Inject()(twDB: Database, authController: Authenticati
     * @return an HTML view template which will be a table of all the projects the user leads
     */
   def loadUserLeadProjectsView(userName : String) = {
-      val allProjects = ProjectsUserLeads.getAll(userName, twDB)
+      val allProjects: List[Array[String]] = ProjectsUserLeads.getAll(userName, twDB)
       views.html.afterLogin.dashboardviews.userLeadProjects(allProjects)
+  }
+
+  /**
+    * Retrieves the view which contains all projects in which user collaborates but does not lead
+    * @param userName the name of the current user
+    * @return an HTML view template which will contain a table of all user collaborated projects
+    */
+  def loadUserCollabProjectsView(userName: String) = {
+   val allCollabProjects: List[Array[String]] = ProjectsUserCollabs.getAllCollabs(userName, twDB)
+   views.html.afterLogin.dashboardviews.userCollabProjects(allCollabProjects)
   }
 
 
