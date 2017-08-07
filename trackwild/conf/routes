@@ -28,6 +28,7 @@ GET     /projectworkspace/datauploader/new      controllers.DataUploadController
 GET     /projectworkspace/datauploader/append   controllers.ProjectsWorkSpaceController.renderDataAppender
 GET     /projectworkspace/dataViewer            controllers.ProjectsWorkSpaceController.renderDataViewerTool
 GET     /projectworkspace/dataImportSelector    controllers.ProjectsWorkSpaceController.renderDataImporterSelector
+GET     /projectworkspace/notes/:projectTitle   controllers.ProjectsWorkSpaceController.getAllNotes(projectTitle:String)
 GET     /projectworkspace/:projectName          controllers.ProjectsWorkSpaceController.loadWorkspace(projectName:String )
 
 # Controller which handles file upload

@@ -3,6 +3,9 @@ package controllers
 import javax.inject.Inject
 import javax.inject.Singleton
 
+import models.adt.NoteObj
+import models.database.ProjectNotesData
+import play.api.db.Database
 import play.api.mvc.{AbstractController, AnyContent, ControllerComponents, Request}
 import play.filters.headers.SecurityHeadersFilter
 
@@ -10,7 +13,7 @@ import play.filters.headers.SecurityHeadersFilter
   * Created by nathanhanak on 7/16/17.
   */
 @Singleton
-class ProjectsWorkSpaceController @Inject()(authController: AuthenticationController, cc: ControllerComponents) extends AbstractController(cc) {
+class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: AuthenticationController, cc: ControllerComponents) extends AbstractController(cc) {
 
   /**
     * loads main project workspace page
@@ -49,5 +52,15 @@ class ProjectsWorkSpaceController @Inject()(authController: AuthenticationContro
     */
   def renderDataViewerTool() = Action {
     implicit request: Request[AnyContent] => Ok(views.html.afterLogin.projectworkspace.dataViewerTool())
+  }
+
+  /**
+    * Loads a template containing all the notes for a project which will load in the project workspace
+    * @param projectTitle the name of the current project
+    * @return the view which will contain all of the notes for the project
+    */
+  def getAllNotes(projectTitle:String) = Action {
+    val allProjectNotes: List[NoteObj] = ProjectNotesData.getAllProjectNotes(projectTitle, twDB)
+    implicit request : Request[AnyContent] => Ok(views.html.afterLogin.projectworkspace.projectNotes(allProjectNotes))
   }
 }

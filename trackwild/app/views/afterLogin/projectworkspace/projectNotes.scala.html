@@ -1,0 +1,14 @@
+@import models.adt.NoteObj
+
+@(notesList:List[NoteObj])(implicit request: RequestHeader)
+
+@for( noteObj <- notesList) {
+    <div class="noteHeading">
+        <h3>@noteObj.title</h3>
+        <h4>@noteObj.author</h4>
+        <h4>@noteObj.pubDate</h4>
+    </div>
+    <div class="noteContent">
+        @noteObj.content
+    </div>
+}
