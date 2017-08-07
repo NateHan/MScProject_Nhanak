@@ -6,7 +6,8 @@ body {
     border: 4px solid rgba(255, 255, 255, .8);
     border-radius: 7px;
     padding-top: 5%;
-    background-color: rgba(57, 141, 162, .8);
+    background: rgba(23, 137, 159, 0.8);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5), /* Exterior Shadow */ inset 0 1px rgba(255, 255, 255, 0.3), /* Top light Line */ inset 0 10px rgba(255, 255, 255, 0.2), /* Top Light Shadow */ inset 0 10px 20px rgba(255, 255, 255, 0.25), /* Sides Light Shadow */ inset 0 -15px 30px rgba(0, 0, 0, 0.3); /* Dark Background */
 }
 
 ul.dropdown-menu {
@@ -33,6 +34,10 @@ li.dropdown, #toolbarheader {
 
 li.dropdown:last-child{
     border: 0;
+}
+
+#projToolBar {
+    text-shadow: 0px 1px 0px rgba(255, 255, 255, .3), 0px -1px 0px rgba(0, 0, 0, .7);
 }
 
 #toolbarheader {
@@ -103,4 +108,20 @@ li.dropdown:last-child{
 #newDataUploadRow {
     font-size: 1.2em;
     width: 80%;
+}
+
+#notes {
+    box-shadow: 1px 1px 5px #052b33 inset;
+    background-color: rgba(10, 73, 86, .8);
+}
+
+.viewHeader {
+    text-align: center;
+    text-shadow: 0px 1px 0px rgba(255, 255, 255, .3), 0px -1px 0px rgba(0, 0, 0, .7);
+    margin: 5px;
+}
+
+hr.viewHeaderHR {
+    margin-top: 5px;
+    margin-bottom: 5px;
 }

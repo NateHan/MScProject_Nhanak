@@ -85,7 +85,7 @@ i + h3 {
     border-radius: 7px;
 }
 
-#userCollabTableHeaderRow, #userLeadTableHeaderRow {
+.userProjectsHeaderRow th {
     background-color: rgba(6, 47, 55, .9);
     text-transform: uppercase;
     text-align: center;
