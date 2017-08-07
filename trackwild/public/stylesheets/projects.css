@@ -110,11 +110,6 @@ li.dropdown:last-child{
     width: 80%;
 }
 
-#notes {
-    box-shadow: 1px 1px 5px #052b33 inset;
-    background-color: rgba(10, 73, 86, .8);
-}
-
 .viewHeader {
     text-align: center;
     text-shadow: 0px 1px 0px rgba(255, 255, 255, .3), 0px -1px 0px rgba(0, 0, 0, .7);
@@ -124,4 +119,12 @@ li.dropdown:last-child{
 hr.viewHeaderHR {
     margin-top: 5px;
     margin-bottom: 5px;
+}
+
+#noteHeading {
+    text-align: left;
+}
+
+#notecontent {
+    text-align: left;
 }

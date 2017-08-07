@@ -16,7 +16,7 @@ object ProjectNotesData {
   def getAllProjectNotes(projectTitle:String, db: Database): List[NoteObj] = {
     val noteObjList = new ListBuffer[NoteObj]
     db.withConnection{ conn =>
-      val prepStmt = conn.prepareStatement("SELECT note_author, note_title, note_date, note_content FROM project_notes" +
+      val prepStmt = conn.prepareStatement("SELECT note_author, note_title, note_date, note_content FROM project_notes " +
         "WHERE project_title=?")
       prepStmt.setString(1, projectTitle)
       val qryResult = prepStmt.executeQuery()

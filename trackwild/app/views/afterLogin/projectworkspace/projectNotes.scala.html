@@ -3,12 +3,13 @@
 @(notesList:List[NoteObj])(implicit request: RequestHeader)
 
 @for( noteObj <- notesList) {
-    <div class="noteHeading">
-        <h3>@noteObj.title</h3>
-        <h4>@noteObj.author</h4>
-        <h4>@noteObj.pubDate</h4>
+    <div id="noteHeading">
+        <h3>Note: @noteObj.title</h3>
+        <h4>Written by: @noteObj.author</h4>
+        <h4>Originally Published: @noteObj.pubDate</h4>
     </div>
-    <div class="noteContent">
+    <hr id="notebodydivider">
+    <div id="noteContent">
         @noteObj.content
     </div>
 }
