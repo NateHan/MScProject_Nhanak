@@ -1,6 +1,7 @@
 // dynamically loads a view by the URL of the router route to load and
 // the id of the element to load the page into
 function loadDoc(myUrl, id) {
+    console.log("called with URL: " + myUrl + " and " + id)
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
@@ -12,14 +13,18 @@ function loadDoc(myUrl, id) {
     xhttp.send();
 }
 
+function loadNAlert(url ) {
+    window.alert("This thing loaded and passed me this: " + url)
+}
+
 // On the project sliders click, it loads the URL of the controller method route, and then
 // activates a dropdown menu, which animates once the information is loaded
 $(document).ready(function () {
 
-    $('.projSliderContent').hide();
+    $('.appSliderContent').hide();
 
-    $('.projectSliders').on('click', function () {
-        var targetArea = $(this).next('.projSliderContent');
+    $('.appSliders').on('click', function () {
+        var targetArea = $(this).next('.appSliderContent');
         var urlToPass = $(targetArea).attr('url');
         targetArea.load(urlToPass, function () {
                 $(this).slideToggle()

@@ -21,7 +21,7 @@ i + h3 {
     display: inline-block;
 }
 
-#projSlidersHeader {
+#projSlidersHeader, .sliderHeaderRow {
     border-bottom: 5px double white;
     text-align: center;
     font-family: animal-fantastic;
@@ -32,18 +32,18 @@ i + h3 {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5), /* Exterior Shadow */ inset 0 1px rgba(255, 255, 255, 0.3), /* Top light Line */ inset 0 10px rgba(255, 255, 255, 0.2), /* Top Light Shadow */ inset 0 10px 20px rgba(255, 255, 255, 0.25), /* Sides Light Shadow */ inset 0 -15px 30px rgba(0, 0, 0, 0.3); /* Dark Background */
 }
 
-#allSlidersContainer {
+#allSlidersContainer, .sliderContainer {
     border: 5px double white;
     border-radius: 10px;
     padding: 0%;
 }
 
-.projectSliders, .dashbutton {
+.appSliders, .dashbutton {
     background: rgba(0, 0, 0, 0.1);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5), /* Exterior Shadow */ inset 0 1px rgba(255, 255, 255, 0.3), /* Top light Line */ inset 0 10px rgba(255, 255, 255, 0.2), /* Top Light Shadow */ inset 0 10px 20px rgba(255, 255, 255, 0.25), /* Sides Light Shadow */ inset 0 -15px 30px rgba(0, 0, 0, 0.3); /* Dark Background */
 }
 
-.projSliderContent {
+.appSliderContent {
     text-align: center;
     padding: 2%;
     background-color: rgba(11, 87, 102, .8);
@@ -57,7 +57,7 @@ i + h3 {
     text-shadow: 0px 1px 0px rgba(255, 255, 255, .3), 0px -1px 0px rgba(0, 0, 0, .7);
 }
 
-.projectSliders:hover {
+.appSliders:hover {
     background: rgba(0, 0, 0, 0.25);
     cursor: pointer;
 }

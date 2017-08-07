@@ -7,24 +7,24 @@
     <div class="container-fluid" id="userProjectsSelectors">
         <div class="row-fluid">
             <div class="col-xs-1"></div>
-            <div class="col-xs-10" id="allSlidersContainer">
-                <h2 id="projSlidersHeader">PROJECTS</h2>
-                <div class="projectSliders" id="projleadSlider">
+            <div class="col-xs-10" class="sliderContainer" id="allSlidersContainer">
+                <h2 class="sliderHeaderRow" id="projSlidersHeader">PROJECTS</h2>
+                <div class="appSliders" id="projleadSlider">
                     <i class="fa fa-paw sliderMainbutton" aria-hidden="true"></i>  <h3>View Projects You Lead</h3>
                 </div>
-                <div class="projSliderContent container-fluid " id="userLeadProjectsDiv" url='@routes.DashboardController.projectOptionPicker("userLead")'>
+                <div class="appSliderContent container-fluid " id="userLeadProjectsDiv" url='@routes.DashboardController.projectOptionPicker("userLead")'>
 
                 </div>
-                <div class="projectSliders" id="projCollabSlider">
+                <div class="appSliders" id="projCollabSlider">
                     <i class="fa fa-users sliderMainbutton" aria-hidden="true"></i>  <h3>View Your Collaborated Projects</h3>
                 </div>
-                <div class="projSliderContent container-fluid " id="userCollabProjectsDiv" url='@routes.DashboardController.projectOptionPicker("userCollab")'>
+                <div class="appSliderContent container-fluid " id="userCollabProjectsDiv" url='@routes.DashboardController.projectOptionPicker("userCollab")'>
 
                 </div>
-                <div class="projectSliders" id="projCreatorSlider">
+                <div class="appSliders" id="projCreatorSlider">
                     <i class="fa fa-plus-square-o sliderMainbutton" aria-hidden="true"></i><h3> Create a New Project</h3>
                 </div>
-                <div class="projSliderContent container-fluid " id="createNewProjectDiv" url='@routes.DashboardController.projectOptionPicker("newProject")'>
+                <div class="appSliderContent container-fluid " id="createNewProjectDiv" url='@routes.DashboardController.projectOptionPicker("newProject")'>
 
                 </div>
             </div>

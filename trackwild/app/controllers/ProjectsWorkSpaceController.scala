@@ -20,9 +20,9 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
     * @param projectName the name of the current project of the user
     * @return an HTTP response containing the HTML for the project workspace
     */
-  def loadWorkspace(projectName: String) = Action {
+  def loadWorkspace(projectTitle: String) = Action {
     implicit request: Request[AnyContent] =>
-      val desiredPage = views.html.afterLogin.projectworkspace.projectView(projectName)
+      val desiredPage = views.html.afterLogin.projectworkspace.projectView(projectTitle)
       authController.returnDesiredPageIfAuthenticated(request, desiredPage)
   }
 
@@ -60,7 +60,9 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
     * @return the view which will contain all of the notes for the project
     */
   def getAllNotes(projectTitle:String) = Action {
-    val allProjectNotes: List[NoteObj] = ProjectNotesData.getAllProjectNotes(projectTitle, twDB)
-    implicit request : Request[AnyContent] => Ok(views.html.afterLogin.projectworkspace.projectNotes(allProjectNotes))
+    implicit request : Request[AnyContent] =>
+      println("Request came in - with this request: " + projectTitle)
+      val allProjectNotes: List[NoteObj] = ProjectNotesData.getAllProjectNotes(projectTitle, twDB)
+      Ok(views.html.afterLogin.projectworkspace.projectNotes(allProjectNotes))
   }
 }

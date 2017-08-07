@@ -8,14 +8,14 @@ import models.formdata.{RegistrationData, UserLoginData}
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.db.Database
-import play.api.mvc.{AbstractController, AnyContent, ControllerComponents, Request}
+import play.api.mvc._
 import play.filters.headers.SecurityHeadersFilter
 
 /**
   * Created by nathanhanak on 7/7/17.
   */
 @Singleton
-class LoginRegController @Inject()(twDB: Database, cc: ControllerComponents) extends AbstractController(cc) with play.api.i18n.I18nSupport {
+class LoginRegController @Inject()(twDB: Database, cc: ControllerComponents, authCntrlr: AuthenticationController) extends AbstractController(cc) with play.api.i18n.I18nSupport {
 
 
   def loadLogin() = Action {
