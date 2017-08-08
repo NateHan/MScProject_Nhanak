@@ -24,7 +24,7 @@ insert into verified_users values (
 
 insert into verified_users values (
     'demo@demo.com',
-    'demo',
+    'demopassword',
     'DemoUser',
     'Demo User',
     'Wide World of Science',

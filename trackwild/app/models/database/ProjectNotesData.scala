@@ -21,8 +21,12 @@ object ProjectNotesData {
       prepStmt.setString(1, projectTitle)
       val qryResult = prepStmt.executeQuery()
       while (qryResult.next()) {
-        noteObjList += NoteObj(qryResult.getString("note_author"), qryResult.getString("note_title"),
-          qryResult.getString("note_date"), qryResult.getString("note_content"))
+        val longTimeStamp = qryResult.getString("note_date")
+        noteObjList += NoteObj(
+          qryResult.getString("note_author"),
+          qryResult.getString("note_title"),
+          longTimeStamp.substring(0, longTimeStamp.indexOfSlice(".")), // removes sub second precision from timestamp
+          qryResult.getString("note_content"))
       }
     }
     noteObjList.toList

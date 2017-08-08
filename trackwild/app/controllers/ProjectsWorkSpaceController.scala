@@ -17,7 +17,7 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
 
   /**
     * loads main project workspace page
-    * @param projectName the name of the current project of the user
+    * @param projectTitle the name of the current project of the user
     * @return an HTTP response containing the HTML for the project workspace
     */
   def loadWorkspace(projectTitle: String) = Action {
@@ -61,7 +61,6 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
     */
   def getAllNotes(projectTitle:String) = Action {
     implicit request : Request[AnyContent] =>
-      println("Request came in - with this request: " + projectTitle)
       val allProjectNotes: List[NoteObj] = ProjectNotesData.getAllProjectNotes(projectTitle, twDB)
       Ok(views.html.afterLogin.projectworkspace.projectNotes(allProjectNotes))
   }

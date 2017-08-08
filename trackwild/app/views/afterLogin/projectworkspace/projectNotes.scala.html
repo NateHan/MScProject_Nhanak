@@ -1,15 +1,21 @@
 @import models.adt.NoteObj
 
-@(notesList:List[NoteObj])(implicit request: RequestHeader)
+@(notesList: List[NoteObj])(implicit request: RequestHeader)
 
-@for( noteObj <- notesList) {
-    <div id="noteHeading">
-        <h3>Note: @noteObj.title</h3>
-        <h4>Written by: @noteObj.author</h4>
-        <h4>Originally Published: @noteObj.pubDate</h4>
-    </div>
-    <hr id="notebodydivider">
-    <div id="noteContent">
+
+@for(noteObj <- notesList) {
+    <div class="singleNoteBox">
+        <div id="noteHeading">
+            <h5><fixeddesc>Note:</fixeddesc>
+                @noteObj.title</h5>
+            <h5><fixeddesc>Written by:</fixeddesc>
+                @noteObj.author</h5>
+            <h5><fixeddesc>Originally Published:</fixeddesc>
+                @noteObj.pubDate</h5>
+        </div>
+        <hr id="notebodydivider">
+        <div id="noteContent">
         @noteObj.content
+        </div>
     </div>
 }

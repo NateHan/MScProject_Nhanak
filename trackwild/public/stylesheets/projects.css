@@ -121,10 +121,29 @@ hr.viewHeaderHR {
     margin-bottom: 5px;
 }
 
+.singleNoteBox {
+    border-top: dashed 3px white;
+    padding-bottom: 5px;
+}
+
+#notebodydivider{
+    margin: 5px;
+    width: 80%;
+    height: 3px;
+}
+
 #noteHeading {
     text-align: left;
 }
 
-#notecontent {
+fixeddesc {
+    font-weight: bold;
+    text-decoration: underline;
+    font-size: 1.2em;
+}
+
+#notesLoadZone #noteContent {
     text-align: left;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
