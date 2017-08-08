@@ -16,7 +16,7 @@ class DataBaseUpdateSpec extends PlaySpec with GuiceOneAppPerSuite with BeforeAn
       val tableName = "all_projects"
       val columnsAndValues = Map("project_title" -> "'Track Sharks 123456'", "project_lead" -> "'DemoUser'")
 
-      DatabaseUpdate.insertInto(tableName, columnsAndValues) mustBe 1
+      DatabaseUpdate.insertRowInto(twDB, tableName, columnsAndValues) mustBe 1
 
       twDB.withConnection { conn =>
         val stmt = conn.createStatement
@@ -29,7 +29,7 @@ class DataBaseUpdateSpec extends PlaySpec with GuiceOneAppPerSuite with BeforeAn
       val tableName = "all_projects"
       val columnsAndValues = Map("project_title" -> "Track Dogs 123456", "project_lead" -> "DemoUser")
 
-      DatabaseUpdate.insertInto(tableName, columnsAndValues) mustBe 1
+      DatabaseUpdate.insertRowInto(twDB, tableName, columnsAndValues) mustBe 1
       // remove test data
       twDB.withConnection { conn =>
         val stmt = conn.createStatement

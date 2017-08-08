@@ -23,7 +23,7 @@ class LoginRegControllerSpec extends PlaySpec with GuiceOneAppPerSuite with Inje
     url = "postgres://twadmin:trackwild@localhost:5432/track_wild_db"
   )
 
-  val controller = new LoginRegController(testDb, stubControllerComponents())
+  val controller = inject[LoginRegController]
 
 
   implicit val duration: Timeout = 20 seconds
