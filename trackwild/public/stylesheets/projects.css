@@ -52,6 +52,14 @@ li.dropdown:last-child{
     text-align: center;
 }
 
+
+.actionDeniedContainer {
+    margin-top:15%;
+    margin-left:auto;
+    margin-right:auto;
+    text-align: center;
+}
+
 #toolOptions {
     margin-top: 3%;
     height: 47%;

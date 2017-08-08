@@ -5,12 +5,13 @@ import play.api.db.Database
 /**
   * Object which is responsible for verifying the user's permission levels concerning access
   * to specific projects. The current levels are:
-  * 0   => "Forbidden Access"
+  *
   * 100 => "Project Lead: All permissions"
   * 200 => "Project Contributor: View all, add notes, upload data"
   * 250 => "Project Contributor: View all, add notes, no data upload"
   * 300 => "External Viewer: View all data - no write or upload"
   * 400 => "Public: View only"
+  * 999 => "Forbidden Access"
   * _   => "Error: No permission set"
   *
   */
@@ -45,8 +46,8 @@ object ProjectPermissions {
     * @param minLevelNeeded the minimum permission level required for the action
     * @return false if the user has a high enough permission, false if not.
     */
-  def userHasPermissionLevel(userName: String, projectTitle: String, minLevelNeeded: Int, db: Database): Boolean = {
-    minLevelNeeded >= getUserPermissionLevel(userName, projectTitle, db)
+  def userHasPermissionLevel(userName: String, projectTitle: String, maxLevelAllowed: Int, db: Database): Boolean = {
+    maxLevelAllowed >= getUserPermissionLevel(userName, projectTitle, db)
   }
 
 
@@ -58,7 +59,7 @@ object ProjectPermissions {
     * @return the permission level in an Int of the verified user
     */
   def getUserPermissionLevel(userName: String, projectTitle: String, db: Database): Int = {
-    var permissionLevel = 0
+    var permissionLevel = 999
     if (userIsProjectLead(userName, projectTitle, db)) permissionLevel = 100
     else {
       db.withConnection { conn =>

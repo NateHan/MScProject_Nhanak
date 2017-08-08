@@ -1,12 +1,16 @@
-@()
+@()(implicit request : RequestHeader)
 
-<div class="container actionDeniedContainer">
-    <div class="row">
-        <div class="col-lg-12">
-            <h1>Action Denied</h1>
-            <h3>Sorry, you do not have the necessary permission levels</h3>
-            <h3>to perform this action.</h3>
-            <h3>Please contact the Project Lead to alter your permission level.</h3>
+@main("Denied Access") {
+
+    <div class="container actionDeniedContainer">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1>Action Denied</h1>
+                <h3>Sorry, you do not have the necessary permission levels</h3>
+                <h3>to perform this action.</h3>
+                <h3>Please contact the Project Lead to alter your permission level.</h3>
+            </div>
         </div>
     </div>
-</div>
+
+}

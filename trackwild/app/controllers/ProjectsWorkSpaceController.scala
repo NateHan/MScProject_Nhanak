@@ -4,9 +4,9 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 import models.adt.NoteObj
-import models.database.ProjectNotesData
+import models.database.{ProjectNotesData, ProjectPermissions}
 import play.api.db.Database
-import play.api.mvc.{AbstractController, AnyContent, ControllerComponents, Request}
+import play.api.mvc._
 import play.filters.headers.SecurityHeadersFilter
 
 /**
@@ -22,9 +22,18 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
     */
   def loadWorkspace(projectTitle: String) = Action {
     implicit request: Request[AnyContent] =>
-      if ()
-      val desiredPage = views.html.afterLogin.projectworkspace.projectView(projectTitle)
-      authController.returnDesiredPageIfAuthenticated(request, desiredPage)
+      if (ProjectPermissions.projectExists(projectTitle, twDB)) {
+        val userName = request.session.get("userName").getOrElse("No User Found in Session")
+        if (ProjectPermissions.userHasPermissionLevel(userName, projectTitle, 400, twDB)) {
+          val desiredPage = views.html.afterLogin.projectworkspace.projectView(projectTitle)
+          authController.returnDesiredPageIfAuthenticated(request, desiredPage)
+            .addingToSession("projectTitle" -> projectTitle)
+        } else {
+          Forbidden(views.html.afterLogin.projectworkspace.noPermission())
+        }
+      } else {
+        NotFound(views.html.afterLogin.projectworkspace.projectDoesNotExist(projectTitle))
+      }
   }
 
   /**
@@ -33,7 +42,12 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
     * @return an HTTP response containing the HTML for the table data uploader
     */
   def renderDataImporterSelector() = Action {
-    implicit request: Request[AnyContent] => Ok(views.html.afterLogin.projectworkspace.dataImporterSelector())
+    implicit request: Request[AnyContent] =>
+      val userName = request.session.get("userName").getOrElse("No User Found in Session")
+      val projectTitle = request.session.get("projectTitle").getOrElse("Project Not Found")
+      if (ProjectPermissions.userHasPermissionLevel(userName, projectTitle, 249, twDB))
+        Ok(views.html.afterLogin.projectworkspace.dataImporterSelector())
+      else Forbidden(views.html.afterLogin.projectworkspace.noPermission())
   }
 
 
