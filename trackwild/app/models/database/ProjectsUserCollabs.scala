@@ -41,6 +41,7 @@ object ProjectsUserCollabs {
     * @return a readable descriptive translation of their allowed permissions.
     */
   def replaceIntWithDescription(permissionLevel: Int): String = permissionLevel match{
+    case 0 => "Forbidden Access"
     case 100 => "Project Lead: All permissions"
     case 200 => "Project Contributor: View all, add notes, upload data"
     case 250 => "Project Contributor: View all, add notes, no data upload"

@@ -22,6 +22,7 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
     */
   def loadWorkspace(projectTitle: String) = Action {
     implicit request: Request[AnyContent] =>
+      if ()
       val desiredPage = views.html.afterLogin.projectworkspace.projectView(projectTitle)
       authController.returnDesiredPageIfAuthenticated(request, desiredPage)
   }
