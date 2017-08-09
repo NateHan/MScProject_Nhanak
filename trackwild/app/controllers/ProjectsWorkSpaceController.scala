@@ -43,7 +43,7 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
     */
   def renderDataImporterSelector() = Action {
     implicit request: Request[AnyContent] =>
-      val userName = request.session.get("userName").getOrElse("No User Found in Session")
+      val userName = request.session.get("username").getOrElse("No User Found in Session")
       val projectTitle = request.session.get("projectTitle").getOrElse("Project Not Found")
       if (ProjectPermissions.userHasPermissionLevel(userName, projectTitle, 249, twDB))
         Ok(views.html.afterLogin.projectworkspace.dataImporterSelector())
@@ -57,7 +57,12 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
     * @return an HTTP response containing the HTML for the table data appender
     */
   def renderDataAppender() = Action {
-    implicit request: Request[AnyContent] => Ok(views.html.afterLogin.projectworkspace.dataAppender())
+    implicit request: Request[AnyContent] =>
+      val userName = request.session.get("username").getOrElse("No User Found in Session")
+      val projectTitle = request.session.get("projectTitle").getOrElse("Project Not Found")
+      if (ProjectPermissions.userHasPermissionLevel(userName, projectTitle, 249, twDB))
+        Ok(views.html.afterLogin.projectworkspace.dataAppender())
+      else Ok(views.html.afterLogin.projectworkspace.noPermissionSmall())
   }
 
   /**
@@ -66,7 +71,12 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
     * @return
     */
   def renderDataViewerTool() = Action {
-    implicit request: Request[AnyContent] => Ok(views.html.afterLogin.projectworkspace.dataViewerTool())
+    implicit request: Request[AnyContent] =>
+      val userName = request.session.get("username").getOrElse("No User Found in Session")
+      val projectTitle = request.session.get("projectTitle").getOrElse("Project Not Found")
+      if (ProjectPermissions.userHasPermissionLevel(userName, projectTitle, 401, twDB))
+      Ok(views.html.afterLogin.projectworkspace.dataViewerTool())
+      else Ok(views.html.afterLogin.projectworkspace.noPermissionSmall())
   }
 
   /**
@@ -76,7 +86,12 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
     */
   def getAllNotes(projectTitle:String) = Action {
     implicit request : Request[AnyContent] =>
-      val allProjectNotes: List[NoteObj] = ProjectNotesData.getAllProjectNotes(projectTitle, twDB)
-      Ok(views.html.afterLogin.projectworkspace.projectNotes(allProjectNotes))
+      val userName = request.session.get("username").getOrElse("No User Found in Session")
+      if (ProjectPermissions.userHasPermissionLevel(userName, projectTitle, 399, twDB)) {
+        val allProjectNotes: List[NoteObj] = ProjectNotesData.getAllProjectNotes(projectTitle, twDB)
+        Ok(views.html.afterLogin.projectworkspace.projectNotes(allProjectNotes))
+      } else {
+        Ok(views.html.afterLogin.projectworkspace.noPermissionSmall())
+      }
   }
 }

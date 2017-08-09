@@ -117,7 +117,6 @@ class LoginRegController @Inject()(twDB: Database, cc: ControllerComponents, aut
         } else {
           BadRequest(views.html.register(regForm)).withHeaders(SecurityHeadersFilter
             .CONTENT_SECURITY_POLICY_HEADER -> " .fontawesome.com .fonts.googleapis.com")
-          ,
         }
       }
     )

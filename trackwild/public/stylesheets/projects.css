@@ -5,14 +5,14 @@ body {
 #toolbarColumn {
     border: 5px solid rgba(255, 255, 255, .8);
     border-radius: 7px;
-    padding-top: 5%;
+    padding: 0;
     background: rgba(23, 137, 159, 0.8);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5), /* Exterior Shadow */ inset 0 1px rgba(255, 255, 255, 0.3), /* Top light Line */ inset 0 10px rgba(255, 255, 255, 0.2), /* Top Light Shadow */ inset 0 10px 20px rgba(255, 255, 255, 0.25), /* Sides Light Shadow */ inset 0 -15px 30px rgba(0, 0, 0, 0.3); /* Dark Background */
     text-shadow: 0px 1px 0px rgba(255, 255, 255, .3), 0px -1px 0px rgba(0, 0, 0, .7);
+}
 
-    -webkit-box-sizing: content-box ;
-    -moz-box-sizing: content-box ;
-    box-sizing: content-box ;
+#toolbarColumn, #toolbarColumn * {
+    box-sizing: content-box;
 }
 
 ul.dropdown-menu {
@@ -70,13 +70,13 @@ li.dropdown:last-child{
 }
 
 #currentTools {
-    margin-left: .5%;
-    margin-right: .5%;
     height: 50%;
     margin-top: 3px;
+    padding-top: 1%;
+    width: 100%;
 }
 
-#toolOptions, #currentTools {
+#toolOptions {
     margin-left: auto;
     margin-right: auto;
     width: 99%;
@@ -106,7 +106,7 @@ li.dropdown:last-child{
 
 .currentToolsCol {
     padding: .5%;
-    margin: 0;
+    margin: 5px;
 }
 
 .workrow {
@@ -127,6 +127,10 @@ li.dropdown:last-child{
     width: 80%;
 }
 
+#currentToolsRow {
+    margin: 0;
+}
+
 .viewHeader {
     text-align: center;
     text-shadow: 0px 1px 0px rgba(255, 255, 255, .3), 0px -1px 0px rgba(0, 0, 0, .7);
@@ -141,6 +145,8 @@ hr.viewHeaderHR {
 .singleNoteBox {
     border-top: dashed 3px white;
     padding-bottom: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
 }
 
 #notebodydivider{
@@ -159,10 +165,10 @@ fixeddesc {
     font-size: 1.2em;
 }
 
-#notesLoadZone #noteContent {
+#notesLoadZone {
     text-align: left;
-    margin-top: 5px;
-    margin-bottom: 5px;
+    margin: 0;
+    padding: 0;
 }
 
 .actionDeniedContainerSmall {
@@ -173,10 +179,20 @@ fixeddesc {
     background-color: rgba(11, 87, 102, .8);
     box-shadow: 3px 3px 8px #06323a inset;
     border-radius: 7px;
-    margin-left: 5px;
-    margin-right: 5px;
 }
 
-#toolbarColumn {
-    padding: 0;
+#projectdataColumn.col-md-6 {
+    width: 49%;
+}
+
+#workspaceNoteSlider {
+    height: 100%;
+    display: flex;
+    padding-top: 2%;
+}
+
+#noteSliderHeader {
+    margin-top: auto;
+    margin-bottom: auto;
+    height: 100%;
 }
