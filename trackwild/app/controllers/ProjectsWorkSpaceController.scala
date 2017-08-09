@@ -23,13 +23,13 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
   def loadWorkspace(projectTitle: String) = Action {
     implicit request: Request[AnyContent] =>
       if (ProjectPermissions.projectExists(projectTitle, twDB)) {
-        val userName = request.session.get("userName").getOrElse("No User Found in Session")
+        val userName = request.session.get("username").getOrElse("No User Found in Session")
         if (ProjectPermissions.userHasPermissionLevel(userName, projectTitle, 400, twDB)) {
           val desiredPage = views.html.afterLogin.projectworkspace.projectView(projectTitle)
           authController.returnDesiredPageIfAuthenticated(request, desiredPage)
             .addingToSession("projectTitle" -> projectTitle)
         } else {
-          Forbidden(views.html.afterLogin.projectworkspace.noPermission())
+          Forbidden(views.html.afterLogin.projectworkspace.noPermissionFullPage())
         }
       } else {
         NotFound(views.html.afterLogin.projectworkspace.projectDoesNotExist(projectTitle))
@@ -47,7 +47,7 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
       val projectTitle = request.session.get("projectTitle").getOrElse("Project Not Found")
       if (ProjectPermissions.userHasPermissionLevel(userName, projectTitle, 249, twDB))
         Ok(views.html.afterLogin.projectworkspace.dataImporterSelector())
-      else Forbidden(views.html.afterLogin.projectworkspace.noPermission())
+      else Ok(views.html.afterLogin.projectworkspace.noPermissionSmall())
   }
 
 

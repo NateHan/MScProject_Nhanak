@@ -13,6 +13,7 @@ GET     /register                   controllers.LoginRegController.loadRegistrat
 
 POST    /register                   controllers.LoginRegController.registerSubmit
 GET     /logout                     controllers.LoginRegController.logOut
++ nocsrf
 POST    /login                      controllers.LoginRegController.attemptLogin
 
 # The controller for the main dashboard upon signin

@@ -14,20 +14,20 @@
 
         <div class="container" id="currentTools">
             <div class="row">
-                <div class="col-sm-2 col-xs-1">
+                <div class="col-sm-2 col-xs-1 currentToolsCol" id="toolbarColumn">
                 @projectToolbar()
                 </div>
                     <!--Tables and Animals viewspace -->
-                <div class="col-md-6 col-xs-11" id="projectdata">
+                <div class="col-md-6 col-xs-11 currentToolsCol" id="projectdataColumn">
                     <h2 class="viewHeader">Project Data</h2>
                     <hr class="viewHeaderHR">
 
                 </div>
                     <!-- Notes viewspace -->
-                <div class="col-md-4 col-xs-11 sliderContainer" id="notes">
+                <div class="col-md-4 col-xs-11 sliderContainer currentToolsCol" id="notesColumn">
                     <h2 class="sliderHeaderRow" id="notesHeader">Notes</h2>
                     <div class="appSliders" id="workspaceNoteSlider">
-                        <i class="fa fa-paw sliderMainbutton" aria-hidden="true"></i>  <h3>View Project Notes</h3>
+                        <i class="fa fa-book sliderMainbutton" aria-hidden="true"></i>  <h3>View Project Notes</h3>
                     </div>
                     <div class="appSliderContent container-fluid " id="notesLoadZone" url='@routes.ProjectsWorkSpaceController.getAllNotes(projectTitle)'>
 
