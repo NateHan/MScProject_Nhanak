@@ -1,19 +1,19 @@
 @(rows: List[Array[String]])
 
-<table class="userProjectsTable" id="userLeadProjectsTable">
+<table class="userProjectsTable appDataTable" id="userLeadProjectsTable">
 
-    <tr class="userProjectsHeaderRow" id="userLeadTableHeaderRow">
+    <tr class="userProjectsHeaderRow appTableHeaderRow" id="userLeadTableHeaderRow">
         <th>Project Title</th>
         <th>Created Date</th>
         <th>Currently Active</th>
         <th>Go to Project Workspace</th>
     </tr>
     @for(row <- rows) {
-        <tr class="userLeadTableContentRow">
+        <tr class="userLeadTableContentRow appTableContentRow">
             @for(cell <- row) {
                 <td>@cell</td>
             }
-        <td class="userProjectsTableContentRow">
+        <td>
             <a href="@routes.ProjectsWorkSpaceController.loadWorkspace(row(0))" class="tableicon links">
                 <i class="fa fa-eye tableIcon" aria-hidden="true"
                 title="Click to go to the Workspace for your project"></i>

@@ -1,0 +1,36 @@
+@(rows: List[Array[String]])
+
+<div class="fromLoadDoc">
+    <div class="row toolOptionsHeaderRow" id="dataPickerTitleRow">
+        <h2 class="tooltitles">Data Viewer Tool</h2>
+        <h3 class="toolSubtitles">Select Data to View in Your Session</h3>
+    </div>
+    <div class="row workrow">
+
+        <table class="appDataTable" id="dataPickerTable">
+            <tr class="appTableHeaderRow" id="dataPickerTableHeaderRow">
+                <th>Table Name</th>
+                <th>Created by</th>
+                <th>Latest Update</th>
+                <th>Latest update by</th>
+                <th>View in Workspace</th>
+            </tr>
+            @for(row <- rows) {
+                <tr class="appTableContentRow">
+                    <td>@row(0)</td> <!-- table name -->
+                    <td>@row(1)</td> <!-- created by -->
+                    <td>@row(2)</td> <!-- latest Update -->
+                    <td>@row(3)</td> <!-- latest Update by -->
+                    <td>
+                        <a href="#" class="tableicon links">
+                            <i class="fa fa-arrow-circle-down tableIcon" aria-hidden="true"
+                            title="Click to view this table in the Workspace for your project"></i>
+                        </a>
+                    </td>
+                        <!-- do somethign with row(4) to get SQL table name here -->
+                </tr>
+
+            }
+        </table>
+    </div>
+</div>

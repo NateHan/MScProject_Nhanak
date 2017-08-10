@@ -27,7 +27,7 @@ POST    /dashboard/projects             controllers.DashboardController.postNewP
 # The controller for the main project view workspace, loads default values if none found
 GET     /projectworkspace/datauploader/new      controllers.DataUploadController.renderNewTableUploader
 GET     /projectworkspace/datauploader/append   controllers.ProjectsWorkSpaceController.renderDataAppender
-GET     /projectworkspace/dataViewer            controllers.ProjectsWorkSpaceController.renderDataViewerTool
+GET     /projectworkspace/dataViewer            controllers.ProjectsWorkSpaceController.renderDataPickerTool
 GET     /projectworkspace/dataImportSelector    controllers.ProjectsWorkSpaceController.renderDataImporterSelector
 GET     /projectworkspace/notes/:projectTitle   controllers.ProjectsWorkSpaceController.getAllNotes(projectTitle:String)
 GET     /projectworkspace/:projectName          controllers.ProjectsWorkSpaceController.loadWorkspace(projectName:String )

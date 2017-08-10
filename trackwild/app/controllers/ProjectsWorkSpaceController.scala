@@ -4,7 +4,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 import models.adt.NoteObj
-import models.database.{ProjectNotesData, ProjectPermissions}
+import models.database.{DataRetriever, ProjectNotesData, ProjectPermissions}
 import play.api.db.Database
 import play.api.mvc._
 import play.filters.headers.SecurityHeadersFilter
@@ -70,12 +70,15 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
     * and view it in the project workspace
     * @return
     */
-  def renderDataViewerTool() = Action {
+  def renderDataPickerTool() = Action {
     implicit request: Request[AnyContent] =>
       val userName = request.session.get("username").getOrElse("No User Found in Session")
       val projectTitle = request.session.get("projectTitle").getOrElse("Project Not Found")
       if (ProjectPermissions.userHasPermissionLevel(userName, projectTitle, 401, twDB))
-      Ok(views.html.afterLogin.projectworkspace.dataViewerTool())
+      authController.returnDesiredPageIfAuthenticated(
+        request,
+        views.html.afterLogin.projectworkspace.dataPickerTool(
+          DataRetriever.retrieveAllProjectData(projectTitle, twDB)))
       else Ok(views.html.afterLogin.projectworkspace.noPermissionSmall())
   }
 
@@ -94,4 +97,5 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
         Ok(views.html.afterLogin.projectworkspace.noPermissionSmall())
       }
   }
+
 }

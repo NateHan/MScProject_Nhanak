@@ -123,3 +123,24 @@ label {
     margin: 0 auto;
 }
 
+
+.appDataTable {
+    text-align: center;
+    width: 95%;
+    border-radius: 7px;
+}
+
+.appTableHeaderRow th {
+    background-color: rgba(6, 47, 55, .9);
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 1.1em;
+    border: 3px solid white;
+    border-radius: 7px;
+    height: 20px;
+}
+
+.appDataTable tr td {
+    border: 3px solid white;
+}
+
