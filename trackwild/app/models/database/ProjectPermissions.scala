@@ -85,16 +85,16 @@ object ProjectPermissions {
     * @return true if the user is the lead of the project, false if not
     */
   def userIsProjectLead(userName: String, projectTitle: String, db: Database): Boolean = {
-    var userIsLeader = false
+    var userIsLead = false
     db.withConnection { conn =>
       val prepStmt = conn.prepareStatement("SELECT project_lead FROM all_projects WHERE project_title=?")
       prepStmt.setString(1, projectTitle)
       val qryResult = prepStmt.executeQuery()
       if (qryResult.next()) {
-        if (userName.equals(qryResult.getString("project_lead"))) userIsLeader = true
+        if (userName.equals(qryResult.getString("project_lead"))) userIsLead = true
       }
     }
-    userIsLeader
+    userIsLead
   }
 
 

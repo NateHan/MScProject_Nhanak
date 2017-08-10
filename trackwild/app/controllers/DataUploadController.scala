@@ -37,7 +37,8 @@ class DataUploadController @Inject()(csvFileToDBParser: CSVFileToDBParser, twDB:
   val tableUploadForm = Form(
     mapping(
       "tableName" -> nonEmptyText,
-      "uploadingUser" -> nonEmptyText
+      "uploadingUser" -> nonEmptyText,
+      "projectTitle" -> nonEmptyText
     )(NewDataTableInfo.apply)(NewDataTableInfo.unapply)
   )
 
@@ -55,13 +56,12 @@ class DataUploadController @Inject()(csvFileToDBParser: CSVFileToDBParser, twDB:
     )
     request.body.file("fileUpload").map { dataFile =>
       if (authController.sessionIsAuthenticated(request.session)) {
-        // temporary holding place, may have to alter path for user as time goes on
         val saveToPath: String = s"/Users/nathanhanak/GithubRepos/MScProject_Nhanak/trackwild/public/tmp/${dataFile.filename}"
         val file = dataFile.ref.moveTo(new File(saveToPath))
-        // TODO make the below statement an IF statement, then trigger the entry into the all_data_tables
-        // table - it needs the username, current project title, and user_table_name
         csvFileToDBParser.parseFileToNewRelation(file,
-          Map( "userName" -> newTableForm.get.uploadingUser, "tableName" -> newTableForm.get.getTableNameSQLFormat))
+          Map( "userName" -> newTableForm.get.uploadingUser,
+            "tableName" -> newTableForm.get.tableName,
+          "projectTitle" -> newTableForm.get.projectTitle))
           Ok(views.html.afterLogin.projectworkspace.projectView("REPLACE PROJECT NAME"))
       } else Unauthorized(views.html.invalidSession("Your session expired or you logged out"))
     }getOrElse( NotFound("Something Happened Along the way"))

@@ -27,6 +27,7 @@
                             "\n -Can only contain letters, numbers, spaces,  -  .  or  _")
                 )
                 <input type="hidden" name="uploadingUser" value="@request.session.get("username")">
+                <input type="hidden" name="projectTitle" value="@request.session.get("projectTitle")">
                 <p>
                     <input type="submit" class="importButton btn-primary btn-block" value="Upload Table">
                     <msg>Data must be in .csv or .xls format</msg>

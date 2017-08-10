@@ -3,10 +3,11 @@ package models.database
 import java.io.File
 
 import scala.io.{BufferedSource, Source}
-import java.sql.{Connection, ResultSet, Statement}
+import java.sql.{Connection, ResultSet, SQLException, Statement}
 import javax.inject.Inject
 import javax.inject.Singleton
 
+import models.database.SQLStringFormatter
 import com.github.tototoshi.csv.CSVReader
 import play.api.db.Database
 
@@ -14,13 +15,31 @@ import play.api.db.Database
 class CSVFileToDBParser @Inject()(twDB: Database) extends FileToDBParser {
 
 
+  /**
+    * Method which will create a new relation from user-uploaded data.
+    * @param file the file containing the data to be inserted
+    * @param tableInfo info about PSQL table in the database from the request.
+    *                  Keys are "userName", "tableName", and "projectTitle"
+    * @return True if the operation was successfully able to add data to a relation
+    */
   override def parseFileToNewRelation(file: File, tableInfo: Map[String,String]): Boolean = {
-    twDB.withConnection { conn =>
+    var parseSuccess = false
+    twDB.withConnection { conn : Connection =>
       val stmt = conn.createStatement()
-      val finalTableName = returnUniqueTableName(tableInfo.getOrElse("tableName", "Unspecified Table Name"), conn)
-      createNewTable(file, finalTableName, stmt)
-      addDataRowsToTable(file, tableInfo, stmt)
+      val tableNameSQLFormat = SQLStringFormatter.returnStringInSQLNameFormat(tableInfo.getOrElse("tableName", "Unspecified Table Name"))
+      val finalTableName = returnUniqueTableName(tableNameSQLFormat, conn)
+      try {
+        createNewTable(file, finalTableName, stmt)
+        addNewTableToAllDataTables(tableInfo.getOrElse("tableName", "Unspecified Table Name"), finalTableName, tableInfo.getOrElse("projectTitle", "No project found"))
+        parseSuccess = addDataRowsToTable(file, Map("tableName" -> finalTableName, "userName" -> tableInfo("userName")), stmt)
+      } catch {
+        case e : SQLException => e.printStackTrace(); 
+        case _ : Throwable => println("Some other error");
+      } finally {
+        if (!parseSuccess) conn.rollback()
+      }
     }
+    parseSuccess
   }
 
   /**
@@ -58,7 +77,9 @@ class CSVFileToDBParser @Inject()(twDB: Database) extends FileToDBParser {
     * @param file      the CSV file we are parsing
     * @param tableName the SQL formatted name of the table to be created
     * @param stmt      the statement from current DB connection
+    * @return          true if 1
     */
+  @throws(classOf[SQLException])
   private def createNewTable(file: File, tableName: String, stmt: Statement): Unit = {
     val csvReader = CSVReader.open(file)
     val fileContentsWHeaders: List[Map[String, String]] = csvReader.allWithHeaders()
@@ -106,6 +127,7 @@ class CSVFileToDBParser @Inject()(twDB: Database) extends FileToDBParser {
     * @param stmt      the statement from the current DB connection
     * @return True if table is larger after operation, false if not
     */
+  @throws(classOf[SQLException])
   override def addDataRowsToTable(file: File, tableInfo: Map[String, String], stmt: Statement): Boolean = {
     val csvReader = CSVReader.open(file)
     val data = csvReader.allWithHeaders()
@@ -131,12 +153,32 @@ class CSVFileToDBParser @Inject()(twDB: Database) extends FileToDBParser {
       queryBuilder.append(s"'${tableInfo("userName")}'); \n") // closes query
     }
     stmt.executeUpdate(queryBuilder.toString())
-    val rowTotalAfter = stmt.executeQuery(s"SELECT COUNT(*) as count FROM ${tableInfo("tableName")}")
     var operationAddedData: Boolean = false
+    val rowTotalAfter = stmt.executeQuery(s"SELECT COUNT(*) as count FROM ${tableInfo("tableName")}")
     while (rowTotalAfter.next()) {
       if (rowTotalBefore < rowTotalAfter.getString("count").toInt) operationAddedData = true
     }
     operationAddedData
+  }
+
+  /**
+    * Method which links the creation of a new table to the rest of the database by giving it an
+    * entry into the DB table all_data_tables
+    * @param rawTableName The name the user entered when creating the table - non-SQL format
+    * @param sqlTableName The table name sanitized for SQL naming conventions
+    * @param projectTitle The name of the project the table was originally uploaded to.
+    * @return true if 1 row is inserted into all_data_tables, false if less or more.
+    */
+  @throws(classOf[SQLException])
+  private def addNewTableToAllDataTables(rawTableName:String, sqlTableName:String, projectTitle:String): Boolean = {
+    twDB.withConnection{ conn =>
+      val prepStmt = conn.prepareStatement("INSERT INTO all_data_tables VALUES(?, ?, ?)")
+      prepStmt.setString(1, rawTableName)
+      prepStmt.setString(2, sqlTableName)
+      prepStmt.setString(3, projectTitle)
+      val rowsUpdated = prepStmt.executeUpdate()
+      rowsUpdated == 1
+    }
   }
 
 

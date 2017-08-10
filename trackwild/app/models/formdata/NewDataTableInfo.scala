@@ -5,7 +5,7 @@ import java.util.Date
 
 import models.database.SQLStringFormatter
 
-case class NewDataTableInfo(tableName: String, uploadingUser: String) {
+case class NewDataTableInfo(tableName: String, uploadingUser: String, projectTitle:String) {
 
   val createdDate: String = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())
 
