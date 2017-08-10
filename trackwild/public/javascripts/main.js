@@ -1,7 +1,6 @@
 // dynamically loads a view by the URL of the router route to load and
 // the id of the element to load the page into
 function loadDoc(myUrl, id) {
-    console.log("called with URL: " + myUrl + " and " + id)
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
@@ -12,6 +11,10 @@ function loadDoc(myUrl, id) {
     xhttp.open("GET", myUrl, true);
     xhttp.send();
 }
+
+$(".dataPickerIcon").click(function(){
+    $("#projectDataContent").append("<b>Does this thing work?</b>");
+});
 
 function loadNAlert(url ) {
     window.alert("This thing loaded and passed me this: " + url)
