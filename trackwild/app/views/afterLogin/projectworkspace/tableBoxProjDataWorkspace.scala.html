@@ -9,16 +9,16 @@
     <div class="googleEarthContainer">Google Earth Stuff Goes Here</div>
 
     <div class="tableRawData">
-        <table class="projDataTable">
+        <table class="appDataTable projDataTable">
             <tr class="appTableHeaderRow">
             @for(headerCell <- table.head) {
-                <th>headerCell</th>
+                <th>@headerCell</th>
             }
             </tr>
             @for(row <- table.tail) {
                 <tr class="appTableContentRow">
                     @for(cell <- row) {
-                        <td>cell</td>
+                        <td>@cell</td>
                     }
                 </tr>
             }
