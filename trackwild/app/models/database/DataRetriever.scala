@@ -72,7 +72,29 @@ object DataRetriever {
     result
   }
 
-  // will have each sql_table_name belonging to the project
-  // for EACH of those, do a SELECT that weeds out oldest entry's username
+  /**
+    * Method which will retrieve a project's data table by its name.
+    * @param tableName the name of the data table we would like to retrieve
+    * @param db the database where the table is located
+    * @return The table as a list of Arrays. The first row will always be the header.
+    */
+  def retrieveDataTableByName(tableName:String, db:Database): List[Array[String]] = {
+    val resultBuffer = new ListBuffer[Array[String]]
+
+    resultBuffer.
+  }
+
+  def getTableheaders(tableName:String, db:Database): Array[String] = {
+    db.withConnection{ conn =>
+      val stmt = conn.createStatement()
+      val resSet = stmt.executeQuery(s"SELECT * FROM $tableName WHERE false;")
+      val rsMetaData = resSet.getMetaData
+      val headerRow: Array[String] = new Array[String](rsMetaData.getColumnCount)
+      for( i <- 1 to rsMetaData.getColumnCount) {
+        headerRow(i-1) = rsMetaData.getColumnName(i)
+      }
+      headerRow
+    }
+  }
 
 }

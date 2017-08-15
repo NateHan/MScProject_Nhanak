@@ -12,10 +12,6 @@ function loadDoc(myUrl, id) {
     xhttp.send();
 }
 
-$(".dataPickerIcon").click(function(){
-    $("#projectDataContent").append("<b>Does this thing work?</b>");
-});
-
 function loadNAlert(url ) {
     window.alert("This thing loaded and passed me this: " + url)
 }
@@ -34,7 +30,9 @@ $(document).ready(function () {
             }
         );
     });
-});
+
+})
+
 
 // Listens for a submission of #createProjectForm (in the dasboard)
 // Linking with the jsRoutes method, it will POST the form and return the result in the targeted area.
@@ -71,5 +69,12 @@ $(document).on('submit', '#createProjectForm', function (event) {
         }
     })
 
-
 });
+
+//Listens for click on the icon in the data picker table. Appends the content to the Project
+//Data viewspace.
+$(document).on('click', '.dataPickerIconDiv', function() {
+    console.log("A Data Table Has been added to the Project Data Workspace")
+    $("#projectDataContent").prepend("<p>Does this thing work?</p><hr>");
+});
+
