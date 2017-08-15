@@ -98,4 +98,21 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
       }
   }
 
+  /**
+    * Method which retrieves a view which will contain the desired table for the project by name
+    * @param tableName the SQL formatted name of the data table we are tryign to retrieve
+    * @return an HTML view containing the table in a viewable format for the project workspace
+    */
+  def renderProjectDataTable(tableName:String) = Action {
+    implicit request: Request[AnyContent] =>
+      val userName = request.session.get("username").getOrElse("No User Found in Session")
+      val project = request.session.get("projectTitle").getOrElse("No Project Title Found in Session")
+      if (ProjectPermissions.userHasPermissionLevel(userName, project, 399, twDB)) {
+        val fullTable = DataRetriever.retrieveFullDataTableByName(tableName, twDB)
+        Ok(views.html.afterLogin.projectworkspace.tableBoxProjDataWorkspace(fullTable))
+      } else {
+        Ok(views.html.afterLogin.projectworkspace.noPermissionSmall())
+      }
+  }
+
 }

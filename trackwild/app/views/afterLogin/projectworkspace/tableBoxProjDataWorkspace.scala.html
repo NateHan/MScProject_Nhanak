@@ -1,12 +1,27 @@
-@()
+@(table:List[Array[String]])
 
 <div class="tableBoxProjDataWS">
+
+    <div class="tableBoxControlIcons">
+        <!-- Add these if time permits -->
+    </div>
 
     <div class="googleEarthContainer">Google Earth Stuff Goes Here</div>
 
     <div class="tableRawData">
         <table class="projDataTable">
-
+            <tr class="appTableHeaderRow">
+            @for(headerCell <- table.head) {
+                <th>headerCell</th>
+            }
+            </tr>
+            @for(row <- table.tail) {
+                <tr class="appTableContentRow">
+                    @for(cell <- row) {
+                        <td>cell</td>
+                    }
+                </tr>
+            }
         </table>
     </div>
 

@@ -78,13 +78,31 @@ object DataRetriever {
     * @param db the database where the table is located
     * @return The table as a list of Arrays. The first row will always be the header.
     */
-  def retrieveDataTableByName(tableName:String, db:Database): List[Array[String]] = {
+  def retrieveFullDataTableByName(tableName:String, db:Database): List[Array[String]] = {
     val resultBuffer = new ListBuffer[Array[String]]
-
-    resultBuffer.
+    resultBuffer += getTableheaders(tableName, db)
+    val noOfCols = resultBuffer.head.length
+    db.withConnection{ conn =>
+      val stmt = conn.createStatement()
+      val resultSet = stmt.executeQuery(s"SELECT * FROM $tableName;")
+      while(resultSet.next()) {
+        val row = new Array[String](noOfCols)
+        for(i <- 0 to noOfCols-1) {
+          row(i) = resultSet.getString(resultBuffer.head(i)) // retrieves each row's entry by column name
+        }
+        resultBuffer += row
+      }
+    }
+    resultBuffer.toList
   }
 
-  def getTableheaders(tableName:String, db:Database): Array[String] = {
+  /**
+    * Method which retrieves only the column titles of the desired table
+    * @param tableName the name of the table we are interested in
+    * @param db the database location of the table
+    * @return an array containing one entry for each column label
+    */
+  private def getTableheaders(tableName:String, db:Database): Array[String] = {
     db.withConnection{ conn =>
       val stmt = conn.createStatement()
       val resSet = stmt.executeQuery(s"SELECT * FROM $tableName WHERE false;")
