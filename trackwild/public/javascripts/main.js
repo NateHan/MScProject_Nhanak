@@ -74,21 +74,14 @@ $(document).on('submit', '#createProjectForm', function (event) {
 //Listens for click on the icon in the data picker table. Appends the content to the Project
 //Data viewspace.
 $(document).on('click', '.dataPickerIconDiv', function() {
-    console.log("Adding Data Table to the Project Data Workspace")
+    var targetArea = $(this).children("i");
+    var urlToPass = $(targetArea).attr('url');
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             $("#projectDataContent").prepend(this.responseText);
         }
     };
-    xhttp.open("GET", '/projectworkspace/dataViewer/leapfrog_data', true);
+    xhttp.open("GET", urlToPass, true);
     xhttp.send();
 });
-
-
-/* this works, commenting out until complete
-$(document).on('click', '.dataPickerIconDiv', function() {
-    $("#projectDataContent").prepend("<p>Does this thing work?</p><hr>");
-    console.log("Adding Data Table to the Project Data Workspace")
-});
-*/
