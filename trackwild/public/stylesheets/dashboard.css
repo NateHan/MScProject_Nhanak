@@ -17,7 +17,7 @@ i.sliderMainbutton{
     float: left;
 }
 
-i + h3 {
+i + h3, i + h5 {
     display: inline-block;
 }
 

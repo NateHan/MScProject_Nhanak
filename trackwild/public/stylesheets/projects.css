@@ -219,8 +219,28 @@ fixeddesc {
     float: none;
 }
 
+.tableRawData {
+    overflow-x: auto;
+    white-space: nowrap;
+    table-layout: fixed;
+}
+
 .tableBoxProjDataWS {
     max-height: 900px;
     overflow-y: scroll;
-    overflow-x: scroll;
 }
+
+.projDataTable td {
+    padding-left: 1%;
+    padding-right: 1%;
+}
+
+.tableProcessingToolBarContainer {
+    margin: 2% auto 2% auto;
+}
+
+.tableProcessingIcon {
+    font-size: 1.0em;
+}
+
+
