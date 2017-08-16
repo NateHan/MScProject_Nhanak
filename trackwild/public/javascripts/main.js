@@ -30,8 +30,24 @@ $(document).ready(function () {
             }
         );
     });
-
 })
+
+
+// Trying to respond to the Project Data Table sliders
+$('#projectdataColumn').ready( function() {
+    console.log("#projectDataColumn is ready")
+    $('.appSliderContent').hide();
+    console.log("#projectDataColumn hid the slider")
+    $('.appSliders').on('click', function () {
+        console.log("caught the appslider click")
+        var targetArea = $(this).next('.appSliderContent');
+        var urlToPass = $(targetArea).attr('url');
+        targetArea.load(urlToPass, function () {
+                $(this).slideToggle()
+            }
+        );
+    });
+});
 
 
 // Listens for a submission of #createProjectForm (in the dasboard)
