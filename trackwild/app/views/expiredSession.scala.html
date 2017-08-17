@@ -1,6 +1,6 @@
 @(message: String)(implicit req: RequestHeader)
 
-@main("Invalid Session") {
+@main("Expired Session") {
 
     @landingnavbar("none")
 
@@ -8,9 +8,10 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="content">
-                    <h1>UNAUTHORIZED</h1>
+                    <h1>SESSION HAS EXPIRED</h1>
                     <h2>@message</h2>
-                    If you would like to access to the site, please <u><a href="/login">login</a></u>
+                    Unfortunately, your session has expired. <br>
+                    If you would like to access to the site, please <u><a href="/login">login</a></u> again.
                 </div>
             </div>
         </div>

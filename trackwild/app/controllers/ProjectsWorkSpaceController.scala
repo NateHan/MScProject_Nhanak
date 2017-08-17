@@ -4,11 +4,10 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 import models.adt.NoteObj
-import models.database.{DataRetriever, ProjectNotesData, ProjectPermissions}
+import models.database.{DataRetriever, DatabaseUpdate, ProjectNotesData, ProjectPermissions}
 import models.formdata.{NewProjectData, NewProjectNote}
 import play.api.data.Form
 import play.api.data.Forms.{mapping, nonEmptyText}
-
 import play.api.db.Database
 import play.api.mvc._
 import play.filters.headers.SecurityHeadersFilter
@@ -155,7 +154,14 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
     * @return
     */
   def postNewNoteToDb() = Action { request : Request[AnyContent] =>
-    Ok("Replace me Later")
+    if (authController.sessionIsAuthenticated(request.session)) {
+      //def insertRowInto(db: Database, tableName: String, columnsToVals: Map[String, String]):
+      //DatabaseUpdate.
+      Ok("Replace me Later")
+    } else {
+      Ok("Replace me Later")
+      //SessionTimeout(views.html.expiredSession("session timeout"))
+    }
   }
 
 }
