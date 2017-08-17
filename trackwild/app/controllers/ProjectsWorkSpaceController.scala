@@ -5,6 +5,10 @@ import javax.inject.Singleton
 
 import models.adt.NoteObj
 import models.database.{DataRetriever, ProjectNotesData, ProjectPermissions}
+import models.formdata.{NewProjectData, NewProjectNote}
+import play.api.data.Form
+import play.api.data.Forms.{mapping, nonEmptyText}
+
 import play.api.db.Database
 import play.api.mvc._
 import play.filters.headers.SecurityHeadersFilter
@@ -13,10 +17,11 @@ import play.filters.headers.SecurityHeadersFilter
   * Created by nathanhanak on 7/16/17.
   */
 @Singleton
-class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: AuthenticationController, cc: ControllerComponents) extends AbstractController(cc) {
+class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: AuthenticationController, cc: ControllerComponents) extends AbstractController(cc) with play.api.i18n.I18nSupport  {
 
   /**
     * loads main project workspace page
+    *
     * @param projectTitle the name of the current project of the user
     * @return an HTTP response containing the HTML for the project workspace
     */
@@ -39,6 +44,7 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
   /**
     * Loads the template which will allows the user to add new .csv or .xls data to their database
     * Will eventually nest a newDataUploader or dataAppender inside
+    *
     * @return an HTTP response containing the HTML for the table data uploader
     */
   def renderDataImporterSelector() = Action {
@@ -54,6 +60,7 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
   /**
     * Loads the template which allows the user to add new .csv or .xls data to their database,
     * appending it to an already-existing table
+    *
     * @return an HTTP response containing the HTML for the table data appender
     */
   def renderDataAppender() = Action {
@@ -68,6 +75,7 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
   /**
     * Loads a template which will allow a user to select their data saved in the DB
     * and view it in the project workspace
+    *
     * @return
     */
   def renderDataPickerTool() = Action {
@@ -75,20 +83,21 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
       val userName = request.session.get("username").getOrElse("No User Found in Session")
       val projectTitle = request.session.get("projectTitle").getOrElse("Project Not Found")
       if (ProjectPermissions.userHasPermissionLevel(userName, projectTitle, 401, twDB))
-      authController.returnDesiredPageIfAuthenticated(
-        request,
-        views.html.afterLogin.projectworkspace.dataPickerTool(
-          DataRetriever.retrieveAllProjectData(projectTitle, twDB)))
+        authController.returnDesiredPageIfAuthenticated(
+          request,
+          views.html.afterLogin.projectworkspace.dataPickerTool(
+            DataRetriever.retrieveAllProjectData(projectTitle, twDB)))
       else Ok(views.html.afterLogin.projectworkspace.noPermissionSmall())
   }
 
   /**
     * Loads a template containing all the notes for a project which will load in the project workspace
+    *
     * @param projectTitle the name of the current project
     * @return the view which will contain all of the notes for the project
     */
-  def getAllNotes(projectTitle:String) = Action {
-    implicit request : Request[AnyContent] =>
+  def getAllNotes(projectTitle: String) = Action {
+    implicit request: Request[AnyContent] =>
       val userName = request.session.get("username").getOrElse("No User Found in Session")
       if (ProjectPermissions.userHasPermissionLevel(userName, projectTitle, 399, twDB)) {
         val allProjectNotes: List[NoteObj] = ProjectNotesData.getAllProjectNotes(projectTitle, twDB)
@@ -100,10 +109,11 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
 
   /**
     * Method which retrieves a view which will contain the desired table for the project by name
+    *
     * @param tableName the SQL formatted name of the data table we are tryign to retrieve
     * @return an HTML view containing the table in a viewable format for the project workspace
     */
-  def renderProjectDataTable(tableName:String) = Action {
+  def renderProjectDataTable(tableName: String) = Action {
     implicit request: Request[AnyContent] =>
       val userName = request.session.get("username").getOrElse("No User Found in Session")
       val project = request.session.get("projectTitle").getOrElse("No Project Title Found in Session")
@@ -113,6 +123,39 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
       } else {
         Ok(views.html.afterLogin.projectworkspace.noPermissionSmall())
       }
+  }
+
+  /**
+    * Method which will load the form allowing the user to append a note to the current project
+    *
+    * @return an Ok request containing the view template with the form to enter a new note
+    */
+  def renderNoteAdder() = Action {
+    implicit request: Request[AnyContent] =>
+      if (authController.userHasRequiredPermissionLevel(299, request) && authController.sessionIsAuthenticated(request.session)) {
+        Ok(views.html.afterLogin.projectworkspace.newNotePostForm(newProjNote))
+      } else {
+        Unauthorized(views.html.afterLogin.projectworkspace.noPermissionSmall())
+      }
+  }
+
+
+  val newProjNote: Form[NewProjectNote] = Form {
+    mapping(
+      "projectTitle" -> nonEmptyText,
+      "noteTitle" -> nonEmptyText,
+      "noteAuthor" -> nonEmptyText,
+      "noteContent" -> nonEmptyText,
+    )(NewProjectNote.apply)(NewProjectNote.unapply)
+  }
+
+  /**
+    * Method which turns user input for a note into a entry into the DB for notes for the project
+    *
+    * @return
+    */
+  def postNewNoteToDb() = Action { request : Request[AnyContent] =>
+    Ok("Replace me Later")
   }
 
 }

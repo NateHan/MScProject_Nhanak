@@ -30,6 +30,8 @@ GET     /projectworkspace/datauploader/append   controllers.ProjectsWorkSpaceCon
 GET     /projectworkspace/dataViewer            controllers.ProjectsWorkSpaceController.renderDataPickerTool
 GET     /projectworkspace/dataViewer/:tableName controllers.ProjectsWorkSpaceController.renderProjectDataTable(tableName:String)
 GET     /projectworkspace/dataImportSelector    controllers.ProjectsWorkSpaceController.renderDataImporterSelector
+GET     /projectworkspace/addNewNote            controllers.ProjectsWorkSpaceController.renderNoteAdder
+POST    /projectworkspace/addNewNote            controllers.ProjectsWorkSpaceController.postNewNoteToDb
 GET     /projectworkspace/notes/:projectTitle   controllers.ProjectsWorkSpaceController.getAllNotes(projectTitle:String)
 GET     /projectworkspace/:projectName          controllers.ProjectsWorkSpaceController.loadWorkspace(projectName:String )
 

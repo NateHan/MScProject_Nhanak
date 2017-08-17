@@ -1,0 +1,42 @@
+@import helper.CSRF
+@import models.formdata.NewProjectNote
+
+@(noteForm: Form[NewProjectNote])(implicit request: RequestHeader, messages: Messages)
+
+<div class="fromLoadDoc">
+    <div class="row toolOptionsHeaderRow" id="newNoteUploader">
+        <h2 class="tooltitles">Note Adding Tool</h2>
+        <h3 class="toolSubtitles">Fill out fields to add a new note to the project</h3>
+    </div>
+    <div class="row workrow" id="newNoteUploadRow">
+        @helper.form(action = controllers.routes.ProjectsWorkSpaceController.postNewNoteToDb, 'id -> "newNoteForm", 'enctype -> "multipart/form-data") {
+            @CSRF.formField
+            <input type="hidden" name="projectTitle" value="@request.session.get("projectTitle")">
+
+            <div class="form-group">
+                <dt>
+                    <label class="toolsrowInputLabel" for="noteTitle">Note Title/Subject</label>
+                </dt>
+                <dd>
+                    <input type="text" class="toolsrowInputText" id="noteTitle" name="noteTitle" placeholder="Enter title or subject" title="If left blank, will default to current time">
+                </dd>
+            </div>
+
+            <input type="hidden" name="noteAuthor" value="@request.session.get("username")">
+
+            <div class="form-group">
+                <dt>
+                    <label class="toolsrowInputLabel" for="noteContent">Note for project: <sup>*required</sup></label>
+                </dt>
+                <dd>
+                    <textarea rows="10" cols="150" class="toolsrowInputText" form="newNoteForm" id="noteContent" name="noteContent" placeholder="Enter note here" required>
+                    </textarea>
+                </dd>
+            </div>
+
+            <button type="submit" class="btn btn-default glassyButton">
+                Submit Note
+            </button>
+        }
+    </div>
+</div>

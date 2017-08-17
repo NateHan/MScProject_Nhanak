@@ -3,12 +3,14 @@ package controllers
 import javax.inject.Inject
 import javax.inject.Singleton
 
+import models.database.ProjectPermissions
+import play.api.db.Database
 import play.api.mvc._
 import play.filters.headers.SecurityHeadersFilter
 import play.twirl.api.Html
 
 @Singleton
-class AuthenticationController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
+class AuthenticationController @Inject()(cc: ControllerComponents, twDB:Database) extends AbstractController(cc) {
 
   /**
     * Searches for authentication parameter set in session's header cookie
@@ -37,6 +39,18 @@ class AuthenticationController @Inject()(cc: ControllerComponents) extends Abstr
         case _ => Unauthorized(views.html.invalidSession(errorMessage)(request)).withNewSession
       }
     }
+
+  /**
+    * Method which checks the user's permission level for the current project
+    * @param requiredLevel the highest level allowed for the desired action from the request
+    * @param request the current GET or POST request made from the client
+    * @return true if the user has a low enough permission level, false if not
+    */
+  def userHasRequiredPermissionLevel(requiredLevel:Int, request: Request[AnyContent]): Boolean = {
+    val userName = request.session.get("username").getOrElse("No User Found in Session")
+    val projectTitle = request.session.get("projectTitle").getOrElse("No Project Title Found in Session")
+    ProjectPermissions.userHasPermissionLevel(userName, projectTitle, requiredLevel, twDB)
+  }
 
 
 
