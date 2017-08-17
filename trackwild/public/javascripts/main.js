@@ -23,7 +23,6 @@ $(document).ready(function () {
     $('.appSliderContent').hide();
 
     $('.appSliders').on('click', function () {
-        console.log("original slider function firing")
         var targetArea = $(this).next('.appSliderContent');
         var urlToPass = $(targetArea).attr('url');
         targetArea.load(urlToPass, function () {
@@ -34,10 +33,8 @@ $(document).ready(function () {
 })
 
 $('#projectDataContent').on("click", '.tableProcessingToolSliders', function() {
-        console.log("secondary appslider function firing");
-        var targetArea = $(this).children('.tptSliderContent');
-        console.log(targetArea);
-        targetArea.slideToggle(); // remove this when it loads a URL later
+        var targetArea = $(this).next('.tptSliderContent');
+        targetArea.slideToggle(); // remove this from here when it loads a URL later, it is below
         /* reactivate later when these appsliders have URLs
         var urlToPass = $(targetArea).attr('url');
         targetArea.load(urlToPass, function () {
@@ -45,8 +42,8 @@ $('#projectDataContent').on("click", '.tableProcessingToolSliders', function() {
             }
         );
          */
-    });
-//});
+});
+
 
 
 // Listens for a submission of #createProjectForm (in the dasboard)
