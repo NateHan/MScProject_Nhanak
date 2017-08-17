@@ -19,7 +19,8 @@
             <!-- add any new JS scripts that GET or POST to controllers below -->
         @helper.javascriptRouter("jsRoutes")(
             routes.javascript.DashboardController.postNewProject,
-            routes.javascript.DashboardController.getSliderResponse
+            routes.javascript.DashboardController.getSliderResponse,
+            routes.javascript.ProjectsWorkSpaceController.postNewNoteToDb
         )
 
     </head>

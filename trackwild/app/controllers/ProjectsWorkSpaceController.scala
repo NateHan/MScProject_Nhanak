@@ -7,7 +7,7 @@ import models.adt.NoteObj
 import models.database.{DataRetriever, DatabaseUpdate, ProjectNotesData, ProjectPermissions}
 import models.formdata.{NewProjectData, NewProjectNote}
 import play.api.data.Form
-import play.api.data.Forms.{mapping, nonEmptyText}
+import play.api.data.Forms.{mapping, nonEmptyText, text}
 import play.api.db.Database
 import play.api.mvc._
 import play.filters.headers.SecurityHeadersFilter
@@ -16,7 +16,7 @@ import play.filters.headers.SecurityHeadersFilter
   * Created by nathanhanak on 7/16/17.
   */
 @Singleton
-class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: AuthenticationController, cc: ControllerComponents) extends AbstractController(cc) with play.api.i18n.I18nSupport  {
+class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: AuthenticationController, cc: ControllerComponents) extends AbstractController(cc) with play.api.i18n.I18nSupport {
 
   /**
     * loads main project workspace page
@@ -142,7 +142,7 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
   val newProjNote: Form[NewProjectNote] = Form {
     mapping(
       "projectTitle" -> nonEmptyText,
-      "noteTitle" -> nonEmptyText,
+      "noteTitle" -> text,
       "noteAuthor" -> nonEmptyText,
       "noteContent" -> nonEmptyText,
     )(NewProjectNote.apply)(NewProjectNote.unapply)
@@ -150,17 +150,40 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
 
   /**
     * Method which turns user input for a note into a entry into the DB for notes for the project
-    * @return
+    *
+    * @return an Action result based on if the user is authorized, has permission, or is successful
     */
-  def postNewNoteToDb() = Action { request : Request[AnyContent] =>
+  def postNewNoteToDb() = Action { implicit request: Request[AnyContent] =>
     if (authController.sessionIsAuthenticated(request.session)) {
-      //def insertRowInto(db: Database, tableName: String, columnsToVals: Map[String, String]):
-      DatabaseUpdate.insertRowInto(twDB, "project_notes", )
-      Ok("Replace me Later")
+      newProjNote.bindFromRequest().fold(
+        errorForm => BadRequest("Form data did not bind"),
+        successForm => {
+          val columnsTovals: Map[String, String] = mapSQLColumnLabelsToNoteFormFields(successForm)
+          if (DatabaseUpdate.insertRowInto(twDB, "project_notes", columnsTovals) == 1) Ok(views.html.afterLogin.projectworkspace.noteAddSuccess)
+          else {
+            BadRequest("Unable to insert note")
+          }
+        }
+      )
     } else {
-      Ok("Replace me Later")
-      //SessionTimeout(views.html.expiredSession("session timeout"))
+      Unauthorized(views.html.expiredSession("You have been logged out or your session has expired"))
     }
+  }
+
+
+  /**
+    * Take the fields collected from form and place into values for a map where the SQL table
+    * column names are the keys
+    * @param note         the new note data type containing the note fields
+    * @return a Map of keys:SQL Columns to values: form fields
+    */
+  def mapSQLColumnLabelsToNoteFormFields(note: NewProjectNote): Map[String, String] = {
+    Map(
+      "project_title" -> note.projectTitle,
+      "note_title" -> note.noteTitle,
+      "note_author" -> note.noteAuthor,
+      "note_content" -> note.noteContent
+    )
   }
 
 }

@@ -11,7 +11,7 @@
     <div class="row workrow" id="newNoteUploadRow">
         @helper.form(action = controllers.routes.ProjectsWorkSpaceController.postNewNoteToDb, 'id -> "newNoteForm", 'enctype -> "multipart/form-data") {
             @CSRF.formField
-            <input type="hidden" name="projectTitle" value="@request.session.get("projectTitle")">
+            <input type="hidden" name="projectTitle" id="projectTitle" value="@request.session.get("projectTitle")">
 
             <div class="form-group">
                 <dt>
@@ -22,14 +22,14 @@
                 </dd>
             </div>
 
-            <input type="hidden" name="noteAuthor" value="@request.session.get("username")">
+            <input type="hidden" name="noteAuthor" id="noteAuthor" value="@request.session.get("username")">
 
             <div class="form-group">
                 <dt>
                     <label class="toolsrowInputLabel" for="noteContent">Note for project: <sup>*required</sup></label>
                 </dt>
                 <dd>
-                    <textarea rows="10" cols="150" class="toolsrowInputText" form="newNoteForm" id="noteContent" name="noteContent" placeholder="Enter note here" required>
+                    <textarea rows="5" cols="150" class="toolsrowInputText" form="newNoteForm" id="noteContent" name="noteContent" placeholder="Enter note here" required>
                     </textarea>
                 </dd>
             </div>

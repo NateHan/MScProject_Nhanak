@@ -30,7 +30,7 @@ $(document).ready(function () {
             }
         );
     });
-})
+});
 
 $('#projectDataContent').on("click", '.tableProcessingToolSliders', function() {
         var targetArea = $(this).next('.tptSliderContent');
@@ -57,14 +57,14 @@ $(document).on('submit', '#createProjectForm', function (event) {
         initialNote: $('#initNoteBox').val()
     }
 
-    var token =  $('input[name="csrfToken"]').attr('value')
+    var token =  $('input[name="csrfToken"]').attr('value');
     $.ajaxSetup({
         beforeSend: function(xhr) {
             xhr.setRequestHeader('Csrf-Token', token);
         }
     });
 
-    var route = jsRoutes.controllers.DashboardController.postNewProject()
+    var route = jsRoutes.controllers.DashboardController.postNewProject();
     $.ajax({
         url: route.url,
         type: route.type,
@@ -80,8 +80,50 @@ $(document).on('submit', '#createProjectForm', function (event) {
             loadDoc('/dashboard/projects/sliderSubmitResponse/newProjFail/NoProjectCreated', 'createNewProjectDiv')
         }
     })
+});
+
+/* Listens for a submission of a #newNoteForm in the Project Workspace
+If successful, the method inserts the notes into the Notes viewspace. If not, displays the error.
+*/
+$('#toolsrow').on('submit', '#newNoteForm', function(event) {
+
+    event.preventDefault();
+
+    var data = {
+        projectTitle: $('#projectTitle').val(),
+        noteTitle: $('#noteTitle').val(),
+        noteAuthor: $('#noteAuthor').val(),
+        noteContent: $('#noteContent').val()
+    }
+
+
+    var token =  $('input[name="csrfToken"]').attr('value')
+    $.ajaxSetup({
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader('Csrf-Token', token);
+        }
+    });
+
+    var route = jsRoutes.controllers.ProjectsWorkSpaceController.postNewNoteToDb();
+    $.ajax({
+        url: route.url,
+        type: route.type,
+        data : JSON.stringify(data),
+        contentType : 'application/json',
+        headers: {'X-CSRF-TOKEN': $('input[name=csrfToken]').attr('value')},
+        success: function(data) {
+            document.getElementById("newNoteUploadRow").innerHTML = data;
+            $('#notesLoadZone').slideUp();
+        },
+        error: function(data){
+            console.log("Did not submit the note")
+        }
+
+    });
+
 
 });
+
 
 //Listens for click on the icon in the data picker table. Appends the content to the Project
 //Data viewspace.

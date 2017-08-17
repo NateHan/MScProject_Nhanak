@@ -219,6 +219,7 @@ fixeddesc {
     margin-top: auto;
     margin-bottom: auto;
     height: 100%;
+    font-size: 1em;
 }
 
 #dataPickerTable {
