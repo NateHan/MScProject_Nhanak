@@ -1,33 +1,32 @@
 @(projectTitle: String)(implicit request: RequestHeader)
 
-@userName() = @{request.session.get("username").getOrElse("nhanak")}
+@userName() = @{
+    request.session.get("username").getOrElse("nhanak")
+}
 
-    @main(s"Track Wild: $projectTitle") {
+@main(s"Track Wild: $projectTitle") {
 
-        @loggedInNavbar("projects")
-        <h3 id="projectViewTitle">@projectTitle</h3>
-        <div class="container" id="toolOptions">
-            <div class="row" id="toolsrow">
+    @loggedInNavbar("projects")
+    <h3 id="projectViewTitle">@projectTitle</h3>
+    <div class="container" id="toolOptions">
+        <div class="row" id="toolsrow">
 
-            </div>
         </div>
+    </div>
 
-        <div class="container-fluid" id="currentTools">
-            <div class="row" id="currentToolsRow">
-                <div class="col-md-2 col-sm-2 col-xs-1 currentToolsCol" id="toolbarColumn">
+    <div class="container-fluid" id="currentTools">
+        <div class="row" id="currentToolsRow">
+            <div class="col-md-2 col-sm-2 col-xs-1 currentToolsCol" id="toolBarAndNotesColumn">
+                    <!-- Project Toolbar -->
+                    <div id="toolbarContainer">
                 @projectToolbar()
-                </div>
-                    <!--Project Data viewspace-->
-                <div class="col-md-6 col-sm-6 col-xs-11 currentToolsCol" id="projectdataColumn">
-                    <h2 class="viewHeader">Project Data</h2>
-                    <hr class="viewHeaderHR">
-                    <div id="projectDataContent"></div>
-                </div>
+                    </div>
                     <!-- Notes viewspace -->
-                <div class="col-md-4 col-sm-4 col-xs-11 sliderContainer currentToolsCol" id="notesColumn">
-                    <h2 class="sliderHeaderRow" id="notesHeader">Notes</h2>
+                <div class="sliderContainer" id="notesContainer">
+                    <h2 class="sliderHeaderRow" id="notesHeader">NOTES</h2>
                     <div class="appSliders" id="workspaceNoteSlider">
-                        <i class="fa fa-book sliderMainbutton" aria-hidden="true"></i>  <h3 id="noteSliderHeader">View Project Notes</h3>
+                        <i class="fa fa-book sliderMainbutton" aria-hidden="true"></i>  <h3 id="noteSliderHeader">
+                        View Project Notes</h3>
                     </div>
                     <div class="appSliderContent container-fluid " id="notesLoadZone" url='@routes.ProjectsWorkSpaceController.getAllNotes(projectTitle)'>
 
@@ -35,8 +34,18 @@
 
                 </div>
             </div>
+                <!--Project Data viewspace-->
+            <div class="col-md-10 col-sm-10 col-xs-11 currentToolsCol" >
+                <div id="projectdataColumn">
+                    <h2 class="viewHeader">Project Data</h2>
+                    <hr class="viewHeaderHR">
+                    <div id="projectDataContent"></div>
+                </div>
+            </div>
 
         </div>
 
+    </div>
 
-    }
+
+}

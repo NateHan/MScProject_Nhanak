@@ -2,16 +2,16 @@ body {
     font-family: 'Ubuntu', sans-serif;
 }
 
-#toolbarColumn {
+#toolbarContainer {
     border: 5px solid rgba(255, 255, 255, .8);
     border-radius: 7px;
     padding: 0;
     background: rgba(23, 137, 159, 0.8);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5), /* Exterior Shadow */ inset 0 1px rgba(255, 255, 255, 0.3), /* Top light Line */ inset 0 10px rgba(255, 255, 255, 0.2), /* Top Light Shadow */ inset 0 10px 20px rgba(255, 255, 255, 0.25), /* Sides Light Shadow */ inset 0 -15px 30px rgba(0, 0, 0, 0.3); /* Dark Background */
-    text-shadow: 0px 1px 0px rgba(255, 255, 255, .3), 0px -1px 0px rgba(0, 0, 0, .7);
+    text-shadow: 0 1px 0 rgba(255, 255, 255, .3), 0 -1px 0 rgba(0, 0, 0, .7);
 }
 
-#toolbarColumn, #toolbarColumn * {
+#toolbarContainer, #toolbarContainer * {
     box-sizing: content-box;
 }
 
@@ -37,18 +37,28 @@ li.dropdown, #toolbarheader {
     border-bottom: 4px solid rgba(255, 255, 255, .8);
 }
 
-li.dropdown:last-child{
+li.dropdown:last-child {
     border: 0;
 }
 
 #toolbarheader {
+    font-family: 'Ubuntu', sans-serif;
     text-align: center;
     font-size: 1.3em;
     font-weight: 500;
     margin: auto;
-    padding: 15px 0px 7px 0px;
+    padding: 15px 0 7px 0;
     max-height: 33px;
     min-height: 33px;
+}
+
+#notesHeader, #workspaceNoteSlider {
+    font-family: 'Ubuntu', sans-serif;
+    text-align: center;
+    font-size: 1.3em;
+    font-weight: 500;
+    margin: auto;
+    padding: 15px 0 7px 0;
 }
 
 #projectViewTitle {
@@ -56,11 +66,10 @@ li.dropdown:last-child{
     text-align: center;
 }
 
-
 .actionDeniedContainer {
-    margin-top:15%;
-    margin-left:auto;
-    margin-right:auto;
+    margin-top: 15%;
+    margin-left: auto;
+    margin-right: auto;
     text-align: center;
 }
 
@@ -91,19 +100,15 @@ li.dropdown:last-child{
 
 .toolOptionsHeaderRow {
     text-align: center;
-    margin: 0px;
-    text-shadow: 0px 1px 0px rgba(255,255,255,.3), 0px -1px 0px rgba(0,0,0,.7);
+    margin: 0;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, .3), 0 -1px 0 rgba(0, 0, 0, .7);
     border-bottom: 4px double white;
     background: rgba(0, 0, 0, 0.1);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5), /* Exterior Shadow */
-    inset 0 1px rgba(255, 255, 255, 0.3), /* Top light Line */
-    inset 0 10px rgba(255, 255, 255, 0.2), /* Top Light Shadow */
-    inset 0 10px 20px rgba(255, 255, 255, 0.25), /* Sides Light Shadow */
-    inset 0 -15px 30px rgba(0, 0, 0, 0.3); /* Dark Background */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5), /* Exterior Shadow */ inset 0 1px rgba(255, 255, 255, 0.3), /* Top light Line */ inset 0 10px rgba(255, 255, 255, 0.2), /* Top Light Shadow */ inset 0 10px 20px rgba(255, 255, 255, 0.25), /* Sides Light Shadow */ inset 0 -15px 30px rgba(0, 0, 0, 0.3); /* Dark Background */
 }
 
 .tooltitles {
-    margin: 0px 2px 2px 2px;
+    margin: 0 2px 2px 2px;
 }
 
 .toolSubtitles {
@@ -118,6 +123,8 @@ li.dropdown:last-child{
 #projectdataColumn {
     margin-right: 10px;
     margin-left: 10px;
+    padding-top: 1%;
+    padding-bottom: 2%;
 }
 
 .workrow {
@@ -144,7 +151,7 @@ li.dropdown:last-child{
 
 .viewHeader {
     text-align: center;
-    text-shadow: 0px 1px 0px rgba(255, 255, 255, .3), 0px -1px 0px rgba(0, 0, 0, .7);
+    text-shadow: 0 1px 0 rgba(255, 255, 255, .3), 0 -1px 0 rgba(0, 0, 0, .7);
     margin: 5px;
 }
 
@@ -160,7 +167,7 @@ hr.viewHeaderHR {
     padding-right: 5px;
 }
 
-#notebodydivider{
+#notebodydivider {
     margin: 5px;
     width: 80%;
     height: 3px;
@@ -182,9 +189,9 @@ fixeddesc {
     padding: 0;
 }
 
-#notesColumn.col-md-4 {
-    max-width: 31%;
-    float: right;
+#notesContainer {
+    float: left;
+    margin-top: 10%;
 }
 
 .actionDeniedContainerSmall {
@@ -230,9 +237,14 @@ fixeddesc {
     overflow-y: scroll;
 }
 
+.projDataTable {
+    margin: 0 auto 0 auto;
+}
+
 .projDataTable td {
     padding-left: 1%;
     padding-right: 1%;
+
 }
 
 .tableProcessingToolBarContainer {
