@@ -150,13 +150,12 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
 
   /**
     * Method which turns user input for a note into a entry into the DB for notes for the project
-    *
     * @return
     */
   def postNewNoteToDb() = Action { request : Request[AnyContent] =>
     if (authController.sessionIsAuthenticated(request.session)) {
       //def insertRowInto(db: Database, tableName: String, columnsToVals: Map[String, String]):
-      //DatabaseUpdate.
+      DatabaseUpdate.insertRowInto(twDB, "project_notes", )
       Ok("Replace me Later")
     } else {
       Ok("Replace me Later")
