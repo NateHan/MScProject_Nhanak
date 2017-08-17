@@ -23,6 +23,7 @@ $(document).ready(function () {
     $('.appSliderContent').hide();
 
     $('.appSliders').on('click', function () {
+        console.log("original slider function firing")
         var targetArea = $(this).next('.appSliderContent');
         var urlToPass = $(targetArea).attr('url');
         targetArea.load(urlToPass, function () {
@@ -32,22 +33,20 @@ $(document).ready(function () {
     });
 })
 
-
-// Trying to respond to the Project Data Table sliders
-$('#projectdataColumn').ready( function() {
-    console.log("#projectDataColumn is ready")
-    $('.appSliderContent').hide();
-    console.log("#projectDataColumn hid the slider")
-    $('.appSliders').on('click', function () {
-        console.log("caught the appslider click")
-        var targetArea = $(this).next('.appSliderContent');
+$('#projectDataContent').on("click", '.tableProcessingToolSliders', function() {
+        console.log("secondary appslider function firing");
+        var targetArea = $(this).children('.tptSliderContent');
+        console.log(targetArea);
+        targetArea.slideToggle(); // remove this when it loads a URL later
+        /* reactivate later when these appsliders have URLs
         var urlToPass = $(targetArea).attr('url');
         targetArea.load(urlToPass, function () {
                 $(this).slideToggle()
             }
         );
+         */
     });
-});
+//});
 
 
 // Listens for a submission of #createProjectForm (in the dasboard)
@@ -96,8 +95,10 @@ $(document).on('click', '.dataPickerIconDiv', function() {
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             $("#projectDataContent").prepend(this.responseText);
+            $('.tptSliderContent').hide(); // hides the slider content of the table processing tools
         }
     };
     xhttp.open("GET", urlToPass, true);
     xhttp.send();
+
 });
