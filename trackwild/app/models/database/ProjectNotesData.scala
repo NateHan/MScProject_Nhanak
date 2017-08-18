@@ -17,7 +17,7 @@ object ProjectNotesData {
     val noteObjList = new ListBuffer[NoteObj]
     db.withConnection{ conn =>
       val prepStmt = conn.prepareStatement("SELECT note_author, note_title, note_date, note_content FROM project_notes " +
-        "WHERE project_title=?")
+        "WHERE project_title=? ORDER BY note_date DESC")
       prepStmt.setString(1, projectTitle)
       val qryResult = prepStmt.executeQuery()
       while (qryResult.next()) {

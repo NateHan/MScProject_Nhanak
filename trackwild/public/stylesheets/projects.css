@@ -129,11 +129,15 @@ li.dropdown:last-child {
 }
 
 .workrow {
-    margin: 5px 10px 5px 10px;
+    margin: 1% 2% 0 2%;
 }
 
 .importButton {
     min-height: 50px;
+}
+
+#dataImporterWorkArea {
+
 }
 
 .toolTextInputBox {
@@ -267,6 +271,11 @@ fixeddesc {
 
 #noteTitle {
     width: 80%;
+}
+
+#noteAddedSuccessMsg {
+    margin: 0 auto;
+    text-align: center;
 }
 
 

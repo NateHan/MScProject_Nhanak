@@ -159,7 +159,7 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
         errorForm => BadRequest("Form data did not bind"),
         successForm => {
           val columnsTovals: Map[String, String] = mapSQLColumnLabelsToNoteFormFields(successForm)
-          if (DatabaseUpdate.insertRowInto(twDB, "project_notes", columnsTovals) == 1) Ok(views.html.afterLogin.projectworkspace.noteAddSuccess)
+          if (DatabaseUpdate.insertRowInto(twDB, "project_notes", columnsTovals) == 1) Ok(views.html.afterLogin.projectworkspace.noteAddSuccess())
           else {
             BadRequest("Unable to insert note")
           }
