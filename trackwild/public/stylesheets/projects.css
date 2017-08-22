@@ -19,7 +19,6 @@ ul.dropdown-menu {
     border: 2px double white;
     background-color: rgb(41, 101, 116);
     cursor: pointer;
-    cursor: hand;
     margin-top: 3px;
     padding: 10px;
 }
@@ -125,7 +124,7 @@ li.dropdown:last-child {
     margin-right: 10px;
     margin-left: 10px;
     padding-top: 1%;
-    padding-bottom: 2%;
+    padding-bottom: 2%
 }
 
 .workrow {

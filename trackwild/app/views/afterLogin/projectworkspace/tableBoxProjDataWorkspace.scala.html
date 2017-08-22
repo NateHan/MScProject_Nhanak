@@ -6,7 +6,34 @@
         <!-- Add these if time permits -->
     </div>
 
-    <div class="googleEarthContainer">Google Earth Stuff Goes Here</div>
+    <div type="hidden" class="googleEarthContainer">
+        <div id="map" style="width: 80%;
+            height: 400px;
+            background-color: grey;" class="map">
+
+        </div>Google Earth Stuff Goes Above Here
+
+        <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDYpu-wE1AEWVUzEUq7RXOhX_3dQUJ2RUw">
+        </script>
+    </div>
+
+    <!-- openlayers version
+    <script type="text/javascript">
+            var map = new ol.Map({
+                target: 'map',
+                layers: [
+                    new ol.layer.Tile({
+                        source: new ol.source.OSM()
+                    })
+                ],
+                view: new ol.View({
+                    center: ol.proj.fromLonLat([37.41, 8.82]),
+                    zoom: 4
+                })
+            });
+    </script>
+-->
     <br>
     <div class="tableProcessingToolBarContainer">
         @tableProcessingToolBar()
