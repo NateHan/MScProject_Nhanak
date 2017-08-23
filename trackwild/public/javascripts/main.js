@@ -143,16 +143,14 @@ $(document).on('click', '.dataPickerIconDiv', function() {
 });
 
 $(document).on('click', '.gmapInit', function() {
+    var mapTarget = $(this).parents("div.tableProcessingToolBarContainer").prevAll("div.googleMapsContainer:first");
     console.log("here is the closest: ");
-    var closeThing = this.closest('div.googleEarthContainer');
     console.log(closeThing);
-    closeThing.setAttribute("style", "display: inline-block;");
-    initMap(this);
+    closeThing.attr("style", "");
+    initMap($(this)); // need to alter - probably want to use closeThing
 });
 
 function initMap(caller) {
-    console.log("here is caller: ");
-    console.log(caller);
     var uluru = {lat: -25.363, lng: 131.044};
     var map = new google.maps.Map(caller.closest('.gmap'), {
         zoom: 4,
