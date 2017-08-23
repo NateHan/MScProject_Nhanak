@@ -35,7 +35,7 @@ class AuthenticationController @Inject()(cc: ControllerComponents, twDB:Database
                                        errorMessage: String = "Track Wild Msg: Must be logged in to access"):Result = {
       request.session.get("authenticated") match {
         case Some(value) if value.equals("true") => Ok(successPage).withHeaders(SecurityHeadersFilter
-          .CONTENT_SECURITY_POLICY_HEADER -> " .fontawesome.com .fonts.googleapis.com maps.googleapis.com")
+          .CONTENT_SECURITY_POLICY_HEADER -> " .fontawesome.com .fonts.googleapis.com maps.googleapis.com csi.gstatic.com")
         case _ => Unauthorized(views.html.invalidSession(errorMessage)(request)).withNewSession
       }
     }

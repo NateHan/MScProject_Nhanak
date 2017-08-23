@@ -21,7 +21,7 @@ class LoginRegController @Inject()(twDB: Database, cc: ControllerComponents, aut
   def loadLogin() = Action {
     implicit request: Request[AnyContent] =>
       Ok(views.html.login(loginform)).withNewSession.withHeaders(SecurityHeadersFilter
-        .CONTENT_SECURITY_POLICY_HEADER -> " .fontawesome.com .fonts.googleapis.com")
+        .CONTENT_SECURITY_POLICY_HEADER -> " .fontawesome.com .fonts.googleapis.com maps.googleapis.com")
   }
 
   val loginform: Form[UserLoginData] = Form(
@@ -50,7 +50,7 @@ class LoginRegController @Inject()(twDB: Database, cc: ControllerComponents, aut
             Ok(views.html.afterLogin.dashboardviews.dashboard())
               .withSession(request.session + ("authenticated" -> "true") + ("username" -> userName))
               .withHeaders(SecurityHeadersFilter
-                .CONTENT_SECURITY_POLICY_HEADER -> " .fontawesome.com .fonts.googleapis.com")
+                .CONTENT_SECURITY_POLICY_HEADER -> " .fontawesome.com .fonts.googleapis.com maps.googleapis.com")
           } else {
             BadRequest(views.html.login(loginform))
           }

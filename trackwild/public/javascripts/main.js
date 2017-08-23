@@ -143,16 +143,18 @@ $(document).on('click', '.dataPickerIconDiv', function() {
 });
 
 $(document).on('click', '.gmapInit', function() {
-    var mapTarget = $(this).parents("div.tableProcessingToolBarContainer").prevAll("div.googleMapsContainer:first");
-    console.log("here is the closest: ");
-    console.log(closeThing);
-    closeThing.attr("style", "");
-    initMap($(this)); // need to alter - probably want to use closeThing
+    var mapContainer = $(this).parents("div.tableProcessingToolBarContainer").prevAll("div.googleMapsContainer:first");
+    mapContainer.attr("style", "");
+    var mapTarget = mapContainer.children(".gmap");
+    initMap(mapTarget);
 });
 
-function initMap(caller) {
+function initMap(targetElem) {
+    console.log("this fires, here's target elem: ");
+    console.log(targetElem);
+    console.log(targetElem[0]);
     var uluru = {lat: -25.363, lng: 131.044};
-    var map = new google.maps.Map(caller.closest('.gmap'), {
+    var map = new google.maps.Map(targetElem[0], {
         zoom: 4,
         center: uluru,
         mapTypeId: 'satellite'
@@ -161,4 +163,7 @@ function initMap(caller) {
         position: uluru,
         map: map
     });
+    console.log(map);
+    console.log(marker);
+    console.log("Made it to the end");
 }

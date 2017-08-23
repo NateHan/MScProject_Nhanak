@@ -277,4 +277,16 @@ fixeddesc {
     text-align: center;
 }
 
+.gmap {
+    height: 400px;
+    width: 90%;
+    background-color: grey;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.googleMapsContainer {
+    margin-right: auto;
+    margin-left: auto;
+}
 
