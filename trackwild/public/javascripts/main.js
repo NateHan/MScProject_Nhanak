@@ -142,11 +142,19 @@ $(document).on('click', '.dataPickerIconDiv', function() {
 
 });
 
-function initMap() {
+$(document).on('click', '.gmapInit', function() {
+    console.log("here is the closest: ");
+    var closeThing = this.closest('div.googleEarthContainer');
+    console.log(closeThing);
+    closeThing.setAttribute("style", "display: inline-block;");
+    initMap(this);
+});
 
-    document.getElement
+function initMap(caller) {
+    console.log("here is caller: ");
+    console.log(caller);
     var uluru = {lat: -25.363, lng: 131.044};
-    var map = new google.maps.Map(document.getElementById('map'), {
+    var map = new google.maps.Map(caller.closest('.gmap'), {
         zoom: 4,
         center: uluru,
         mapTypeId: 'satellite'
