@@ -118,7 +118,7 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
       val project = request.session.get("projectTitle").getOrElse("No Project Title Found in Session")
       if (ProjectPermissions.userHasPermissionLevel(userName, project, 399, twDB)) {
         val fullTable = DataRetriever.retrieveFullDataTableByName(tableName, twDB)
-        Ok(views.html.afterLogin.projectworkspace.tableBoxProjDataWorkspace(fullTable))
+        Ok(views.html.afterLogin.projectworkspace.tableBoxProjDataWorkspace(fullTable, tableName))
       } else {
         Ok(views.html.afterLogin.projectworkspace.noPermissionSmall())
       }
@@ -174,7 +174,8 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
   /**
     * Take the fields collected from form and place into values for a map where the SQL table
     * column names are the keys
-    * @param note         the new note data type containing the note fields
+    *
+    * @param note the new note data type containing the note fields
     * @return a Map of keys:SQL Columns to values: form fields
     */
   def mapSQLColumnLabelsToNoteFormFields(note: NewProjectNote): Map[String, String] = {
@@ -185,5 +186,38 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
       "note_content" -> note.noteContent
     )
   }
+
+  /**
+    * Method which retrieves tools needed to process the data tables in the project viewspace.
+    * Performs authentcation and permission checks first.
+    * @param toolNeeded the name of analysis tool which we would like to return to the user
+    * @return a view template containing the tool requested
+    */
+  def tableToolPickerFactory(toolNeeded: String, tableName:String): Action = {
+    implicit request: Request[AnyContent] => {
+      //auth and permission check first
+      if (!authController.sessionIsAuthenticated(request.session)) {
+        Ok(views.html.expiredSession("Not Authenticated"))
+      } else if (!authController.userHasRequiredPermissionLevel(249, request)) {
+        Ok(views.html.noPermissionSmall())
+      } else {
+        // return desired tool page
+        val pageToLoad = toolNeeded match {
+          case "tableQuery" => TODO
+          case "manuallyAddRow" =>
+            val tableHeaders = DataRetriever.getTableheaders(tableName,twDB).toList
+            views.html.afterLogin.projectworkspace.manualAddDataRow(tableHeaders)
+        }
+        Ok(pageToLoad)
+      }
+    }
+  }
+
+  // user clicks slider ->
+  //  table name is collected, request for form sent to server
+  // Permission & authed? server returns form in small box : permission denied
+  // User fills out form and posts to server
+  // If post is successful, display success and refresh tableBox, otherwise post failure
+
 
 }

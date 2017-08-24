@@ -8,7 +8,7 @@ import play.api.db.Database
   *
   * 100 => "Project Lead: All permissions"
   * 200 => "Project Contributor: View all, add notes, upload data"
-  * 250 => "Project Contributor: View all, add notes, no data upload"
+  * 250 => "Project Contributor: View all, add notes, no table data upload/addition"
   * 300 => "External Viewer: View all data - no write or upload"
   * 400 => "Public: View only"
   * 999 => "Forbidden Access"

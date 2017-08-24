@@ -1,4 +1,4 @@
-@(table:List[Array[String]])
+@(table:List[Array[String]], tableName:String)
 
 <div class="tableBoxProjDataWS">
 
@@ -18,7 +18,7 @@
     </div>
     <br>
     <div class="tableRawData">
-        <table class="appDataTable projDataTable">
+        <table class="appDataTable projDataTable" id="@tableName">
             <tr class="appTableHeaderRow projDataHeaderRow">
             @for(headerCell <- table.head) {
                 <th>@headerCell</th>

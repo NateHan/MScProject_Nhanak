@@ -102,7 +102,7 @@ object DataRetriever {
     * @param db the database location of the table
     * @return an array containing one entry for each column label
     */
-  private def getTableheaders(tableName:String, db:Database): Array[String] = {
+  def getTableheaders(tableName:String, db:Database): Array[String] = {
     db.withConnection{ conn =>
       val stmt = conn.createStatement()
       val resSet = stmt.executeQuery(s"SELECT * FROM $tableName WHERE false;")
