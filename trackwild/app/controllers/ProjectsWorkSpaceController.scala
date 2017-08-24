@@ -193,7 +193,7 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
     * @param toolNeeded the name of analysis tool which we would like to return to the user
     * @return a view template containing the tool requested
     */
-  def tableToolPickerFactory(toolNeeded: String, tableName:String) = Action {
+  def tableToolFactory(toolNeeded: String, tableName:String) = Action {
     implicit request: Request[AnyContent] => {
       //auth and permission check first
       if (!authController.sessionIsAuthenticated(request.session)) {
@@ -203,10 +203,12 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
       } else {
         // return desired tool page
         toolNeeded match {
-          //case "tableQuery" => TODO
+          case "tableQuery" => Ok(views.html.afterLogin.projectworkspace.tableQueryTool())
+          case "gmaps" => Ok(views.html.afterLogin.projectworkspace.generateGoogleMaps())
           case "manuallyAddRow" =>
             val tableHeaders = DataRetriever.getTableheaders(tableName,twDB).toList
             Ok(views.html.afterLogin.projectworkspace.manualAddDataRow(tableHeaders))
+          case _ => NotFound("No page found for request")
         }
       }
     }

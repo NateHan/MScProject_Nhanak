@@ -34,7 +34,6 @@ $(document).ready(function () {
 
 $('#projectDataContent').on("click", '.tableProcessingToolSliders', function() {
         var targetArea = $(this).next('.tptSliderContent');
-        //targetArea.slideToggle(); // remove this from here when it loads a URL later, it is below
         var urlToPass = $(targetArea).attr('url');
         targetArea.load(urlToPass, function () {
                 $(this).slideToggle()
