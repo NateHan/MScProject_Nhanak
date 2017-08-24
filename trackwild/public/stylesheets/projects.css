@@ -290,3 +290,7 @@ fixeddesc {
     margin-left: auto;
 }
 
+.manualRowInput {
+    display: inline-block;
+    max-width: 50%;
+}

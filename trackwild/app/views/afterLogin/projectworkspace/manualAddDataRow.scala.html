@@ -5,17 +5,22 @@
 <div class="row">
     <form method="post" class="sliderForms" action="#TODO" autocomplete="off">
         @CSRF.formField
-
+        <div class="row">
         @for(label <- columnLabels) {
-            <label for="@label" class="manualRowInputLabel">@label</label>
-            <input type="text" name="@label" class="manualRowInput" required>
+            @if(!label.toLowerCase.equals("uploaded_by") && !label.toLowerCase.equals("date_added")) {
+                <label for="@label" class="manualRowInputLabel">@label</label>
+                <input type="text" name="@label" class="manualRowInput sliderTextInputBox" required>
+                <br>
+            }
         }
+        </div>
 
         <input type="hidden" name="userName" id="sessionUserName" value="@request.session.get("username")">
     </form>
 
     <div class="row">
         <button type="submit" class="btn btn-default btn-lg">
+            <!-- make this a checkbox when possible -->
             <i class="fa fa-plus-square" aria-hidden="true"></i>
             Add Row
         </button>
