@@ -1,4 +1,4 @@
-@()
+@(tableName:String)
 
 <div class="container-fluid tableProcessingTools" >
     <div class="row-fluid">
@@ -8,19 +8,19 @@
             <div class="appSliders tableProcessingToolSliders">
                 <i class="fa fa-plus-square-o tableProcessingIcon" aria-hidden="true"></i>  <h5 class="processingDescription">Manually Add Row</h5>
             </div>
-            <div class="appSliderContent tptSliderContent container-fluid " url='#makeURLToAddRow'>
+            <div class="appSliderContent tptSliderContent container-fluid " url='@routes.ProjectsWorkSpaceController.tableToolPickerFactory("manuallyAddRow", tableName)'>
                 Form to manually add a row to this table here
             </div>
             <div class="appSliders tableProcessingToolSliders" >
                 <i class="fa fa-globe tableProcessingIcon" aria-hidden="true"></i>  <h5 class="processingDescription">Visualize in Google Maps</h5>
             </div>
-            <div class="appSliderContent tptSliderContent container-fluid ">
-                <button class="gmapInit glassyButton">View data in Google Maps</button>
+            <div class="appSliderContent tptSliderContent container-fluid " url="placeholder">
+
             </div>
             <div class="appSliders tableProcessingToolSliders" >
                 <i class="fa fa-question-circle tableProcessingIcon" aria-hidden="true"></i>  <h5 class="processingDescription">Run Query on Table</h5>
             </div>
-            <div class="appSliderContent tptSliderContent container-fluid " url='#makeURLToAddRow'>
+            <div class="appSliderContent tptSliderContent container-fluid " url='@routes.ProjectsWorkSpaceController.tableToolPickerFactory("tableQuery", tableName)'>
                 Form to run query on table here
             </div>
 

@@ -34,14 +34,12 @@ $(document).ready(function () {
 
 $('#projectDataContent').on("click", '.tableProcessingToolSliders', function() {
         var targetArea = $(this).next('.tptSliderContent');
-        targetArea.slideToggle(); // remove this from here when it loads a URL later, it is below
-        /* reactivate later when these appsliders have URLs
+        //targetArea.slideToggle(); // remove this from here when it loads a URL later, it is below
         var urlToPass = $(targetArea).attr('url');
         targetArea.load(urlToPass, function () {
                 $(this).slideToggle()
             }
         );
-         */
 });
 
 
@@ -142,6 +140,8 @@ $(document).on('click', '.dataPickerIconDiv', function() {
 
 });
 
+// Listens for the click of the Google Maps Button in the tableProcessingToolbar element
+// reveals the Google Maps div and then initializes/retrieves the map.
 $(document).on('click', '.gmapInit', function() {
     var mapContainer = $(this).parents("div.tableProcessingToolBarContainer").prevAll("div.googleMapsContainer:first");
     mapContainer.attr("style", "");

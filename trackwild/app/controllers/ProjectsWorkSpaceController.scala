@@ -193,28 +193,27 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
     * @param toolNeeded the name of analysis tool which we would like to return to the user
     * @return a view template containing the tool requested
     */
-  def tableToolPickerFactory(toolNeeded: String, tableName:String): Action = {
+  def tableToolPickerFactory(toolNeeded: String, tableName:String) = Action {
     implicit request: Request[AnyContent] => {
       //auth and permission check first
       if (!authController.sessionIsAuthenticated(request.session)) {
         Ok(views.html.expiredSession("Not Authenticated"))
       } else if (!authController.userHasRequiredPermissionLevel(249, request)) {
-        Ok(views.html.noPermissionSmall())
+        Ok(views.html.afterLogin.projectworkspace.noPermissionSmall())
       } else {
         // return desired tool page
-        val pageToLoad = toolNeeded match {
-          case "tableQuery" => TODO
+        toolNeeded match {
+          //case "tableQuery" => TODO
           case "manuallyAddRow" =>
             val tableHeaders = DataRetriever.getTableheaders(tableName,twDB).toList
-            views.html.afterLogin.projectworkspace.manualAddDataRow(tableHeaders)
+            Ok(views.html.afterLogin.projectworkspace.manualAddDataRow(tableHeaders))
         }
-        Ok(pageToLoad)
       }
     }
   }
 
   // user clicks slider ->
-  //  table name is collected, request for form sent to server
+  // table name is collected, request for form sent to server
   // Permission & authed? server returns form in small box : permission denied
   // User fills out form and posts to server
   // If post is successful, display success and refresh tableBox, otherwise post failure
