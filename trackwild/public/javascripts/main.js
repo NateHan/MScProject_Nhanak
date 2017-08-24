@@ -149,10 +149,9 @@ $(document).on('click', '.gmapInit', function() {
     initMap(mapTarget);
 });
 
+//Function initializes a Google Maps map within the table's processing area. The targetELem is
+//a reserved space for Google maps in the Project Data Workspace for each data table.
 function initMap(targetElem) {
-    console.log("this fires, here's target elem: ");
-    console.log(targetElem);
-    console.log(targetElem[0]);
     var uluru = {lat: -25.363, lng: 131.044};
     var map = new google.maps.Map(targetElem[0], {
         zoom: 4,
@@ -163,7 +162,4 @@ function initMap(targetElem) {
         position: uluru,
         map: map
     });
-    console.log(map);
-    console.log(marker);
-    console.log("Made it to the end");
 }

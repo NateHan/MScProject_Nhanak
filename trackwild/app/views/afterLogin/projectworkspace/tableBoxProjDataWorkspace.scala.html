@@ -19,13 +19,13 @@
     <br>
     <div class="tableRawData">
         <table class="appDataTable projDataTable">
-            <tr class="appTableHeaderRow">
+            <tr class="appTableHeaderRow projDataHeaderRow">
             @for(headerCell <- table.head) {
                 <th>@headerCell</th>
             }
             </tr>
             @for(row <- table.tail) {
-                <tr class="appTableContentRow">
+                <tr class="appTableContentRow projDataContentRow">
                     @for(cell <- row) {
                         <td>@cell</td>
                     }
