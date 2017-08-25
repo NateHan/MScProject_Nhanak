@@ -41,10 +41,11 @@ $('#projectDataContent').on("click", '.tableProcessingToolSliders', function() {
         );
 });
 
-/** Method which handles the submission of a manually-entered table row in the
+/**
+ *  Method which handles the submission of a manually-entered table row in the
  *  Project Data Workspace
  */
-$('#projectDataContent').on('submit', '.addRowSubmitBtn', function(event) {
+$('#projectDataContent').on('submit', '.manualRowAddForm', function(event) {
     // $(this) in this scenario is the form
     event.preventDefault();
 
@@ -92,7 +93,7 @@ $(document).on('submit', '#createProjectForm', function (event) {
         title: $('#projectTitleInputBox').val(),
         userName: $('#sessionUserName').val(),
         initialNote: $('#initNoteBox').val()
-    }
+    };
 
     var token =  $('input[name="csrfToken"]').attr('value');
     $.ajaxSetup({
