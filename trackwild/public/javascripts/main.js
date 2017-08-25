@@ -63,6 +63,8 @@ $('#projectDataContent').on('submit', '.addRowSubmitBtn', function(event) {
         }
     });
 
+    var targetAreaId = tableName + "manualRowAdd";
+
     var route = jsRoutes.controllers.ProjectsWorkspaceController.manualAddNewRow(tableName);
     $.ajax({
         url: route.url,
@@ -71,13 +73,11 @@ $('#projectDataContent').on('submit', '.addRowSubmitBtn', function(event) {
         contentType : 'application/json',
         headers: {'X-CSRF-TOKEN': $('input[name=csrfToken]').attr('value')},
         success: function (data) {
+            loadDoc('/projectworkspace/tool/response/Table%20Row/true', targetAreaId)
             //get it to reload the table with the added row
-            //change the parameters of loadDoc to match a successful note below.
-            loadDoc(successURL, 'createNewProjectDiv')
         },
         error: function (data) {
-            //change this to a small error template or something.
-            loadDoc('/dashboard/projects/sliderSubmitResponse/newProjFail/NoProjectCreated', 'createNewProjectDiv')
+            loadDoc('/projectworkspace/tool/response/Table%20Row/false', targetAreaId)
         }
     })
 

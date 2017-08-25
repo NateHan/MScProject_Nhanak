@@ -1,5 +1,7 @@
 @(tableName:String)
 
+@generateElemId(elemName: String) = @{tableName + elemName}
+
 <div class="container-fluid tableProcessingTools" >
     <div class="row-fluid">
         <div class="col-xs-1"></div>
@@ -8,7 +10,7 @@
             <div class="appSliders tableProcessingToolSliders">
                 <i class="fa fa-plus-square-o tableProcessingIcon" aria-hidden="true"></i>  <h5 class="processingDescription">Manually Add Row</h5>
             </div>
-            <div class="appSliderContent tptSliderContent container-fluid " url='@routes.ProjectsWorkSpaceController.tableToolFactory("manuallyAddRow", tableName)'>
+            <div class="appSliderContent tptSliderContent container-fluid " id="@generateElemId("manualRowAdd")" url='@routes.ProjectsWorkSpaceController.tableToolFactory("manuallyAddRow", tableName)'>
                 Form to manually add a row to this table here
             </div>
             <div class="appSliders tableProcessingToolSliders" >

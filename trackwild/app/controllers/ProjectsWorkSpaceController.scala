@@ -215,12 +215,17 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
   }
 
   /**
-    * Method which receives the POST request for the row which manually adds a new row to the desired table
-    * @return
+    * Method which receives the POST request for the row which manually
+    * adds a new row to the desired table
+    * @return an Ok response if the insert was succesful.
     */
   def manualAddNewRow(tableName:String) = Action {
     implicit request: Request[AnyContent] => {
-      Ok("Replace me")
+      // figure out how to get the data that comes in from the form, once you've
+      // figured out how to get each of those into the form itself in the main.js file.
+      // val colsToVals : Map[String, String] = TODO map ColsToVals from the form. Form should have Json format which will make this easy.
+      DatabaseUpdate.insertRowInto(twDB, tableName, )
+      Ok("Row Added Succesfully")
     }
   }
 
@@ -231,15 +236,16 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
   // If post is successful, display success and refresh tableBox, otherwise post failure
 
   /**
-    * Method which returns a successful notification for the adding the item
+    * Method which returns a successful or failure notification for the adding the item
     * @param item the name of the item which was added by the user
     * @return the view template containing an appropriate message.
     */
-  def getSuccessResponse(item: String) = Action {
+  def getTableToolResponse(item: String, success:Boolean) = Action {
     implicit request: Request[AnyContent] =>
-      Ok(views.html.afterLogin.projectworkspace.itemAddSuccess(item))
+      success match {
+        case true => Ok(views.html.afterLogin.projectworkspace.itemAddSuccess(item))
+        case false => Ok(views.html.afterLogin.projectworkspace.itemAddFail(item))
+      }
   }
-
-
 
 }
