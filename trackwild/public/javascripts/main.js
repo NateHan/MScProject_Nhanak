@@ -41,12 +41,52 @@ $('#projectDataContent').on("click", '.tableProcessingToolSliders', function() {
         );
 });
 
+/** Method which handles the submission of a manually-entered table row in the
+ *  Project Data Workspace
+ */
+$('#projectDataContent').on('submit', '.addRowSubmitBtn', function(event) {
+    // $(this) in this scenario is the form
+    event.preventDefault();
+
+    var data = { }; // will be an array
+    var inputs = $(this).getElementsByTagName("input");
+    // look up how to get the value from a collection of inputs and add into an Array.
+    // I want to add it all into data in this format name:input value
+    inputs.forEach( data.add(e.getAttribute("name"): e.getContent() ))
+
+    var tableName = $('.tableNameHiddenInput').val()
+
+    var token =  $('input[name="csrfToken"]').attr('value');
+    $.ajaxSetup({
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader('Csrf-Token', token);
+        }
+    });
+
+    var route = jsRoutes.controllers.ProjectsWorkspaceController.manualAddNewRow(tableName);
+    $.ajax({
+        url: route.url,
+        type: route.type,
+        data : JSON.stringify(data),
+        contentType : 'application/json',
+        headers: {'X-CSRF-TOKEN': $('input[name=csrfToken]').attr('value')},
+        success: function (data) {
+            //get it to reload the table with the added row
+            //change the parameters of loadDoc to match a successful note below.
+            loadDoc(successURL, 'createNewProjectDiv')
+        },
+        error: function (data) {
+            //change this to a small error template or something.
+            loadDoc('/dashboard/projects/sliderSubmitResponse/newProjFail/NoProjectCreated', 'createNewProjectDiv')
+        }
+    })
+
+});
 
 
 // Listens for a submission of #createProjectForm (in the dasboard)
 // Linking with the jsRoutes method, it will POST the form and return the result in the targeted area.
 $(document).on('submit', '#createProjectForm', function (event) {
-
     event.preventDefault();
     var data = {
         title: $('#projectTitleInputBox').val(),

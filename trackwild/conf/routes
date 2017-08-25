@@ -32,7 +32,9 @@ GET     /projectworkspace/dataViewer/:tableName controllers.ProjectsWorkSpaceCon
 GET     /projectworkspace/dataImportSelector    controllers.ProjectsWorkSpaceController.renderDataImporterSelector
 GET     /projectworkspace/addNewNote            controllers.ProjectsWorkSpaceController.renderNoteAdder
 POST    /projectworkspace/addNewNote            controllers.ProjectsWorkSpaceController.postNewNoteToDb
+POST    /projectworkspace/manualRowAdd/:tableName       controllers.ProjectsWorkSpaceController.manualAddNewRow(tableName:String)
 GET     /projectworkspace/tool/:toolNeeded/:tableName   controllers.ProjectsWorkSpaceController.tableToolFactory(toolNeeded:String, tableName:String)
+GET     /projectworkspace/tool/response/:item   controller.ProjectsWorkSpaceController.getResponse(item:String)
 GET     /projectworkspace/notes/:projectTitle   controllers.ProjectsWorkSpaceController.getAllNotes(projectTitle:String)
 GET     /projectworkspace/:projectName          controllers.ProjectsWorkSpaceController.loadWorkspace(projectName:String )
 

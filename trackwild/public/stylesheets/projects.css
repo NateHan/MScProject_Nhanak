@@ -272,7 +272,7 @@ fixeddesc {
     width: 80%;
 }
 
-#noteAddedSuccessMsg {
+.itemAddedSuccessMsg{
     margin: 0 auto;
     text-align: center;
 }

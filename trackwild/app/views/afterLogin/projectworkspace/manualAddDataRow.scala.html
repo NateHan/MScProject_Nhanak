@@ -1,11 +1,11 @@
 @import helper._
 
-@(columnLabels:List[String])(implicit messages: MessagesProvider, request: RequestHeader)
+@(columnLabels:List[String], tableName:String)(implicit messages: MessagesProvider, request: RequestHeader)
 
 <div class="row">
-    <form method="post" class="sliderForms" action="#TODO" autocomplete="off">
+    <form method="post" class="sliderForms" action="@routes.ProjectsWorkSpaceController.manualAddNewRow(tableName)" autocomplete="off">
         @CSRF.formField
-        <div class="row">
+        <div class="row" class="addRowFormContainer">
         @for(label <- columnLabels) {
             @if(!label.toLowerCase.equals("uploaded_by") && !label.toLowerCase.equals("date_added")) {
                 <label for="@label" class="manualRowInputLabel">@label</label>
@@ -15,11 +15,12 @@
         }
         </div>
 
-        <input type="hidden" name="userName" id="sessionUserName" value="@request.session.get("username")">
+        <input type="hidden" name="userName" value="@request.session.get("username")">
+        <input type="hidden" name="tableName" class"tableNameHiddenInput" value="@tableName">
     </form>
 
     <div class="row">
-        <button type="submit" class="btn btn-default btn-lg">
+        <button type="submit" class="btn btn-default btn-md glassyButton addRowSubmitBtn">
             <!-- make this a checkbox when possible -->
             <i class="fa fa-plus-square" aria-hidden="true"></i>
             Add Row

@@ -207,10 +207,20 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
           case "gmaps" => Ok(views.html.afterLogin.projectworkspace.generateGoogleMaps())
           case "manuallyAddRow" =>
             val tableHeaders = DataRetriever.getTableheaders(tableName,twDB).toList
-            Ok(views.html.afterLogin.projectworkspace.manualAddDataRow(tableHeaders))
+            Ok(views.html.afterLogin.projectworkspace.manualAddDataRow(tableHeaders, tableName))
           case _ => NotFound("No page found for request")
         }
       }
+    }
+  }
+
+  /**
+    * Method which receives the POST request for the row which manually adds a new row to the desired table
+    * @return
+    */
+  def manualAddNewRow(tableName:String) = Action {
+    implicit request: Request[AnyContent] => {
+      Ok("Replace me")
     }
   }
 
@@ -219,6 +229,17 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
   // Permission & authed? server returns form in small box : permission denied
   // User fills out form and posts to server
   // If post is successful, display success and refresh tableBox, otherwise post failure
+
+  /**
+    * Method which returns a successful notification for the adding the item
+    * @param item the name of the item which was added by the user
+    * @return the view template containing an appropriate message.
+    */
+  def getSuccessResponse(item: String) = Action {
+    implicit request: Request[AnyContent] =>
+      Ok(views.html.afterLogin.projectworkspace.itemAddSuccess(item))
+  }
+
 
 
 }
