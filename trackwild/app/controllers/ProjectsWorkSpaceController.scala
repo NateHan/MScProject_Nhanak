@@ -6,6 +6,8 @@ import javax.inject.Singleton
 import models.adt.NoteObj
 import models.database.{DataRetriever, DatabaseUpdate, ProjectNotesData, ProjectPermissions}
 import models.formdata.{NewProjectData, NewProjectNote}
+import models.jsonmodels.ManualRowAddContent
+import play.api.libs.json._
 import play.api.data.Form
 import play.api.data.Forms.{mapping, nonEmptyText, text}
 import play.api.db.Database
@@ -219,19 +221,18 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
     * adds a new row to the desired table
     * @return an Ok response if the insert was succesful.
     */
-  def manualAddNewRow(tableName:String) = Action {
-    implicit request: Request[AnyContent] => {
-      val body = request.body
-      println("got the body and it's: ")
-      println(body)
-      // figure out how to get the data that comes in from the form, once you've
-      // figured out how to get each of those into the form itself in the main.js file.
-      // val colsToVals : Map[String, String] = TODO map ColsToVals from the form. Form should have Json format which will make this easy.
-      //DatabaseUpdate.insertRowInto(twDB, tableName, )
-      Ok("Row Added Succesfully")
+  def manualAddNewRow(tableName:String) = Action(parse.json[List[ManualRowAddContent]]) {
+    implicit request => {
+      val myContent: List[ManualRowAddContent] = request.body
+      var colsToVals: Map[String, String] = null
+      myContent.foreach( input => colsToVals += (input.colName -> input.value))
+      if (DatabaseUpdate.insertRowInto(twDB, tableName, colsToVals) == 1) {
+        Ok("replace me")
+      } else {
+        BadRequest("Something went wrong")
+      }
     }
   }
-
   // user clicks slider ->
   // table name is collected, request for form sent to server
   // Permission & authed? server returns form in small box : permission denied
