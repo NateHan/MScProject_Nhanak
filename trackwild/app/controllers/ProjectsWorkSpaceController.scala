@@ -223,9 +223,9 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
     */
   def manualAddNewRow(tableName:String) = Action(parse.json[List[ManualRowAddContent]]) {
     implicit request => {
-      val myContent: List[ManualRowAddContent] = request.body
-      var colsToVals: Map[String, String] = null
-      myContent.foreach( input => colsToVals += (input.colName -> input.value))
+      val myContentList: List[ManualRowAddContent] = request.body
+      var colsToVals: Map[String, String] = myContentList.grouped(2)
+        .collect{ case List(k,v) => k.colName->v.value }.toMap
       if (DatabaseUpdate.insertRowInto(twDB, tableName, colsToVals) == 1) {
         Ok("replace me")
       } else {
@@ -233,11 +233,7 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
       }
     }
   }
-  // user clicks slider ->
-  // table name is collected, request for form sent to server
-  // Permission & authed? server returns form in small box : permission denied
-  // User fills out form and posts to server
-  // If post is successful, display success and refresh tableBox, otherwise post failure
+
 
   /**
     * Method which returns a successful or failure notification for the adding the item
