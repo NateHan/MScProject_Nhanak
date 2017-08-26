@@ -49,13 +49,15 @@ $('#projectDataContent').on('submit', '.manualRowAddForm', function(event) {
     // $(this) in this scenario is the form
     event.preventDefault();
 
-    var data = { }; // will be an array
-    var inputs = $(this).getElementsByTagName("input");
-    // look up how to get the value from a collection of inputs and add into an Array.
-    // I want to add it all into data in this format name:input value
-    inputs.forEach( data.add(e.getAttribute("name"): e.getContent() ))
+    var data = [];
+    //get all form text inputs and gather into array.
+    $("form.manualRowAddForm input[type=text]").each(function() {
+        var columnName = $(this).attr("name");
+        var inputVal = $(this).val();
+        data.push({colName:columnName, value:inputVal});
+    });
 
-    var tableName = $('.tableNameHiddenInput').val()
+    var tableName = $('.tableNameHiddenInput').val();
 
     var token =  $('input[name="csrfToken"]').attr('value');
     $.ajaxSetup({
@@ -64,9 +66,12 @@ $('#projectDataContent').on('submit', '.manualRowAddForm', function(event) {
         }
     });
 
+    //is the ID of the container containing this form, which will need to display
+    //a success or failure template based on the input.
     var targetAreaId = tableName + "manualRowAdd";
 
-    var route = jsRoutes.controllers.ProjectsWorkspaceController.manualAddNewRow(tableName);
+    var route = jsRoutes.controllers.ProjectsWorkSpaceController.manualAddNewRow(tableName);
+    console.log("nope");
     $.ajax({
         url: route.url,
         type: route.type,
@@ -75,7 +80,7 @@ $('#projectDataContent').on('submit', '.manualRowAddForm', function(event) {
         headers: {'X-CSRF-TOKEN': $('input[name=csrfToken]').attr('value')},
         success: function (data) {
             loadDoc('/projectworkspace/tool/response/Table%20Row/true', targetAreaId)
-            //get it to reload the table with the added row
+            //TODO get it to reload the table with the added row
         },
         error: function (data) {
             loadDoc('/projectworkspace/tool/response/Table%20Row/false', targetAreaId)

@@ -221,10 +221,13 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
     */
   def manualAddNewRow(tableName:String) = Action {
     implicit request: Request[AnyContent] => {
+      val body = request.body
+      println("got the body and it's: ")
+      println(body)
       // figure out how to get the data that comes in from the form, once you've
       // figured out how to get each of those into the form itself in the main.js file.
       // val colsToVals : Map[String, String] = TODO map ColsToVals from the form. Form should have Json format which will make this easy.
-      DatabaseUpdate.insertRowInto(twDB, tableName, )
+      //DatabaseUpdate.insertRowInto(twDB, tableName, )
       Ok("Row Added Succesfully")
     }
   }

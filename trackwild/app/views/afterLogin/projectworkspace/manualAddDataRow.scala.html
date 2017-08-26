@@ -5,6 +5,7 @@
 <div class="row">
     <form method="post" class="sliderForms manualRowAddForm" action="@routes.ProjectsWorkSpaceController.manualAddNewRow(tableName)" autocomplete="off">
         @CSRF.formField
+        <note>Please follow previous input's formatting. Validation not yet implemented</note>
         <div class="row" class="addRowFormContainer">
         @for(label <- columnLabels) {
             @if(!label.toLowerCase.equals("uploaded_by") && !label.toLowerCase.equals("date_added")) {
