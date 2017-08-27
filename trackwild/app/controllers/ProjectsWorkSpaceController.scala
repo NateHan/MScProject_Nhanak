@@ -224,9 +224,9 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
   def manualAddNewRow(tableName:String) = Action(parse.json[List[ManualRowAddContent]]) {
     implicit request => {
       val myContentList: List[ManualRowAddContent] = request.body
-      var colsToVals: Map[String, String] = myContentList.grouped(2)
-        .collect{ case List(k,v) => k.colName->v.value }.toMap
-      if (DatabaseUpdate.insertRowInto(twDB, tableName, colsToVals) == 1) {
+      var colsToVals = scala.collection.mutable.Map[String, String]()
+      myContentList.foreach(content => colsToVals += (content.colName -> content.value))
+      if (DatabaseUpdate.insertRowInto(twDB, tableName, colsToVals.toMap) == 1) {
         Ok("replace me")
       } else {
         BadRequest("Something went wrong")
