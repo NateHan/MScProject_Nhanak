@@ -1,5 +1,7 @@
 @(table:List[Array[String]], tableName:String)
 
+@generateIdForElemClass(elemClass:String) = @{elemClass+tableName}
+
 <div class="tableBoxProjDataWS">
 
     <div class="tableBoxControlIcons">
@@ -17,7 +19,8 @@
         @tableProcessingToolBar(tableName)
     </div>
     <br>
-    <div class="tableRawData">
+    <!-- area to display the table goes below -->
+    <div class="tableRawData" id="@generateIdForElemClass("tableRawData")">
         <table class="appDataTable projDataTable" id="@tableName">
             <tr class="appTableHeaderRow projDataHeaderRow">
             @for(headerCell <- table.head) {

@@ -109,7 +109,8 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
   }
 
   /**
-    * Method which retrieves a view which will contain the desired table for the project by name
+    * Method which retrieves a view which will contain the desired table AND WORKSPACE
+    * for the project by name
     *
     * @param tableName the SQL formatted name of the data table we are tryign to retrieve
     * @return an HTML view containing the table in a viewable format for the project workspace
@@ -124,6 +125,19 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
       } else {
         Ok(views.html.afterLogin.projectworkspace.noPermissionSmall())
       }
+  }
+
+  /**
+    * Method for Ajax calls which will only retern an HTML template containing the data
+    * table requested, but only the bare minimum - what's between and including the <table> tags
+    * @param tableName the name of the table to retrieve in full
+    * @return a view html template containing the minimum HTML containing the <table>
+    */
+  def renderOnlyTableByName(tableName: String) = Action {
+    implicit request: Request[AnyContent] => {
+      val fullTable = DataRetriever.retrieveFullDataTableByName(tableName, twDB)
+      Ok(views.html.afterLogin.projectworkspace.projDataTableOnly(fullTable, tableName))
+    }
   }
 
   /**

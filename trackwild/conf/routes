@@ -29,6 +29,7 @@ GET     /projectworkspace/datauploader/new      controllers.DataUploadController
 GET     /projectworkspace/datauploader/append   controllers.ProjectsWorkSpaceController.renderDataAppender
 GET     /projectworkspace/dataViewer            controllers.ProjectsWorkSpaceController.renderDataPickerTool
 GET     /projectworkspace/dataViewer/:tableName controllers.ProjectsWorkSpaceController.renderProjectDataTable(tableName:String)
+GET     /projectworkspace/getOnlyTable/:tableName   controllers.ProjectsWorkSpaceController.renderOnlyTableByName(tableName:String)
 GET     /projectworkspace/dataImportSelector    controllers.ProjectsWorkSpaceController.renderDataImporterSelector
 GET     /projectworkspace/addNewNote            controllers.ProjectsWorkSpaceController.renderNoteAdder
 POST    /projectworkspace/addNewNote            controllers.ProjectsWorkSpaceController.postNewNoteToDb

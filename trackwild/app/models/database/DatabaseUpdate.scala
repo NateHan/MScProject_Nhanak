@@ -73,19 +73,14 @@ object DatabaseUpdate {
     * @param position The index position of the @value within the @pStmt's query string.
     */
   private def parseTypeAndSetPrepStmt(value: String, pStmt: PreparedStatement, position: Int): Unit = {
-    value.toLowerCase match {
-      case value if value.matches("[a-z]+") && !value.matches(".*([0-2]{1}[0-9]{1}:{1}[0-5]{1}[0-9]{1})+.*") => pStmt.setString(position, value) // if contains letters but no 'num:num'
+    value match {
+      case value if value.toLowerCase.matches("[a-z]+") && !value.matches(".*([0-2]{1}[0-9]{1}:{1}[0-5]{1}[0-9]{1})+.*") => pStmt.setString(position, value) // if contains letters but no 'num:num'
       case value if value.matches("[-]?[0-9]+[.]{1}[0-9]+") => pStmt.setDouble(position, value.toDouble)  // if contains number(s).number(s)
       case value if value.matches("[-]?[0-9]+") => pStmt.setInt(position, value.toInt) // if contains only num, starting with an optional "-"
       case value if value.matches(".*([0-2]{1}[0-9]{1}:{1}[0-5]{1}[0-9]{1})+.*") => pStmt.setTimestamp(position, Timestamp.valueOf(value)) // if contains num num :num num
-      case value if value.matches("^true$|^false$|^t$|^f$|^y$|^n$|^yes$|^no$") => pStmt.setBoolean(position, value.toBoolean)
+      case value if value.toLowerCase.matches("^true$|^false$|^t$|^f$|^y$|^n$|^yes$|^no$") => pStmt.setBoolean(position, value.toBoolean)
       case _ => pStmt.setString(position, value)
     }
   }
-
-
-// take a string and PreparedStatement
-// parse its actual type
-// do a prepStatement.setX
 
 }

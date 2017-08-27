@@ -1,0 +1,16 @@
+@(table:List[Array[String]], tableName:String)
+
+<table class="appDataTable projDataTable" id="@tableName">
+    <tr class="appTableHeaderRow projDataHeaderRow">
+    @for(headerCell <- table.head) {
+        <th>@headerCell</th>
+    }
+    </tr>
+    @for(row <- table.tail) {
+        <tr class="appTableContentRow projDataContentRow">
+        @for(cell <- row) {
+            <td>@cell</td>
+        }
+        </tr>
+    }
+</table>

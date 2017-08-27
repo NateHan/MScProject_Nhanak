@@ -71,7 +71,6 @@ $('#projectDataContent').on('submit', '.manualRowAddForm', function(event) {
     var targetAreaId = tableName + "manualRowAdd";
 
     var route = jsRoutes.controllers.ProjectsWorkSpaceController.manualAddNewRow(tableName);
-    console.log("nope");
     $.ajax({
         url: route.url,
         type: route.type,
@@ -79,8 +78,13 @@ $('#projectDataContent').on('submit', '.manualRowAddForm', function(event) {
         contentType : 'application/json',
         headers: {'X-CSRF-TOKEN': $('input[name=csrfToken]').attr('value')},
         success: function (data) {
-            loadDoc('/projectworkspace/tool/response/Table%20Row/true', targetAreaId)
-            //TODO get it to reload the table with the added row
+            loadDoc('/projectworkspace/tool/response/Table%20Row/true', targetAreaId);
+            var targetDivId = "tableRawData" + tableName;
+            console.log(targetDivId);
+            console.log(document.getElementById(targetDivId));
+            document.getElementById(targetDivId).innerHTML = "";
+            var url = "/projectworkspace/getOnlyTable/" + tableName
+            loadDoc(url, targetDivId)
         },
         error: function (data) {
             loadDoc('/projectworkspace/tool/response/Table%20Row/false', targetAreaId)
@@ -137,10 +141,10 @@ $('#toolsrow').on('submit', '#newNoteForm', function(event) {
         noteTitle: $('#noteTitle').val(),
         noteAuthor: $('#noteAuthor').val(),
         noteContent: $('#noteContent').val()
-    }
+    };
 
 
-    var token =  $('input[name="csrfToken"]').attr('value')
+    var token =  $('input[name="csrfToken"]').attr('value');
     $.ajaxSetup({
         beforeSend: function(xhr) {
             xhr.setRequestHeader('Csrf-Token', token);
