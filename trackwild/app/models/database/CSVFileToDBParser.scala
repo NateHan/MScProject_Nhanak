@@ -102,7 +102,6 @@ class CSVFileToDBParser @Inject()(twDB: Database) extends FileToDBParser {
     * @return alters the value of the original map to be string representation of datatype of the column
     */
   private def mapHeadersToSQLDataTypes(firstRow: Map[String, String]): Map[String, String] = {
-
     for ((k, v) <- firstRow)
       yield (SQLStringFormatter.returnStringInSQLNameFormat(k), dataTypeFinder(v.toLowerCase))
   }

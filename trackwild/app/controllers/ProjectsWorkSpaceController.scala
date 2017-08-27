@@ -226,10 +226,12 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
       val myContentList: List[ManualRowAddContent] = request.body
       var colsToVals = scala.collection.mutable.Map[String, String]()
       myContentList.foreach(content => colsToVals += (content.colName -> content.value))
-      if (DatabaseUpdate.insertRowInto(twDB, tableName, colsToVals.toMap) == 1) {
+      colsToVals += ("uploaded_by" -> request.session.get("username").getOrElse("unknown"))
+      val rowsAffected = DatabaseUpdate.insertRowInto(twDB, tableName, colsToVals.toMap)
+      if (rowsAffected == 1) {
         Ok("replace me")
       } else {
-        BadRequest("Something went wrong")
+        BadRequest(s"DB insert updated $rowsAffected rows, and it should have been only 1")
       }
     }
   }
