@@ -36,6 +36,7 @@ POST    /projectworkspace/addNewNote            controllers.ProjectsWorkSpaceCon
 POST    /projectworkspace/manualRowAdd/:tableName           controllers.ProjectsWorkSpaceController.manualAddNewRow(tableName:String)
 GET     /projectworkspace/tool/:toolNeeded/:tableName       controllers.ProjectsWorkSpaceController.tableToolFactory(toolNeeded:String, tableName:String)
 GET     /projectworkspace/tool/response/:item/:success      controllers.ProjectsWorkSpaceController.getTableToolResponse(item:String, success:Boolean)
+POST    /projectworkspace/tool/queryData        controllers.ProjectsWorkSpaceController.postQueryReturnResult
 GET     /projectworkspace/notes/:projectTitle   controllers.ProjectsWorkSpaceController.getAllNotes(projectTitle:String)
 GET     /projectworkspace/:projectName          controllers.ProjectsWorkSpaceController.loadWorkspace(projectName:String )
 

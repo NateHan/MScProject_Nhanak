@@ -5,7 +5,7 @@ import javax.inject.Singleton
 
 import models.adt.NoteObj
 import models.database.{DataRetriever, DatabaseUpdate, ProjectNotesData, ProjectPermissions}
-import models.formdata.{NewProjectData, NewProjectNote}
+import models.formdata.{NewProjectData, NewProjectNote, TableSQLScript}
 import models.jsonmodels.ManualRowAddContent
 import play.api.libs.json._
 import play.api.data.Form
@@ -219,7 +219,7 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
       } else {
         // return desired tool page
         toolNeeded match {
-          case "tableQuery" => Ok(views.html.afterLogin.projectworkspace.tableQueryTool())
+          case "tableQuery" => Ok(views.html.afterLogin.projectworkspace.querytool.tableQueryFormView(queryForm))
           case "gmaps" => Ok(views.html.afterLogin.projectworkspace.generateGoogleMaps())
           case "manuallyAddRow" =>
             val tableHeaders = DataRetriever.getTableheaders(tableName,twDB).toList
@@ -262,6 +262,24 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
         case true => Ok(views.html.afterLogin.projectworkspace.itemAddSuccess(item))
         case false => Ok(views.html.afterLogin.projectworkspace.itemAddFail(item))
       }
+  }
+
+  //form which handles a user-created query from the Project Workspace
+  val queryForm: Form[TableSQLScript] = Form {
+    mapping (
+      "viewName" -> nonEmptyText,
+       "query" -> nonEmptyText
+    )(TableSQLScript.apply)(TableSQLScript.unapply)
+  }
+
+  /**
+    * Method handles the POSTing of a form for the custom query creator.
+    * Returns a view template containing a view which renders the resulting SQL
+    * @return a view template containing the result of the query, or an error view if it didn't work.
+    */
+  def postQueryReturnResult() = Action {
+    implicit request: Request[AnyContent] =>
+      Ok("Yep")
   }
 
 }

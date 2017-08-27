@@ -46,7 +46,6 @@ class DataUploadController @Inject()(csvFileToDBParser: CSVFileToDBParser, twDB:
     * Allows user to upload a new table to their project
     * Checks if authenticated
     * Triggers creation of a new table in the DB and transfers data
-    * Maybe just have it flash an error if it doesn't work?
     * @return
     */
   def uploadNewTable() = Action(parse.multipartFormData) {implicit request =>
@@ -62,7 +61,7 @@ class DataUploadController @Inject()(csvFileToDBParser: CSVFileToDBParser, twDB:
           Map( "userName" -> newTableForm.get.uploadingUser,
             "tableName" -> newTableForm.get.tableName,
           "projectTitle" -> newTableForm.get.projectTitle))
-          Ok(views.html.afterLogin.projectworkspace.projectView("REPLACE PROJECT NAME"))
+          Ok(views.html.afterLogin.projectworkspace.projectView(request.session.get("projectTitle").getOrElse("Project Not Found")))
       } else Unauthorized(views.html.invalidSession("Your session expired or you logged out"))
     }getOrElse( NotFound("Something Happened Along the way"))
   }

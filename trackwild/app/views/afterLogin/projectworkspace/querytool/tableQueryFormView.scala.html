@@ -1,0 +1,21 @@
+@import helper.CSRF
+@import models.formdata.TableSQLScript
+
+@(queryForm:Form[TableSQLScript], viewName:String)(implicit request: RequestHeader, messages: Messages)
+
+@generateQueryAreaId=@{viewName+"QueryText"}
+
+<div class="row">
+    <form method="post" class="sliderForms" id="" action="@routes.ProjectsWorkSpaceController.postQueryReturnResult()" autocomplete="off">
+    @CSRF.formField
+        <input type="hidden" name="viewName" value="@viewName">
+
+        <label for="@generateQueryAreaId">Enter Valid SQL Here <br>
+            SELECT statements only. Queries with "UPDATE", "INSERT", "DELETE", "DROP" will be rejected<br>
+            Use @viewName to reference this table in your FROM statement.
+        </label>
+
+        <textarea name="queryTextArea" class="sliderTextInputBox" id="@generateQueryAreaId" cols="30" rows="10" required></textarea>
+    </form>
+</div>
+<text>Form for queries goes here </text>
