@@ -4,7 +4,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 import models.adt.NoteObj
-import models.database.{DataRetriever, DatabaseUpdate, ProjectNotesData, ProjectPermissions}
+import models.database._
 import models.formdata.{NewProjectData, NewProjectNote, TableSQLScript}
 import models.jsonmodels.ManualRowAddContent
 import play.api.libs.json._
@@ -219,7 +219,9 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
       } else {
         // return desired tool page
         toolNeeded match {
-          case "tableQuery" => Ok(views.html.afterLogin.projectworkspace.querytool.tableQueryFormView(queryForm))
+          case "tableQuery" =>
+            Ok(views.html.afterLogin.projectworkspace.querytool.tableQueryFormView(queryForm, SQLViewsQueryExecutor.generateViewFor(tableName, twDB))
+          )
           case "gmaps" => Ok(views.html.afterLogin.projectworkspace.generateGoogleMaps())
           case "manuallyAddRow" =>
             val tableHeaders = DataRetriever.getTableheaders(tableName,twDB).toList

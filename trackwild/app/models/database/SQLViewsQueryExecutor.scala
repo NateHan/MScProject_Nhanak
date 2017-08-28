@@ -4,7 +4,11 @@ import play.api.db.Database
 
 import scala.util.Random
 
-object QueryExecutor {
+/**
+  * Object used as one of the objects which performs the query analysis in the table
+  * analysis tools.
+  */
+object SQLViewsQueryExecutor {
 
   /**
     * Method which generates a custom-generated view returning the entirety of the requested table.
@@ -14,7 +18,10 @@ object QueryExecutor {
     */
   def generateViewFor(tableName:String, db:Database): String ={
     val viewName = tableName + Random.alphanumeric.take(5).mkString
-
+    db.withConnection{ conn =>
+      val stmt = conn.createStatement()
+      stmt.executeUpdate(s"CREATE VIEW $viewName AS SELECT * FROM $tableName;")
+    }
     viewName
   }
 
@@ -25,7 +32,11 @@ object QueryExecutor {
     * @return True if the view was successfully removed, false if not.
     */
   def destroyView(viewName:String, db:Database): Boolean = {
-    false
+    db.withConnection{ conn =>
+      val stmt = conn.createStatement()
+      val viewsDropped = stmt.executeUpdate(s"DROP VIEW $viewName;")
+      viewsDropped == 1
+    }
   }
 
 
