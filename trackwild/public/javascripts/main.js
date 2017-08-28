@@ -79,9 +79,7 @@ $('#projectDataContent').on('submit', '.manualRowAddForm', function(event) {
         headers: {'X-CSRF-TOKEN': $('input[name=csrfToken]').attr('value')},
         success: function (data) {
             loadDoc('/projectworkspace/tool/response/Table%20Row/true', targetAreaId);
-            var targetDivId = "tableRawData" + tableName;
-            console.log(targetDivId);
-            console.log(document.getElementById(targetDivId));
+            var targetDivId = "tableRawData" + tableName; // from here below, reload table with added row
             document.getElementById(targetDivId).innerHTML = "";
             var url = "/projectworkspace/getOnlyTable/" + tableName
             loadDoc(url, targetDivId)
@@ -123,7 +121,8 @@ $('#projectDataContent').on('submit', '.tableSQLViewQuery', function(event) {
             console.log("we did it!");
         },
         error: function (data) {
-            console.log("We messed up");
+            var errMsgElemId =  viewName + "ErrMsgTxt";
+            document.getElementById(errMsgElemId).innerHTML = data.responseText
         }
     })
 

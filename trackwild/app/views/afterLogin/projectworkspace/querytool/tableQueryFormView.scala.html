@@ -16,7 +16,9 @@
             Use @viewName to reference this table in your FROM statement.
             </p>
         </label>
-
+        <div class="row errMsgRow">
+            <text id="@generateElemId("ErrMsgTxt")"></text>
+        </div>
         <textarea name="queryTextArea" class="sliderTextInputBox queryFormInputs" id="@generateElemId("TextAreaInput")" cols="20" rows="10" required></textarea>
         <div class="row">
             <button type="submit" class="btn btn-default btn-md glassyButton">
@@ -24,5 +26,6 @@
                 Add Row
             </button>
         </div>
+
     </form>
 </div>

@@ -294,3 +294,7 @@ fixeddesc {
     display: inline-block;
     max-width: 50%;
 }
+
+.errMsgRow {
+    color: red;
+}
