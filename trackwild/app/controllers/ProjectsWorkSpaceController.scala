@@ -281,8 +281,14 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
     */
   def postQueryReturnResult() = Action {
     implicit request: Request[AnyContent] =>
-      println("we made it Pickle Rick!")
-      BadRequest("here is the error message.")
+      queryForm.bindFromRequest().fold(
+        errorForm => BadRequest("Unable to process your input values, please try again."),
+          qryForm=> {
+            val viewName = qryForm.viewName
+            val (qryResult:List[Array[String]], message)= DataRetriever.performQueryOnView(qryForm, twDB)
+            Ok(views.html.afterLogin.projectworkspace.projDataTableOnly(qryResult,viewName))
+          }
+      )
   }
 
 }
