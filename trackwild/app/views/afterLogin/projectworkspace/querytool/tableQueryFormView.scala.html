@@ -3,21 +3,21 @@
 
 @(queryForm:Form[TableSQLScript], viewName:String)(implicit request: RequestHeader, messages: Messages)
 
-@generateQueryAreaId=@{viewName+"QueryText"}
+@generateElemId(moniker:String)=@{viewName+moniker}
 
 <div class="row">
-    <form method="post" class="sliderForms" id="" action="@routes.ProjectsWorkSpaceController.postQueryReturnResult()" autocomplete="off">
+    <form method="post" class="sliderForms tableSQLViewQuery" viewName="@viewName" id="@generateElemId("Form")" action="@routes.ProjectsWorkSpaceController.postQueryReturnResult()" autocomplete="off">
     @CSRF.formField
-        <input type="hidden" name="viewName" value="@viewName">
+        <input type="hidden" id="@generateElemId("ViewNameInput")" class="queryFormInputs" name="viewName" value="@viewName">
 
-        <label for="@generateQueryAreaId">Enter Valid SQL Here <br>
+        <label for="@generateElemId("TextAreaInput")">Enter Valid SQL Below <br>
             SELECT statements only. Queries with "UPDATE", "INSERT", "DELETE", "DROP" will be rejected<br>
             <p>
             Use @viewName to reference this table in your FROM statement.
             </p>
         </label>
 
-        <textarea name="queryTextArea" class="sliderTextInputBox" id="@generateQueryAreaId" cols="30" rows="10" required></textarea>
+        <textarea name="queryTextArea" class="sliderTextInputBox queryFormInputs" id="@generateElemId("TextAreaInput")" cols="20" rows="10" required></textarea>
         <div class="row">
             <button type="submit" class="btn btn-default btn-md glassyButton">
                 <i class="fa fa-check-square" aria-hidden="true"></i>
@@ -26,4 +26,3 @@
         </div>
     </form>
 </div>
-<text>Form for queries goes here </text>

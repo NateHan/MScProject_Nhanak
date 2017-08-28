@@ -281,6 +281,7 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
     */
   def postQueryReturnResult() = Action {
     implicit request: Request[AnyContent] =>
+      println("we made it Pickle Rick!")
       Ok("Yep")
   }
 

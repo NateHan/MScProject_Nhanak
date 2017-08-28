@@ -93,6 +93,42 @@ $('#projectDataContent').on('submit', '.manualRowAddForm', function(event) {
 
 });
 
+/**
+ * Method which will submit all inputs from the SQL View query form.
+ */
+$('#projectDataContent').on('submit', '.tableSQLViewQuery', function(event) {
+    // $(this) in this scenario is the form
+    event.preventDefault();
+    var viewName = $(this).attr('viewName');
+    var data = {
+        viewName: viewName,
+        query: $("#"+viewName+"TextAreaInput").val()
+    };
+
+    var token =  $('input[name="csrfToken"]').attr('value');
+    $.ajaxSetup({
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader('Csrf-Token', token);
+        }
+    });
+
+    var route = jsRoutes.controllers.ProjectsWorkSpaceController.postQueryReturnResult();
+    $.ajax({
+        url: route.url,
+        type: route.type,
+        data : JSON.stringify(data),
+        contentType : 'application/json',
+        headers: {'X-CSRF-TOKEN': token},
+        success: function (data) {
+            console.log("we did it!");
+        },
+        error: function (data) {
+            console.log("We messed up");
+        }
+    })
+
+});
+
 
 // Listens for a submission of #createProjectForm (in the dasboard)
 // Linking with the jsRoutes method, it will POST the form and return the result in the targeted area.
@@ -193,7 +229,7 @@ $(document).on('click', '.dataPickerIconDiv', function() {
 // reveals the Google Maps div and then initializes/retrieves the map.
 $(document).on('click', '.gmapInit', function() {
     var mapContainer = $(this).parents("div.tableProcessingToolBarContainer").prevAll("div.googleMapsContainer:first");
-    mapContainer.attr("style", "");
+    mapContainer.attr("style", ""); // makes element visible by removing "hidden" from attribute
     var mapTarget = mapContainer.children(".gmap");
     initMap(mapTarget);
 });
