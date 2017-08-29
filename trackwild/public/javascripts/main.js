@@ -109,7 +109,7 @@ $('#projectDataContent').on('submit', '.tableSQLViewQuery', function(event) {
             xhr.setRequestHeader('Csrf-Token', token);
         }
     });
-
+    var successDisplayArea = document.getElementById(viewName+ "qryResultsDisplay");
     var route = jsRoutes.controllers.ProjectsWorkSpaceController.postQueryReturnResult();
     $.ajax({
         url: route.url,
@@ -118,11 +118,12 @@ $('#projectDataContent').on('submit', '.tableSQLViewQuery', function(event) {
         contentType : 'application/json',
         headers: {'X-CSRF-TOKEN': token},
         success: function (data) {
-            console.log("we did it!");
+            successDisplayArea.innerHTML = data;
         },
         error: function (data) {
             var errMsgElemId =  viewName + "ErrMsgTxt";
             document.getElementById(errMsgElemId).innerHTML = data.responseText
+            successDisplayArea.innerHTML = "";
         }
     })
 

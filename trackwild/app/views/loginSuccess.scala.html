@@ -1,6 +1,6 @@
 @()(implicit request: RequestHeader)
 
-@getAuthAndUserName = @{
+*@getAuthAndUserName = @{
     val foundUsername: String = request.session.get("username").getOrElse("no username found")
     val foundAuthenticated: String = request.session.get("authenticated").getOrElse("No authentication found")
     s"$foundUsername and $foundAuthenticated"
@@ -16,8 +16,11 @@
                 <div class="content">
 
                     <h1>Login Successful</h1>
+                    <!-- This was used to test if values placed into session
+                    They aren't available here, but on the next API call, they do. Not sure why.
                     <h2>The auth token and username are:</h2>
                     <h2 id="headerValues">@getAuthAndUserName</h2>
+                    -->
                     <h2>Redirecting you to the Dashboard in...</h2>
                     <h3>
                         <div id="counter">3</div>

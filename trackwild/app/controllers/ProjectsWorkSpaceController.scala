@@ -290,7 +290,7 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
               case (qR, msg) if qR.nonEmpty => Ok(views.html.afterLogin.projectworkspace.projDataTableOnly(qR, viewName))
               case (qR, msg) if (qR.isEmpty && msg.equals("clean query")) =>  BadRequest("No results returned, try another query.")
               case (qR, msg) if (qR.isEmpty && msg.equals("clean query")) => BadRequest(msg)
-              case _ => BadRequest(s"Error happend. $message")
+              case _ => BadRequest(s"Error: $message")
             }
           }
       )

@@ -298,3 +298,8 @@ fixeddesc {
 .errMsgRow {
     color: red;
 }
+
+.qrySubmitBtn {
+    margin-top: 5px;
+    margin-bottom: 10px;
+}

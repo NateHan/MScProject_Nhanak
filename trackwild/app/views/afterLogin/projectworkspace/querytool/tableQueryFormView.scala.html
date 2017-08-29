@@ -19,13 +19,15 @@
         <div class="row errMsgRow">
             <text id="@generateElemId("ErrMsgTxt")"></text>
         </div>
-        <textarea name="queryTextArea" class="sliderTextInputBox queryFormInputs" pattern= id="@generateElemId("TextAreaInput")" cols="20" rows="10" required></textarea>
+        <textarea name="queryTextArea" class="sliderTextInputBox queryFormInputs" id="@generateElemId("TextAreaInput")" cols="20" rows="10" required></textarea>
         <div class="row">
-            <button type="submit" class="btn btn-default btn-md glassyButton">
+            <button type="submit" class="btn btn-default btn-md glassyButton qrySubmitBtn">
                 <i class="fa fa-check-square" aria-hidden="true"></i>
-                Add Row
+                Execute Query
             </button>
         </div>
+
+        <div class="row" id="@generateElemId("qryResultsDisplay")"></div>
 
     </form>
 </div>

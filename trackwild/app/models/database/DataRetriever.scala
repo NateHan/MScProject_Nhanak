@@ -144,7 +144,11 @@ object DataRetriever {
           val qryResult = stmt.executeQuery(qry.query)
           val resMetaData = qryResult.getMetaData
           resultBuilder += getColumnLabelsFromResultSet(qryResult)
+          var i = 0
+          println("got this far at least")
           while (qryResult.next()) {
+            i = i+1
+            println("We have this many results: " + i)
             val tableRow = new Array[String](resMetaData.getColumnCount)
             for (i <- 0 until resMetaData.getColumnCount) {
               tableRow(i) =  qryResult.getString(resultBuilder.head(i))
@@ -165,17 +169,19 @@ object DataRetriever {
     * Checks to see if the incoming query string is strictly a SELECT statement and
     * is neither destructive or additive
     *
-    * @param qry the incoming query
+    * @param qryObj the incoming query wrapped in a case class
     * @return "clean" if the String is legal, an error message if it contains bad SQL.
     */
   private def returnIllegalSQLifPresent(qryObj: TableSQLScript): String = {
+    println(qryObj.query);
     val illegalKeys = List("DELETE", "UPDATE", "INSERT", "DROP", "CREATE")
     var queryStatus = "clean query"
     for (key <- illegalKeys) {
       if (qryObj.query.toUpperCase.contains(key)) queryStatus = "Cannot run your query, " +
         "it contains SQL which is not allowed: " + key
     }
-    if (!qryObj.query.toUpperCase.contains(s"FROM ${qryObj.viewName}")) queryStatus =
+    val requiredFromStmt = s"FROM ${qryObj.viewName}".toUpperCase
+    if (!qryObj.query.toUpperCase.contains(requiredFromStmt)) queryStatus =
       s"""Query must contain 'FROM ${qryObj.viewName}'"""
     queryStatus
   }

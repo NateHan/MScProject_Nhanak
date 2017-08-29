@@ -21,9 +21,9 @@ class LoginRegController @Inject()(twDB: Database, cc: ControllerComponents, aut
 
   def loadLogin() = Action {
       implicit request: Request[AnyContent] =>
-        Ok(views.html.login(loginform)).withNewSession.withSession(request.session + ("test" -> "I see this"))/*.withHeaders(SecurityHeadersFilter
+        Ok(views.html.login(loginform)).withNewSession.withHeaders(SecurityHeadersFilter
           .CONTENT_SECURITY_POLICY_HEADER -> " .fontawesome.com .fonts.googleapis.com maps.googleapis.com")
-  */}
+  }
 
   val loginform: Form[UserLoginData] = Form(
     mapping(
