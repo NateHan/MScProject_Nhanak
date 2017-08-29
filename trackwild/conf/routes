@@ -13,7 +13,7 @@ GET     /register                   controllers.LoginRegController.loadRegistrat
 
 POST    /register                   controllers.LoginRegController.registerSubmit
 GET     /logout                     controllers.LoginRegController.logOut
-+ noCSRF
+
 POST    /login                      controllers.LoginRegController.attemptLogin
 
 # The controller for the main dashboard upon signin
@@ -21,7 +21,6 @@ GET     /dashboard                      controllers.DashboardController.index
 GET     /dashboard/projects             controllers.DashboardController.loadUserProjects
 GET     /dashboard/projects/:option     controllers.DashboardController.projectOptionPicker(option:String)
 GET     /dashboard/projects/sliderSubmitResponse/:response/:projTitle    controllers.DashboardController.getSliderResponse(response: String, projTitle:String)
-
 POST    /dashboard/projects             controllers.DashboardController.postNewProject
 
 # The controller for the main project view workspace, loads default values if none found
