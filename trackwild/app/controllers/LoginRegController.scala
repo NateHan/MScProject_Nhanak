@@ -9,6 +9,7 @@ import play.api.data.Form
 import play.api.data.Forms._
 import play.api.db.Database
 import play.api.mvc._
+import play.filters.csrf.CSRF
 import play.filters.headers.SecurityHeadersFilter
 
 /**
@@ -19,9 +20,9 @@ class LoginRegController @Inject()(twDB: Database, cc: ControllerComponents, aut
 
 
   def loadLogin() = Action {
-    implicit request: Request[AnyContent] =>
-      Ok(views.html.login(loginform)).withNewSession.withHeaders(SecurityHeadersFilter
-        .CONTENT_SECURITY_POLICY_HEADER -> " .fontawesome.com .fonts.googleapis.com maps.googleapis.com")
+      implicit request: Request[AnyContent] =>
+        Ok(views.html.login(loginform)).withHeaders(SecurityHeadersFilter
+          .CONTENT_SECURITY_POLICY_HEADER -> " .fontawesome.com .fonts.googleapis.com maps.googleapis.com")
   }
 
   val loginform: Form[UserLoginData] = Form(
@@ -40,14 +41,14 @@ class LoginRegController @Inject()(twDB: Database, cc: ControllerComponents, aut
     * @return the Action for the resulting page
     */
   def attemptLogin() = Action {
-    implicit request: Request[AnyContent] => {
+     implicit request: Request[AnyContent] => {
       loginform.bindFromRequest().fold(
         formWithErrors => BadRequest(views.html.login(formWithErrors)),
         successfulForm => {
           val validator: DbInputValidator = new LoginInputsValidator(twDB, successfulForm)
           if (validator.inputsAreValid) {
             val userName = getUserName(successfulForm.inputEmail.toLowerCase)
-            Ok(views.html.afterLogin.dashboardviews.dashboard())
+            Ok(views.html.loginSuccess())
               .withSession(request.session + ("authenticated" -> "true") + ("username" -> userName))
               .withHeaders(SecurityHeadersFilter
                 .CONTENT_SECURITY_POLICY_HEADER -> " .fontawesome.com .fonts.googleapis.com maps.googleapis.com")

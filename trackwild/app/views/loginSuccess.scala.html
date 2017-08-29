@@ -1,0 +1,41 @@
+@()(implicit request: RequestHeader)
+
+@getAuthAndUserName = @{
+    val foundUsername: String = request.session.get("username").getOrElse("no username found")
+    val foundAuthenticated: String = request.session.get("authenticated").getOrElse("No authentication found")
+    s"$foundUsername and $foundAuthenticated"
+}
+
+@main("Successful Login") {
+
+    @landingnavbar("login")
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="content">
+
+                    <h1>Login Successful</h1>
+                    <h2>The auth token and username are:</h2>
+                    <h2 id="headerValues">@getAuthAndUserName</h2>
+                    <h2>Redirecting you to the Dashboard in...</h2>
+                    <h3>
+                        <div id="counter">3</div>
+                    </h3>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="application/javascript">
+            setInterval(function () {
+                var div = document.querySelector("#counter");
+                var count = div.textContent * 1 - 1;
+                div.textContent = count;
+                if (count <= 0) {
+                    window.location = '@routes.DashboardController.index()'
+                }
+            }, 1000);
+    </script>
+}

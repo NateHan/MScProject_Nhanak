@@ -1,6 +1,6 @@
 package models.database
 
-import java.sql.ResultSet
+import java.sql.{ResultSet, SQLException}
 
 import models.formdata.TableSQLScript
 import play.api.db.Database
@@ -96,7 +96,7 @@ object DataRetriever {
       val resultSet = stmt.executeQuery(s"SELECT * FROM $tableName;")
       while (resultSet.next()) {
         val row = new Array[String](noOfCols)
-        for (i <- 0 to noOfCols - 1) {
+        for (i <- 0 until noOfCols) {
           row(i) = resultSet.getString(resultBuffer.head(i)) // retrieves each row's entry by column name
         }
         resultBuffer += row
@@ -135,47 +135,49 @@ object DataRetriever {
     *         or an empty List and an error message if an error happened.
     */
   def performQueryOnView(qry: TableSQLScript, db: Database): (List[Array[String]], String) = {
-    var message = "Cannot run your query because it contains SQL which is not allowed: " + returnIllegalSQL(qry.query)
+    var message = returnIllegalSQLifPresent(qry)
     val resultBuilder = new ListBuffer[Array[String]]
-    if (message.contains("none")) {
+    if (message.equals("clean query")) {
       db.withConnection { conn =>
         val stmt = conn.createStatement()
-        try {
+        try { // needs to handle SQL exceptions if entered SQL has error
           val qryResult = stmt.executeQuery(qry.query)
           val resMetaData = qryResult.getMetaData
           resultBuilder += getColumnLabelsFromResultSet(qryResult)
           while (qryResult.next()) {
-            for (i <- 1 to resMetaData.getColumnCount) {
-
+            val tableRow = new Array[String](resMetaData.getColumnCount)
+            for (i <- 0 until resMetaData.getColumnCount) {
+              tableRow(i) =  qryResult.getString(resultBuilder.head(i))
             }
+            resultBuilder += tableRow
           }
-          (resultBuilder.toList, message)
         } catch {
-
+          case e:Exception =>
+            message = e.getMessage
+            e.printStackTrace();
         }
       }
-    } else
+    }
       (resultBuilder.toList, message)
   }
 
-  // check query for illegal strings
-  //    if clean: Execute query, return the result, make up a message
-  //    if not clean, return an empty List, put what went wrong in the ErrorMessage
-
   /**
     * Checks to see if the incoming query string is strictly a SELECT statement and
-    * is niether destructive or additive
+    * is neither destructive or additive
     *
     * @param qry the incoming query
     * @return "clean" if the String is legal, an error message if it contains bad SQL.
     */
-  private def returnIllegalSQL(qry: String): String = {
+  private def returnIllegalSQLifPresent(qryObj: TableSQLScript): String = {
     val illegalKeys = List("DELETE", "UPDATE", "INSERT", "DROP", "CREATE")
-    var illegalKeyInQuery = "none"
+    var queryStatus = "clean query"
     for (key <- illegalKeys) {
-      if (qry.toUpperCase.contains(key)) illegalKeyInQuery = key
+      if (qryObj.query.toUpperCase.contains(key)) queryStatus = "Cannot run your query, " +
+        "it contains SQL which is not allowed: " + key
     }
-    illegalKeyInQuery
+    if (!qryObj.query.toUpperCase.contains(s"FROM ${qryObj.viewName}")) queryStatus =
+      s"""Query must contain 'FROM ${qryObj.viewName}'"""
+    queryStatus
   }
 
   /**
@@ -187,7 +189,7 @@ object DataRetriever {
   private def getColumnLabelsFromResultSet(resultSet: ResultSet): Array[String] = {
     val resMetaData = resultSet.getMetaData
     val headerRow: Array[String] = new Array[String](resMetaData.getColumnCount)
-    for (i <- 1 to resMetaData.getColumnCount) {
+    for (i <- 1 to headerRow.length) {
       headerRow(i - 1) = resMetaData.getColumnName(i)
     }
     headerRow

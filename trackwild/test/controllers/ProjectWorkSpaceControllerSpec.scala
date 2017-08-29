@@ -50,8 +50,8 @@ class ProjectWorkSpaceControllerSpec extends PlaySpec with GuiceOneAppPerSuite w
       contentType(dataAppender) mustBe Some("text/html")
     }
 
-    "render the view dataViewerTool.scala.html with #renderDataViewerTool" in {
-      val dataViewer = controller.renderDataViewerTool().apply(FakeRequest(GET, "/projectworkspace/dataViewer"))
+    "render the view dataPickerTool.scala.html with #renderDataViewerTool" in {
+      val dataViewer = controller.renderDataPickerTool().apply(FakeRequest(GET, "/projectworkspace/dataViewer"))
 
       status(dataViewer) mustBe OK
       contentType(dataViewer) mustBe Some("text/html")

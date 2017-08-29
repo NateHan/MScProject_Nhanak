@@ -1,13 +1,18 @@
 package models
 
-import models.database.{ProjectPermissions, TrackWildDatabaseGrabber}
+import models.database.{ProjectPermissions}
 import org.scalatest.BeforeAndAfterAll
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+import play.api.db.Databases
 
 class ProjectPermissionsSpec extends PlaySpec with GuiceOneAppPerSuite with BeforeAndAfterAll {
 
-  val twDB = TrackWildDatabaseGrabber.getApplicationDataBase
+  val twDB = Databases(
+    driver = "org.postgresql.Driver",
+    url = "postgres://twadmin:trackwild@localhost:5432/track_wild_db"
+  )
+
   val validProjectTitle = "testProject"
   val lowLevelUser = "testUser"
 

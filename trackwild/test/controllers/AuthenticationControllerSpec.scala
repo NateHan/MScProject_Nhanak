@@ -2,6 +2,7 @@ package controllers
 
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice.GuiceOneAppPerTest
+import play.api.db.Databases
 import play.api.mvc.{Action, Result}
 import play.api.test.Helpers.stubControllerComponents
 import play.api.test.{FakeRequest, Injecting}
@@ -9,13 +10,18 @@ import play.api.test.Helpers._
 
 class AuthenticationControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting {
 
+  val testDb = Databases(
+    driver = "org.postgresql.Driver",
+    url = "postgres://twadmin:trackwild@localhost:5432/track_wild_db"
+  )
+
   "AuthenticationController#sessionIsAuthenticated " should {
 
     "return true when given a session with authentication in the header " in {
       // test method directly
       val validRequest = FakeRequest(GET, "/dashboard")
         .withSession("authenticated" -> "true", "username" -> "testuser")
-      val authController = new AuthenticationController(stubControllerComponents())
+      val authController = new AuthenticationController(stubControllerComponents(), testDb)
 
       authController.sessionIsAuthenticated(validRequest.session) mustBe true
 
@@ -34,7 +40,7 @@ class AuthenticationControllerSpec extends PlaySpec with GuiceOneAppPerTest with
       // test method directly
       val invalidRequest = FakeRequest(GET, "/dashboard")
         .withSession("authenticated" -> "false")
-      val authController = new AuthenticationController(stubControllerComponents())
+      val authController = new AuthenticationController(stubControllerComponents(), testDb)
 
       authController.sessionIsAuthenticated(invalidRequest.session) mustBe false
 
@@ -53,7 +59,7 @@ class AuthenticationControllerSpec extends PlaySpec with GuiceOneAppPerTest with
     "return an Ok Result containing the expected view in an authorized session" in {
       implicit val validRequest = FakeRequest(GET, "/dashboard")
         .withSession("authenticated" -> "true", "username" -> "testuser")
-      val authController = new AuthenticationController(stubControllerComponents())
+      val authController = new AuthenticationController(stubControllerComponents(), testDb)
 
       val result = authController.returnDesiredPageIfAuthenticated(validRequest, views.html.afterLogin.dashboardviews.dashboard())
 
@@ -62,7 +68,7 @@ class AuthenticationControllerSpec extends PlaySpec with GuiceOneAppPerTest with
 
     "return an unauthorized Result containing the invalidSession.html page for an unauthorized session" in {
       implicit val invalidRequest = FakeRequest(GET, "/dashboard")
-      val authController = new AuthenticationController(stubControllerComponents())
+      val authController = new AuthenticationController(stubControllerComponents(), testDb)
 
       val result = authController.returnDesiredPageIfAuthenticated(invalidRequest, views.html.afterLogin.dashboardviews.dashboard())
 

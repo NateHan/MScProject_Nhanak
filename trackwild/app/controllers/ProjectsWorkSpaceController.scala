@@ -286,7 +286,12 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
           qryForm=> {
             val viewName = qryForm.viewName
             val (qryResult:List[Array[String]], message)= DataRetriever.performQueryOnView(qryForm, twDB)
-            Ok(views.html.afterLogin.projectworkspace.projDataTableOnly(qryResult,viewName))
+            (qryResult, message) match {
+              case (qR, msg) if qR.nonEmpty => Ok(views.html.afterLogin.projectworkspace.projDataTableOnly(qR, viewName))
+              case (qR, msg) if (qR.isEmpty && msg.equals("clean query")) =>  BadRequest("No results returned, try another query.")
+              case (qR, msg) if (qR.isEmpty && msg.equals("clean query")) => BadRequest(msg)
+              case _ => BadRequest(s"Error happend. $message")
+            }
           }
       )
   }

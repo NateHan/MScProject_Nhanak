@@ -21,7 +21,7 @@ class HomeController @Inject()(cc: ControllerComponents) extends AbstractControl
    * a path of `/`.
    */
   def index() = Action {
-    implicit request: Request[AnyContent] => Ok(views.html.index()).withHeaders(SecurityHeadersFilter
+    implicit request: Request[AnyContent] => Ok(views.html.index()).withNewSession.withHeaders(SecurityHeadersFilter
       .CONTENT_SECURITY_POLICY_HEADER -> " .fontawesome.com .fonts.googleapis.com")
   }
 

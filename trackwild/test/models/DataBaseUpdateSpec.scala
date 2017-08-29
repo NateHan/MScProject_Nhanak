@@ -1,14 +1,19 @@
 package models
 
-import models.database.{DatabaseUpdate, TrackWildDatabaseGrabber}
+import models.database.{DatabaseUpdate}
 import org.scalatest.BeforeAndAfterAll
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+import play.api.db.Databases
 
 
 class DataBaseUpdateSpec extends PlaySpec with GuiceOneAppPerSuite with BeforeAndAfterAll {
 
-  val twDB = TrackWildDatabaseGrabber.getApplicationDataBase
+  val twDB = Databases(
+    driver = "org.postgresql.Driver",
+    url = "postgres://twadmin:trackwild@localhost:5432/track_wild_db"
+  )
+
 
   "DatabseUpdate object #insertInto " should {
 
