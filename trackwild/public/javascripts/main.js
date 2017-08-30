@@ -324,13 +324,63 @@ Takes all the points from the referenced data table and displays them on the map
 @param map - the current map displayed and on which we would like to display the points
  */
 function plotAllPoints(allPoints, map) {
+    var idsToColours = generateColorForUniqueId(allPoints); // Array [ {animalId:_, color:_}, {...} ]
+    var circlePath = google.maps.SymbolPath.CIRCLE;
     $.each(allPoints, function(index, point){
         var latLng = new google.maps.LatLng(point.lat, point.long);
+        var colour = null // use point.AnimalId as key and use it to retrieve the color value from idsToColours
         var marker = new google.maps.Marker({
             position: latLng,
+            fillColor: colour,
+            fillOpacity: 0.8,
+            icon: {
+                path: circlePath,
+                scale: 3
+            },
             map: map
+            // do stroke colour too if it acts weird
         });
     });
+}
+
+/**
+ * creates a JSON object of unique animalId's to a unique colour.
+ * @param allPoints all the points in the
+ * @return a JSON array of [ {animalId:"_", colour:"_"}]
+ */
+function generateColorForUniqueId(allPoints) {
+    var uniqueIds = getAllUniqueIds(allPoints);
+    var usedColours = [];
+    var idsToColours = [];
+    for(var i = 0; i < uniqueIds.length; i++) {
+        // START HERE
+        //
+        // retrieve a color
+        // if it's in usedColours, retrieve another color
+        // if it's not: push an obj in idsToColours, and push just colour to used Colours,
+    }
+    return idsToColours;
+}
+
+/**
+ * gets all unique ID's for the list of all the points.
+ * @param allPoints a JSON array in the form of:
+ [ { "animalId": "_", "date":"_",  "lat":_num_, "long":_num_}, etc... ]
+ */
+function getAllUniqueIds(allPoints) {
+    var idsMapped = [];
+    for (var i = 0; i < allPoints.length; i++) {
+        var idIsMapped = false;
+        idsMapped.forEach(function(id) {
+            if (allPoints[i].animalId === id) {
+                idIsMapped = true
+            };
+        });
+        if (idIsMapped === false) {
+            idsMapped.push(allPoints[i].animalId);
+        }
+    }
+    return idsMapped;
 }
 
 /** GOOGLE MAPS' METHODS ABOVE **/
