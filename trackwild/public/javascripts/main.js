@@ -199,7 +199,8 @@ $('#toolsrow').on('submit', '#newNoteForm', function (event) {
             $('#notesLoadZone').slideUp();
         },
         error: function (data) {
-            console.log("Did not submit the note")
+            console.log("Did not submit the note");
+            document.getElementById("newNoteUploadRow").innerHTML = data;
         }
 
     });
@@ -243,21 +244,16 @@ $(document).on('click', '.gmapInit', function () {
 //Function initializes a Google Maps map within the table's processing area. The targetELem is
 //a reserved Div for Google maps in the Project Data Workspace for each data table.
 function initMap(targetElem, tableToMap) {
-    //var uluru = {lat: -25.363, lng: 131.044};get rid of this when findMapCenter is implemented.
 
     var indexesOfLatAndLong = findIndexesOfLatAndLong(tableToMap);
     var allMappedPoints = getAllPointsAsObj(tableToMap, indexesOfLatAndLong);
-    console.log(allMappedPoints);
     var averageLatLng = findMapCenter(allMappedPoints);
     var map = new google.maps.Map(targetElem[0], {
-        zoom: 4,
+        zoom: 5,
         center: averageLatLng,
-        mapTypeId: 'satellite'
+        mapTypeId: 'hybrid'
     });
-    var marker = new google.maps.Marker({
-        position: averageLatLng,
-        map: map
-    });
+    plotAllPoints(allMappedPoints, map);
 }
 
 /*
@@ -270,11 +266,7 @@ of the map.
 function findMapCenter(allPoints) {
     var averageLat = 0;
     var averageLong = 0;
-    console.log("ALL THE POINTS")
-    console.log(allPoints);
     $.each(allPoints, function (count, pointObj) {
-        //console.log("here is the pointObj: ");
-        //console.log(pointObj);
         averageLat = +((averageLat + pointObj.lat).toFixed(6)); // '+' transforms it back to a number
         averageLong = +((averageLong + pointObj.long).toFixed(6));
     });
@@ -299,8 +291,8 @@ function findIndexesOfLatAndLong(tableElem) {
 
 /*
 Method which takes an entire <table></table> elem and the indexes which identify its latitude
-and longitude and returns an array of all the geolocational points to mapped in the form of
-a JSON array: [ { "animalId": _, "lat":_, "long":_ }, ...etc]
+and longitude and returns an array of all the geolocational points stored in the form of
+a JSON array: [ { "animalId": "_", "date":"_",  "lat":_num_, "long":_num_}, ...etc]
  */
 function getAllPointsAsObj(tableData, indexesOfLatAndLong) {
     var allRows = $(tableData).find("tr.projDataContentRow");
@@ -313,9 +305,7 @@ function getAllPointsAsObj(tableData, indexesOfLatAndLong) {
         var id = $(row).find('td:eq(' + animalIdIndex + ')').html();
         var date = $(row).find('td:eq(' + dateIndex + ')').html();
         var lat = Number($(row).find('td:eq(' + indexesOfLatAndLong.latIndex + ')').html());
-        console.log(lat);
         var long = Number($(row).find('td:eq(' + indexesOfLatAndLong.lngIndex + ')').html());
-        console.log(long);
         var point = {
             "animalId": id,
             "date": date,
@@ -326,5 +316,21 @@ function getAllPointsAsObj(tableData, indexesOfLatAndLong) {
     });
     return allPoints;
 };
+
+/*
+Takes all the points from the referenced data table and displays them on the map.
+@param allPoints - a JSON array in the form of:
+      [ { "animalId": "_", "date":"_",  "lat":_num_, "long":_num_}
+@param map - the current map displayed and on which we would like to display the points
+ */
+function plotAllPoints(allPoints, map) {
+    $.each(allPoints, function(index, point){
+        var latLng = new google.maps.LatLng(point.lat, point.long);
+        var marker = new google.maps.Marker({
+            position: latLng,
+            map: map
+        });
+    });
+}
 
 /** GOOGLE MAPS' METHODS ABOVE **/
