@@ -235,6 +235,7 @@ $(document).on('click', '.gmapInit', function() {
     var mapContainer = $(this).parents("div.tableProcessingToolBarContainer").prevAll("div.googleMapsContainer:first");
     var mapTarget = mapContainer.children(".gmap");
     var tableToBeMapped = mapContainer.siblings('.tableRawData')[0].getElementsByClassName('projDataTable')[0];
+    console.log(tableToBeMapped);
     mapContainer.attr("style", ""); // makes element visible by removing "hidden" from attribute
     initMap(mapTarget, tableToBeMapped);
 });
@@ -243,9 +244,12 @@ $(document).on('click', '.gmapInit', function() {
 //a reserved Div for Google maps in the Project Data Workspace for each data table.
 function initMap(targetElem, tableToMap) {
     var uluru = {lat: -25.363, lng: 131.044}; // get rid of this when findMapCenter is implemented.
+
+    var indexesOfLatAndLong = findIndexesOfLatAndLong(tableToMap);
+    var allMappedPoints = getAllPoints(tableToMap, indexesOfLatAndLong);
     var map = new google.maps.Map(targetElem[0], {
         zoom: 4,
-        center: uluru, // replace with: findMapCenter(tableToMap);
+        center: uluru, // replace with: findMapCenter(allMappedPoints);
         mapTypeId: 'satellite'
     });
     var marker = new google.maps.Marker({
@@ -254,14 +258,45 @@ function initMap(targetElem, tableToMap) {
     });
 }
 
-function findMapCenter(tableData) {
-    var latLongTableIndeces = findIndecesOfLatAndLong(tableData);
+function findMapCenter(allPoints) {
+        var averageLat = 0;
+        var averageLong = 0;
+        $.each(allPoints, function()
+        //get avg lats: add all Lats, divide by # of tr's.
+        //get avg longs: add all Longs, divide by # of tr's.
         // return {lat: __, lng: __};
 }
 
-function findIndecesOfLatAndLong(tableElem) {
-
-    return {latIndex: 22, lngIndex: 34}
+function findIndexesOfLatAndLong(tableElem) {
+    var tableLatIndex = $(tableElem).find('th:contains("latitude"), th:contains("Latitude"), th:contains("LATITUDE")')
+        .first().index();
+    var tableLongIndex = $(tableElem).find('th:contains("longitude"), th:contains("Longitude"), th:contains("LONGITUDE")')
+        .first().index();
+    return {latIndex: tableLatIndex, lngIndex:tableLongIndex};
 }
 
-/** GOOGLE MAPS METHODS ABOVE **/
+/*
+Method which takes an entire <table></table> elem and the indexes which identify its latitude
+and longitude and returns an array of all the geolocational points to mapped in the form of
+a JSON array: [ { "animalId": _, "lat":_, "long":_ }, ...etc]
+ */
+function getAllPointsAsObj(tableData, indexesOfLatAndLong) {
+    var allRows = $(tableData).find("tr.projDataContentRow");
+    var animalIdIndex = $(tableElem).find('th:contains("id"), th:contains("ID"), th:contains("Id")')
+        .first().index();
+    var allPoints = [];
+    $.each(allRows, function(index, row) {
+        var id =  Number($(row).find('td:eq(' + animalIdIndex + ')').html());
+        var lat = Number($(row).find('td:eq(' + indexesOfLatAndLong.latInd + ')').html());
+        var long = Number($(row).find('td:eq(' + indexesOfLatAndLong.longInd + ')').html());
+        var point = {
+            "animalId": id,
+            "lat": lat,
+            "long": long
+        };
+        resArray.push(point);
+    });
+    return allPoints;
+};
+
+/** GOOGLE MAPS' METHODS ABOVE **/
