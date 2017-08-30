@@ -145,10 +145,8 @@ object DataRetriever {
           val resMetaData = qryResult.getMetaData
           resultBuilder += getColumnLabelsFromResultSet(qryResult)
           var i = 0
-          println("got this far at least")
           while (qryResult.next()) {
             i = i+1
-            println("We have this many results: " + i)
             val tableRow = new Array[String](resMetaData.getColumnCount)
             for (i <- 0 until resMetaData.getColumnCount) {
               tableRow(i) =  qryResult.getString(resultBuilder.head(i))
@@ -173,7 +171,6 @@ object DataRetriever {
     * @return "clean" if the String is legal, an error message if it contains bad SQL.
     */
   private def returnIllegalSQLifPresent(qryObj: TableSQLScript): String = {
-    println(qryObj.query);
     val illegalKeys = List("DELETE", "UPDATE", "INSERT", "DROP", "CREATE")
     var queryStatus = "clean query"
     for (key <- illegalKeys) {

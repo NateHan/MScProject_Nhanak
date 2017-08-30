@@ -12,7 +12,7 @@ function loadDoc(myUrl, id) {
     xhttp.send();
 }
 
-function loadNAlert(url ) {
+function loadNAlert(url) {
     window.alert("This thing loaded and passed me this: " + url)
 }
 
@@ -32,36 +32,36 @@ $(document).ready(function () {
     });
 });
 
-$('#projectDataContent').on("click", '.tableProcessingToolSliders', function() {
-        var targetArea = $(this).next('.tptSliderContent');
-        var urlToPass = $(targetArea).attr('url');
-        targetArea.load(urlToPass, function () {
-                $(this).slideToggle()
-            }
-        );
+$('#projectDataContent').on("click", '.tableProcessingToolSliders', function () {
+    var targetArea = $(this).next('.tptSliderContent');
+    var urlToPass = $(targetArea).attr('url');
+    targetArea.load(urlToPass, function () {
+            $(this).slideToggle()
+        }
+    );
 });
 
 /**
  *  Method which handles the submission of a manually-entered table row in the
  *  Project Data Workspace
  */
-$('#projectDataContent').on('submit', '.manualRowAddForm', function(event) {
+$('#projectDataContent').on('submit', '.manualRowAddForm', function (event) {
     // $(this) in this scenario is the form
     event.preventDefault();
 
     var data = [];
     //get all form text inputs and gather into array.
-    $("form.manualRowAddForm input[type=text]").each(function() {
+    $("form.manualRowAddForm input[type=text]").each(function () {
         var columnName = $(this).attr("name");
         var inputVal = $(this).val();
-        data.push({colName:columnName, value:inputVal});
+        data.push({colName: columnName, value: inputVal});
     });
 
     var tableName = $('.tableNameHiddenInput').val();
 
-    var token =  $('input[name="csrfToken"]').attr('value');
+    var token = $('input[name="csrfToken"]').attr('value');
     $.ajaxSetup({
-        beforeSend: function(xhr) {
+        beforeSend: function (xhr) {
             xhr.setRequestHeader('Csrf-Token', token);
         }
     });
@@ -74,8 +74,8 @@ $('#projectDataContent').on('submit', '.manualRowAddForm', function(event) {
     $.ajax({
         url: route.url,
         type: route.type,
-        data : JSON.stringify(data),
-        contentType : 'application/json',
+        data: JSON.stringify(data),
+        contentType: 'application/json',
         headers: {'X-CSRF-TOKEN': $('input[name=csrfToken]').attr('value')},
         success: function (data) {
             loadDoc('/projectworkspace/tool/response/Table%20Row/true', targetAreaId);
@@ -94,34 +94,34 @@ $('#projectDataContent').on('submit', '.manualRowAddForm', function(event) {
 /**
  * Method which will submit all inputs from the SQL View query form.
  */
-$('#projectDataContent').on('submit', '.tableSQLViewQuery', function(event) {
+$('#projectDataContent').on('submit', '.tableSQLViewQuery', function (event) {
     // $(this) in this scenario is the form
     event.preventDefault();
     var viewName = $(this).attr('viewName');
     var data = {
         viewName: viewName,
-        query: $("#"+viewName+"TextAreaInput").val()
+        query: $("#" + viewName + "TextAreaInput").val()
     };
 
-    var token =  $('input[name="csrfToken"]').attr('value');
+    var token = $('input[name="csrfToken"]').attr('value');
     $.ajaxSetup({
-        beforeSend: function(xhr) {
+        beforeSend: function (xhr) {
             xhr.setRequestHeader('Csrf-Token', token);
         }
     });
-    var successDisplayArea = document.getElementById(viewName+ "qryResultsDisplay");
+    var successDisplayArea = document.getElementById(viewName + "qryResultsDisplay");
     var route = jsRoutes.controllers.ProjectsWorkSpaceController.postQueryReturnResult();
     $.ajax({
         url: route.url,
         type: route.type,
-        data : JSON.stringify(data),
-        contentType : 'application/json',
+        data: JSON.stringify(data),
+        contentType: 'application/json',
         headers: {'X-CSRF-TOKEN': token},
         success: function (data) {
             successDisplayArea.innerHTML = data;
         },
         error: function (data) {
-            var errMsgElemId =  viewName + "ErrMsgTxt";
+            var errMsgElemId = viewName + "ErrMsgTxt";
             document.getElementById(errMsgElemId).innerHTML = data.responseText
             successDisplayArea.innerHTML = "";
         }
@@ -140,9 +140,9 @@ $(document).on('submit', '#createProjectForm', function (event) {
         initialNote: $('#initNoteBox').val()
     };
 
-    var token =  $('input[name="csrfToken"]').attr('value');
+    var token = $('input[name="csrfToken"]').attr('value');
     $.ajaxSetup({
-        beforeSend: function(xhr) {
+        beforeSend: function (xhr) {
             xhr.setRequestHeader('Csrf-Token', token);
         }
     });
@@ -151,8 +151,8 @@ $(document).on('submit', '#createProjectForm', function (event) {
     $.ajax({
         url: route.url,
         type: route.type,
-        data : JSON.stringify(data),
-        contentType : 'application/json',
+        data: JSON.stringify(data),
+        contentType: 'application/json',
         headers: {'X-CSRF-TOKEN': $('input[name=csrfToken]').attr('value')},
         success: function (data) {
             var projName = JSON.stringify(data.newProjectName).replace(/^"(.*)"$/, '$1');
@@ -168,7 +168,7 @@ $(document).on('submit', '#createProjectForm', function (event) {
 /* Listens for a submission of a #newNoteForm in the Project Workspace
 If successful, the method inserts the notes into the Notes viewspace. If not, displays the error.
 */
-$('#toolsrow').on('submit', '#newNoteForm', function(event) {
+$('#toolsrow').on('submit', '#newNoteForm', function (event) {
 
     event.preventDefault();
 
@@ -180,9 +180,9 @@ $('#toolsrow').on('submit', '#newNoteForm', function(event) {
     };
 
 
-    var token =  $('input[name="csrfToken"]').attr('value');
+    var token = $('input[name="csrfToken"]').attr('value');
     $.ajaxSetup({
-        beforeSend: function(xhr) {
+        beforeSend: function (xhr) {
             xhr.setRequestHeader('Csrf-Token', token);
         }
     });
@@ -191,14 +191,14 @@ $('#toolsrow').on('submit', '#newNoteForm', function(event) {
     $.ajax({
         url: route.url,
         type: route.type,
-        data : JSON.stringify(data),
-        contentType : 'application/json',
+        data: JSON.stringify(data),
+        contentType: 'application/json',
         headers: {'X-CSRF-TOKEN': $('input[name=csrfToken]').attr('value')},
-        success: function(data) {
+        success: function (data) {
             document.getElementById("newNoteUploadRow").innerHTML = data;
             $('#notesLoadZone').slideUp();
         },
-        error: function(data){
+        error: function (data) {
             console.log("Did not submit the note")
         }
 
@@ -210,7 +210,7 @@ $('#toolsrow').on('submit', '#newNoteForm', function(event) {
 
 //Listens for click on the icon in the data picker table. Appends the content to the Project
 //Data viewspace.
-$(document).on('click', '.dataPickerIconDiv', function() {
+$(document).on('click', '.dataPickerIconDiv', function () {
     var targetArea = $(this).children("i");
     var urlToPass = $(targetArea).attr('url');
     var xhttp = new XMLHttpRequest();
@@ -231,7 +231,7 @@ $(document).on('click', '.dataPickerIconDiv', function() {
  * Grabs the map visualization div container and the actual generated HTML table
  * to pass onto the initMap() method.
  */
-$(document).on('click', '.gmapInit', function() {
+$(document).on('click', '.gmapInit', function () {
     var mapContainer = $(this).parents("div.tableProcessingToolBarContainer").prevAll("div.googleMapsContainer:first");
     var mapTarget = mapContainer.children(".gmap");
     var tableToBeMapped = mapContainer.siblings('.tableRawData')[0].getElementsByClassName('projDataTable')[0];
@@ -243,36 +243,58 @@ $(document).on('click', '.gmapInit', function() {
 //Function initializes a Google Maps map within the table's processing area. The targetELem is
 //a reserved Div for Google maps in the Project Data Workspace for each data table.
 function initMap(targetElem, tableToMap) {
-    var uluru = {lat: -25.363, lng: 131.044}; // get rid of this when findMapCenter is implemented.
+    //var uluru = {lat: -25.363, lng: 131.044};get rid of this when findMapCenter is implemented.
 
     var indexesOfLatAndLong = findIndexesOfLatAndLong(tableToMap);
-    var allMappedPoints = getAllPoints(tableToMap, indexesOfLatAndLong);
+    var allMappedPoints = getAllPointsAsObj(tableToMap, indexesOfLatAndLong);
+    console.log(allMappedPoints);
+    var averageLatLng = findMapCenter(allMappedPoints);
     var map = new google.maps.Map(targetElem[0], {
         zoom: 4,
-        center: uluru, // replace with: findMapCenter(allMappedPoints);
+        center: averageLatLng,
         mapTypeId: 'satellite'
     });
     var marker = new google.maps.Marker({
-        position: uluru,
+        position: averageLatLng,
         map: map
     });
 }
 
+/*
+Method which takes all the points which will be calculated and plotted and finds the center.
+This will be used to initialize the center of the map.
+param: @allPoints is an Array of JSON in this format: {"animalId": _, "date": _, "lat": _, "long": _}
+return: returns a single JSON object in the format of {lat:_, lng:_} which is the calculated center
+of the map.
+ */
 function findMapCenter(allPoints) {
-        var averageLat = 0;
-        var averageLong = 0;
-        $.each(allPoints, function()
-        //get avg lats: add all Lats, divide by # of tr's.
-        //get avg longs: add all Longs, divide by # of tr's.
-        // return {lat: __, lng: __};
+    var averageLat = 0;
+    var averageLong = 0;
+    console.log("ALL THE POINTS")
+    console.log(allPoints);
+    $.each(allPoints, function (count, pointObj) {
+        //console.log("here is the pointObj: ");
+        //console.log(pointObj);
+        averageLat = +((averageLat + pointObj.lat).toFixed(6)); // '+' transforms it back to a number
+        averageLong = +((averageLong + pointObj.long).toFixed(6));
+    });
+    return {
+        "lat": +((averageLat / allPoints.length).toFixed(6)),
+        "lng": +((averageLong / allPoints.length).toFixed(6))
+    };
 }
 
+/*
+ Identifies the index of the column of the table which represents the latitude and longitude
+ @param: tableElem a full <table></table>
+ @return: a JSON object in the format {latIndex: _, lngIndex: _};
+ */
 function findIndexesOfLatAndLong(tableElem) {
     var tableLatIndex = $(tableElem).find('th:contains("latitude"), th:contains("Latitude"), th:contains("LATITUDE")')
         .first().index();
     var tableLongIndex = $(tableElem).find('th:contains("longitude"), th:contains("Longitude"), th:contains("LONGITUDE")')
         .first().index();
-    return {latIndex: tableLatIndex, lngIndex:tableLongIndex};
+    return {latIndex: tableLatIndex, lngIndex: tableLongIndex};
 }
 
 /*
@@ -282,19 +304,25 @@ a JSON array: [ { "animalId": _, "lat":_, "long":_ }, ...etc]
  */
 function getAllPointsAsObj(tableData, indexesOfLatAndLong) {
     var allRows = $(tableData).find("tr.projDataContentRow");
-    var animalIdIndex = $(tableElem).find('th:contains("id"), th:contains("ID"), th:contains("Id")')
+    var animalIdIndex = $(tableData).find('th:contains("id"), th:contains("ID"), th:contains("Id")')
+        .first().index();
+    var dateIndex = $(tableData).find('th:contains("date"), th:contains("Date"), th:contains("DATE")')
         .first().index();
     var allPoints = [];
-    $.each(allRows, function(index, row) {
-        var id =  Number($(row).find('td:eq(' + animalIdIndex + ')').html());
-        var lat = Number($(row).find('td:eq(' + indexesOfLatAndLong.latInd + ')').html());
-        var long = Number($(row).find('td:eq(' + indexesOfLatAndLong.longInd + ')').html());
+    $.each(allRows, function (index, row) {
+        var id = $(row).find('td:eq(' + animalIdIndex + ')').html();
+        var date = $(row).find('td:eq(' + dateIndex + ')').html();
+        var lat = Number($(row).find('td:eq(' + indexesOfLatAndLong.latIndex + ')').html());
+        console.log(lat);
+        var long = Number($(row).find('td:eq(' + indexesOfLatAndLong.lngIndex + ')').html());
+        console.log(long);
         var point = {
             "animalId": id,
+            "date": date,
             "lat": lat,
             "long": long
         };
-        resArray.push(point);
+        allPoints.push(point);
     });
     return allPoints;
 };
