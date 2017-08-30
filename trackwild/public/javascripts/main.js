@@ -225,22 +225,27 @@ $(document).on('click', '.dataPickerIconDiv', function() {
 
 });
 
-// Listens for the click of the Google Maps Button in the tableProcessingToolbar element
-// reveals the Google Maps div and then initializes/retrieves the map.
+/** GOOGLE MAPS METHODS BELOW **/
+/* Listens for the click of the Google Maps Button in the tableProcessingToolbar element
+ * reveals the Google Maps div and then initializes/retrieves the map.
+ * Grabs the map visualization div container and the actual generated HTML table
+ * to pass onto the initMap() method.
+ */
 $(document).on('click', '.gmapInit', function() {
     var mapContainer = $(this).parents("div.tableProcessingToolBarContainer").prevAll("div.googleMapsContainer:first");
-    mapContainer.attr("style", ""); // makes element visible by removing "hidden" from attribute
     var mapTarget = mapContainer.children(".gmap");
-    initMap(mapTarget);
+    var tableToBeMapped = mapContainer.siblings('.tableRawData')[0].getElementsByClassName('projDataTable')[0];
+    mapContainer.attr("style", ""); // makes element visible by removing "hidden" from attribute
+    initMap(mapTarget, tableToBeMapped);
 });
 
 //Function initializes a Google Maps map within the table's processing area. The targetELem is
-//a reserved space for Google maps in the Project Data Workspace for each data table.
-function initMap(targetElem) {
-    var uluru = {lat: -25.363, lng: 131.044};
+//a reserved Div for Google maps in the Project Data Workspace for each data table.
+function initMap(targetElem, tableToMap) {
+    var uluru = {lat: -25.363, lng: 131.044}; // get rid of this when findMapCenter is implemented.
     var map = new google.maps.Map(targetElem[0], {
         zoom: 4,
-        center: uluru,
+        center: uluru, // replace with: findMapCenter(tableToMap);
         mapTypeId: 'satellite'
     });
     var marker = new google.maps.Marker({
@@ -248,3 +253,15 @@ function initMap(targetElem) {
         map: map
     });
 }
+
+function findMapCenter(tableData) {
+    var latLongTableIndeces = findIndecesOfLatAndLong(tableData);
+        // return {lat: __, lng: __};
+}
+
+function findIndecesOfLatAndLong(tableElem) {
+
+    return {latIndex: 22, lngIndex: 34}
+}
+
+/** GOOGLE MAPS METHODS ABOVE **/
