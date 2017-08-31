@@ -245,6 +245,9 @@ $(document).on('click', '.gmapInit', function () {
 function initMap(targetElem, tableToMap) {
     var indexesOfLatAndLong = findIndexesOfLatAndLong(tableToMap);
     var allMappedPoints = getAllPointsAsObj(tableToMap, indexesOfLatAndLong);
+    console.log(allMappedPoints);
+    allMappedPoints = allMappedPoints.sort(compByIdThenTime);
+    console.log(allMappedPoints);
     var averageLatLng = findMapCenter(allMappedPoints);
     var map = new google.maps.Map(targetElem[0], {
         zoom: 10,
@@ -323,9 +326,6 @@ Takes all the points from the referenced data table and displays them on the map
  */
 function plotAllPoints(allPoints, map) {
     var idsToColours = generateColorsForUniqueId(allPoints); // a JSON object of {animalId:colour, animalId:colour, etc. }
-    console.log(allPoints);
-    console.log("here are the idsToColors: >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-    console.log(idsToColours);
     var circlePath = google.maps.SymbolPath.CIRCLE;
     $.each(allPoints, function(index, point){
         var latLng = new google.maps.LatLng(point.lat, point.long);
@@ -336,8 +336,9 @@ function plotAllPoints(allPoints, map) {
                 path: circlePath,
                 scale: 3,
                 fillColor: iconColour,
-                fillOpacity: 0.8,
-                strokeColor: iconColour
+                fillOpacity: 0.5,
+                strokeColor: iconColour,
+                strokeOpacity: 0.7
             },
             map: map
         });
@@ -351,7 +352,6 @@ function plotAllPoints(allPoints, map) {
  */
 function generateColorsForUniqueId(allPoints) {
     var uniqueIds = getAllUniqueIds(allPoints);
-    console.log(uniqueIds);
     var usedColours = [];
     var idToColour = {};
     for (var i = 0; i < uniqueIds.length; i++) {
@@ -407,6 +407,22 @@ function contains(array, obj) {
         }
     }
     return false;
+}
+
+/**
+ * Method compares 2 different JSON objects which represent points. First by animalId, and
+ * then by date if the id's are identical. To be used with a JSONArray.sort(compByIdThenTime).
+ * @param a point JSON object : { "animalId": "_", "date":"_",  "lat":_num_, "long":_num_
+ * @param b point JSON object : { "animalId": "_", "date":"_",  "lat":_num_, "long":_num_
+ * @returns {number} 1 if greater, -1 if not, 0 if equals
+ */
+function compByIdThenTime(a, b) {
+    var diff = a.animalId - b.animalId;
+    if (diff === 0) {
+        return new Date(a.date) - new Date(b.date);
+    } else {
+        return diff;
+    }
 }
 
 /** GOOGLE MAPS' METHODS ABOVE **/
