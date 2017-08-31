@@ -245,18 +245,26 @@ $(document).on('click', '.gmapInit', function () {
 function initMap(targetElem, tableToMap) {
     var indexesOfLatAndLong = findIndexesOfLatAndLong(tableToMap);
     var allMappedPoints = getAllPointsAsObj(tableToMap, indexesOfLatAndLong);
-    console.log(allMappedPoints);
     allMappedPoints = allMappedPoints.sort(compByIdThenTime);
-    console.log(allMappedPoints);
     var averageLatLng = findMapCenter(allMappedPoints);
     var map = new google.maps.Map(targetElem[0], {
         zoom: 10,
         center: averageLatLng,
         mapTypeId: 'hybrid'
     });
-    plotAllPoints(allMappedPoints, map);
+    displayAllPointData(allMappedPoints, map);
 }
 
+/**
+ * Method which renders all the points and the lines drawn between them.
+ * @param allPoints a JSON array: [ { "animalId": "_", "date":"_",  "lat":_num_, "long":_num_}, ...etc]
+ * @param map the current map displayed to the user
+ */
+function displayAllPointData(allPoints, map) {
+    var idsToColours = generateColorsForUniqueId(allPoints); // a JSON object of {animalId:colour, animalId:colour, etc. }
+    plotAllPoints(allPoints, map, idsToColours);
+    plotAllPolyLines(allPoints, map, idsToColours);
+}
 /*
 Method which takes all the points which will be calculated and plotted and finds the center.
 This will be used to initialize the center of the map.
@@ -316,16 +324,16 @@ function getAllPointsAsObj(tableData, indexesOfLatAndLong) {
         allPoints.push(point);
     });
     return allPoints;
-};
+}
 
 /*
 Takes all the points from the referenced data table and displays them on the map.
 @param allPoints - a JSON array in the form of:
       [ { "animalId": "_", "date":"_",  "lat":_num_, "long":_num_}
 @param map - the current map displayed and on which we would like to display the points
+@param idsToColours a JSON object of {"animalId":"colour", "animalId":"colour", etc}
  */
-function plotAllPoints(allPoints, map) {
-    var idsToColours = generateColorsForUniqueId(allPoints); // a JSON object of {animalId:colour, animalId:colour, etc. }
+function plotAllPoints(allPoints, map, idsToColours) {
     var circlePath = google.maps.SymbolPath.CIRCLE;
     $.each(allPoints, function(index, point){
         var latLng = new google.maps.LatLng(point.lat, point.long);
@@ -346,8 +354,49 @@ function plotAllPoints(allPoints, map) {
 }
 
 /**
+ * Method which draws the polylines connecting each collected data point on the map.
+ * @param allPoints - a JSON array in the form of:
+ *      [ { "animalId": "_", "date":"_",  "lat":_num_, "long":_num_}
+ * @param map - the current map displayed and on which we would like to display the points
+ * @param idsToColours a JSON object of {"animalId":"colour", "animalId":"colour", etc}
+ */
+function plotAllPolyLines(allPoints, map, idsToColours) {
+    var idsToCoords= mapCoordArrayForIds(allPoints, idsToColours);
+    // idsToCoords is a JSON object in the form of { animalId:[{lat:_, lng:_}, {lat:_, lng:_}, ...], ...}
+    for(iDKey in idsToColours) {
+        var animalPaths = new google.maps.Polyline({
+            path: idsToCoords[iDKey], // gets coord array in the form of [{lat:X, lng:Y}, {lat:X, lng:Y} ]
+            geodesic: true,
+            strokeColor: idsToColours[iDKey],
+            strokeOpacity: 1.0,
+            strokeWeight: 2
+        });
+        animalPaths.setMap(map);
+    }
+}
+
+/**
+ * Puts all coordinates in an array according to each animal Id.
+ * @param allPoints all the points from the data set.
+ * @param idsToColours
+ * @returns a JSON object in the form of {animalId:[{lat:_, lng:_}, {lat:_, lng:_}], ... } with
+ * one animalId for each unique iD in allPoints.
+ */
+function mapCoordArrayForIds(allPoints, idsToColours){
+    var idsToCoords= {};
+    for (k in idsToColours) { // fills it with all possible ids, initialized with empty arrays
+        idsToCoords[k] = [];
+    }
+    allPoints.forEach(function(point){
+        idsToCoords[point.animalId].push({lat: point.lat, lng:point.long})
+    });
+    return idsToCoords;
+}
+
+/**
  * creates a JSON object of unique animalId's to a unique colour.
- * @param allPoints all the points in the
+ * @param allPoints all currently points to plot, in a JSON array in the form of:
+ *      [ { "animalId": "_", "date":"_",  "lat":_num_, "long":_num_}
  * @return a JSON object of {animalId:colour, animalId:colour, etc. }
  */
 function generateColorsForUniqueId(allPoints) {
