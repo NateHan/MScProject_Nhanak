@@ -197,4 +197,27 @@ object DataRetriever {
     }
     headerRow
   }
+
+  /**
+    * Method which retrieves the collaborators and their permission levels for the current project
+    * @param projectTitle THe project title we are seeking collaborators for.
+    * @param db the database where the project information is stored
+    * @return a List of table rows, each stored as an Array[String]
+    */
+  def retrieveCollaboratorsForProject(projectTitle:String, db:Database): List[Array[String]] = {
+    val resultTable = new ListBuffer[Array[String]]
+    db.withConnection { conn =>
+      val stmt = conn.createStatement()
+      val resultSet = stmt.executeQuery(s"SELECT username, permission_level FROM collaborations WHERE project_title='$projectTitle';")
+      while (resultSet.next) {
+        val row = new Array[String](2)
+        row(0) = resultSet.getString(1)
+        row(1) = resultSet.getInt(2).toString
+        resultTable += row
+      }
+      resultTable.toList
+    }
+  }
+
+
 }

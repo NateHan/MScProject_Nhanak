@@ -1,0 +1,43 @@
+@(rows: List[Array[String]])(implicit request: RequestHeader, message: Messages)
+
+<div class="fromLoadDoc">
+    <div class="row toolOptionsHeaderRow" id="collaboratorTitleRow">
+        <h2 class="tooltitles">View Collaborator Tool</h2>
+        <h3 class="toolSubtitles">View the Collaborators on your Project</h3>
+    </div>
+    <div class="row workrow" id="collaboratorWorkRow">
+
+        <table class="appDataTable" id="collaboratorTable">
+            <tr class="appTableHeaderRow" id="collaboratorTableHeaderRow">
+                <th>User Name</th>
+                <th>Permissions for Project</th>
+                <th>Remove Collaborator</th>
+            </tr>
+            @for(row <- rows) {
+                <tr class="appTableContentRow">
+                    <td>@row(0)</td>
+                        <!-- user name -->
+                    <td>@row(1)</td>
+                        <!-- collaboration level -->
+                    <td class="collaboratorIconDiv">
+                        <i class="fa fa-minus-circle tableIcon removeCollabIcon" aria-hidden="true"
+                        title="Click to remove this collaborator"
+                        url='/projectworkspace/removeCollab/@row(0)'></i>
+                    </td>
+                </tr>
+
+            }
+        </table>
+    </div>
+
+    <div id="collabMessageArea">
+
+    </div>
+
+    <div class="row" id="addCollabFormArea">
+    @addNewCollaboratorForm()
+    </div>
+
+</div>
+
+

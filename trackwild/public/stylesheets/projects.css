@@ -344,3 +344,7 @@ div.windowbox ul.windowBoxContentList {
             inset 0 10px 20px rgba(255, 255, 255, 0.25),/* Sides Light Shadow */
             inset 0 -15px 30px rgba(0, 0, 0, 0.3); /* Dark Background */
 }
+
+#addCollabFormArea {
+    max-width: 90%;
+}

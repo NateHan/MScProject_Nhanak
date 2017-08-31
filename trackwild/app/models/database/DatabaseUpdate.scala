@@ -83,4 +83,19 @@ object DatabaseUpdate {
     }
   }
 
+  /**
+    * Method which removes a row from a table
+    * @param whereStatement the qualifying piece of the SQL query to be executed
+    * @param tableName the name of the table to be updated
+    * @param db the database location of the table
+    * @return an Int containing the number of rows affected.
+    */
+  def removeFromTable(whereStatement:String, tableName:String, db:Database): Boolean = {
+    db.withConnection { conn =>
+      val stmt = conn.createStatement()
+      val numRowsAffected:Int = stmt.executeUpdate(s"DELETE FROM $tableName WHERE $whereStatement;")
+      numRowsAffected == 1
+    }
+  }
+
 }

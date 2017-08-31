@@ -32,6 +32,10 @@ GET     /projectworkspace/getOnlyTable/:tableName   controllers.ProjectsWorkSpac
 GET     /projectworkspace/dataImportSelector    controllers.ProjectsWorkSpaceController.renderDataImporterSelector
 GET     /projectworkspace/addNewNote            controllers.ProjectsWorkSpaceController.renderNoteAdder
 POST    /projectworkspace/addNewNote            controllers.ProjectsWorkSpaceController.postNewNoteToDb
+GET     /projectworkspace/viewCollabs           controllers.ProjectsWorkSpaceController.renderCollaboratorViewer
+GET     /projectworkspace/removeCollab/:user    controllers.ProjectsWorkSpaceController.removeCollaborator(user:String)
+
+#the routes associated with the Project WorkSpace are below
 POST    /projectworkspace/manualRowAdd/:tableName           controllers.ProjectsWorkSpaceController.manualAddNewRow(tableName:String)
 GET     /projectworkspace/tool/:toolNeeded/:tableName       controllers.ProjectsWorkSpaceController.tableToolFactory(toolNeeded:String, tableName:String)
 GET     /projectworkspace/tool/response/:item/:success      controllers.ProjectsWorkSpaceController.getTableToolResponse(item:String, success:Boolean)

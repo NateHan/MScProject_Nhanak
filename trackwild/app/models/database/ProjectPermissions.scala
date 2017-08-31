@@ -43,7 +43,7 @@ object ProjectPermissions {
     * the function for the project they are attempting with their HTTP request
     *
     * @param userName    the user attempting to access the project
-    * @param minLevelNeeded the minimum permission level required for the action
+    * @param maxLevelAllowed the minimum permission level required for the action
     * @return false if the user has a high enough permission, false if not.
     */
   def userHasPermissionLevel(userName: String, projectTitle: String, maxLevelAllowed: Int, db: Database): Boolean = {
