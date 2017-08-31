@@ -303,3 +303,44 @@ fixeddesc {
     margin-top: 5px;
     margin-bottom: 10px;
 }
+
+.windowbox{
+    background-color:#204582;
+    box-shadow:
+            0 2px 8px rgba(0, 0, 0, 0.5),        /* Exterior Shadow */
+            inset 0 1px rgba(255, 255, 255, 0.3),        /* Top light Line */
+            inset 0 10px rgba(255, 255, 255, 0.2),/* Top Light Shadow */
+            inset 0 10px 20px rgba(255, 255, 255, 0.25),/* Sides Light Shadow */
+            inset 0 -15px 30px rgba(0, 0, 0, 0.3); /* Dark Background */
+    color: white;
+    text-align: center;
+    text-shadow: 0px 1px 0px rgba(255, 255, 255, .3), 0px -1px 0px rgba(0, 0, 0, .7)
+}
+
+.windowBoxidRow{
+    text-align: center;
+    border-bottom: solid 3px white;
+}
+
+.gm-style-iw{
+    background-color:#204582;
+    box-shadow:
+            0 2px 8px rgba(0, 0, 0, 0.5),        /* Exterior Shadow */
+            inset 0 1px rgba(255, 255, 255, 0.3),        /* Top light Line */
+            inset 0 10px rgba(255, 255, 255, 0.2),/* Top Light Shadow */
+            inset 0 10px 20px rgba(255, 255, 255, 0.25),/* Sides Light Shadow */
+            inset 0 -15px 30px rgba(0, 0, 0, 0.3); /* Dark Background */
+}
+
+div.windowbox ul.windowBoxContentList {
+    float: left;
+    text-align: left;
+    padding: 5px;
+    background-color:#2958a5;
+    box-shadow:
+            0 2px 8px rgba(0, 0, 0, 0.5),        /* Exterior Shadow */
+            inset 0 1px rgba(255, 255, 255, 0.3),        /* Top light Line */
+            inset 0 10px rgba(255, 255, 255, 0.2),/* Top Light Shadow */
+            inset 0 10px 20px rgba(255, 255, 255, 0.25),/* Sides Light Shadow */
+            inset 0 -15px 30px rgba(0, 0, 0, 0.3); /* Dark Background */
+}

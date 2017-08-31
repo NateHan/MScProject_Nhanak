@@ -248,7 +248,7 @@ function initMap(targetElem, tableToMap) {
     allMappedPoints = allMappedPoints.sort(compByIdThenTime);
     var averageLatLng = findMapCenter(allMappedPoints);
     var map = new google.maps.Map(targetElem[0], {
-        zoom: 10,
+        zoom: 11,
         center: averageLatLng,
         mapTypeId: 'hybrid'
     });
@@ -344,13 +344,43 @@ function plotAllPoints(allPoints, map, idsToColours) {
                 path: circlePath,
                 scale: 3,
                 fillColor: iconColour,
-                fillOpacity: 0.5,
-                strokeColor: iconColour,
-                strokeOpacity: 0.7
+                fillOpacity: 0.6,
+                strokeColor: '#000000',
+                strokeOpacity: 1,
+                strokeWeight: 1
             },
             map: map
         });
+        addWindowToMarker(marker, point, map);
     });
+}
+
+function addWindowToMarker(marker, point, map){
+
+    var contentString = '<div class="windowbox">'+
+        '<div class="windowBoxidRow">'+ "Animal Id: " + point.animalId + '</div>'+
+        '<div class="windowBoxContent">' +
+            '<ul class="windowBoxContentList">' +
+                '<li class="contentItem"> ' +
+                    "Date: " + point.date +
+                '</li>' +
+                '<li class="contentItem"> ' +
+                    "Latitude: " + point.lat +
+                '</li>' +
+                '<li class="contentItem"> ' +
+                "Latitude: " + point.lat +
+                '</li>' +
+            ' </ul> ' +
+        ' </div>' +
+        ' </div> ' ;
+    var infowindow = new google.maps.InfoWindow({
+        content: contentString
+    });
+
+    marker.addListener('click', function() {
+        infowindow.open(map, marker);
+    });
+
 }
 
 /**
