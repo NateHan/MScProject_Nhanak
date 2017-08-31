@@ -1,0 +1,27 @@
+@()(implicit request: RequestHeader, message:Messages)
+
+<form action="">
+    <input type="hidden" class="newCollabInputs" name="projectTitle" value="@request.session.get("projectTitle")">
+    <input type="hidden" class="newCollabInputs" name="currentUser" value="@request.session.get("username")">
+
+    <div class="form-group">
+        <label for="userToadd">Enter the email address or username of the User to Add</label>
+        <input type="text" class="newCollabInputs" name="userToAdd" id="userToAdd">
+    </div>
+
+    <div class="form-group">
+        <label for="permissionSelection">Select user's permission levels for project:</label>
+        <select class="form-control" id="permissionSelection">
+            <option>Project Contributor: View all, add notes, upload data</option>
+            <option>Project Contributor: View all, add notes, no table data upload/addition</option>
+            <option>External Viewer: View all data - no write or upload</option>
+        </select>
+    </div>
+
+    <div class="row">
+        <button type="submit" class="btn btn-default btn-md glassyButton addRowSubmitBtn">
+            <i class="fa fa-plus-square-o" aria-hidden="true"></i>
+            Add Row
+        </button>
+    </div>
+</form>
