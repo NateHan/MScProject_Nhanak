@@ -236,7 +236,6 @@ $(document).on('click', '.gmapInit', function () {
     var mapContainer = $(this).parents("div.tableProcessingToolBarContainer").prevAll("div.googleMapsContainer:first");
     var mapTarget = mapContainer.children(".gmap");
     var tableToBeMapped = mapContainer.siblings('.tableRawData')[0].getElementsByClassName('projDataTable')[0];
-    console.log(tableToBeMapped);
     mapContainer.attr("style", ""); // makes element visible by removing "hidden" from attribute
     initMap(mapTarget, tableToBeMapped);
 });
@@ -244,12 +243,11 @@ $(document).on('click', '.gmapInit', function () {
 //Function initializes a Google Maps map within the table's processing area. The targetELem is
 //a reserved Div for Google maps in the Project Data Workspace for each data table.
 function initMap(targetElem, tableToMap) {
-
     var indexesOfLatAndLong = findIndexesOfLatAndLong(tableToMap);
     var allMappedPoints = getAllPointsAsObj(tableToMap, indexesOfLatAndLong);
     var averageLatLng = findMapCenter(allMappedPoints);
     var map = new google.maps.Map(targetElem[0], {
-        zoom: 5,
+        zoom: 10,
         center: averageLatLng,
         mapTypeId: 'hybrid'
     });
@@ -324,21 +322,24 @@ Takes all the points from the referenced data table and displays them on the map
 @param map - the current map displayed and on which we would like to display the points
  */
 function plotAllPoints(allPoints, map) {
-    var idsToColours = generateColorForUniqueId(allPoints); // Array [ {animalId:_, color:_}, {...} ]
+    var idsToColours = generateColorsForUniqueId(allPoints); // a JSON object of {animalId:colour, animalId:colour, etc. }
+    console.log(allPoints);
+    console.log("here are the idsToColors: >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+    console.log(idsToColours);
     var circlePath = google.maps.SymbolPath.CIRCLE;
     $.each(allPoints, function(index, point){
         var latLng = new google.maps.LatLng(point.lat, point.long);
-        var colour = null // use point.AnimalId as key and use it to retrieve the color value from idsToColours
+        var iconColour = idsToColours[point.animalId]; // use point.AnimalId as key and use it to retrieve the color value from idsToColours
         var marker = new google.maps.Marker({
             position: latLng,
-            fillColor: colour,
-            fillOpacity: 0.8,
             icon: {
                 path: circlePath,
-                scale: 3
+                scale: 3,
+                fillColor: iconColour,
+                fillOpacity: 0.8,
+                strokeColor: iconColour
             },
             map: map
-            // do stroke colour too if it acts weird
         });
     });
 }
@@ -346,20 +347,35 @@ function plotAllPoints(allPoints, map) {
 /**
  * creates a JSON object of unique animalId's to a unique colour.
  * @param allPoints all the points in the
- * @return a JSON array of [ {animalId:"_", colour:"_"}]
+ * @return a JSON object of {animalId:colour, animalId:colour, etc. }
  */
-function generateColorForUniqueId(allPoints) {
+function generateColorsForUniqueId(allPoints) {
     var uniqueIds = getAllUniqueIds(allPoints);
+    console.log(uniqueIds);
     var usedColours = [];
-    var idsToColours = [];
-    for(var i = 0; i < uniqueIds.length; i++) {
-        // START HERE
-        //
-        // retrieve a color
-        // if it's in usedColours, retrieve another color
-        // if it's not: push an obj in idsToColours, and push just colour to used Colours,
+    var idToColour = {};
+    for (var i = 0; i < uniqueIds.length; i++) {
+        var colour = getRandomColor(usedColours);
+        idToColour[uniqueIds[i]] = colour;
+        usedColours.push(colour);
     }
-    return idsToColours;
+    return idToColour
+}
+
+/**
+ * Method which generates a random unique hex color and returns its value as a string.
+ * Checks the array of usedColours, if it has been used already, array will recurse until
+ * it generates an unused color
+ * @param usedColours an array of colors that have been previously used.
+ * @returns {string} a hex color value
+ */
+function getRandomColor(usedColours) {
+    var newColour = '#' + ('00000' + (Math.random() * (1 << 24) | 0).toString(16)).slice(-6);
+    if (!contains(usedColours, newColour)) {
+        return newColour;
+    } else {
+        getRandomColor(usedColours);
+    }
 }
 
 /**
@@ -381,6 +397,16 @@ function getAllUniqueIds(allPoints) {
         }
     }
     return idsMapped;
+}
+
+function contains(array, obj) {
+    var i = array.length;
+    while (i--) {
+        if (array[i] === obj) {
+            return true;
+        }
+    }
+    return false;
 }
 
 /** GOOGLE MAPS' METHODS ABOVE **/
