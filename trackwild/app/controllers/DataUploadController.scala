@@ -11,6 +11,7 @@ import play.api.data.Forms._
 import play.api.mvc._
 import models.database.{CSVFileToDBParser, FileToDBParser}
 import play.api.db.Database
+import play.filters.headers.SecurityHeadersFilter
 
 /**
   * class which controls the upload of new data files
@@ -61,7 +62,10 @@ class DataUploadController @Inject()(csvFileToDBParser: CSVFileToDBParser, twDB:
           Map( "userName" -> newTableForm.get.uploadingUser,
             "tableName" -> newTableForm.get.tableName,
           "projectTitle" -> newTableForm.get.projectTitle))
-          Ok(views.html.afterLogin.projectworkspace.projectView(request.session.get("projectTitle").getOrElse("Project Not Found")))
+        Ok(views.html.afterLogin.projectworkspace.projectView(request.session.get("projectTitle").getOrElse("Project Not Found")))
+          .withHeaders(SecurityHeadersFilter
+          .CONTENT_SECURITY_POLICY_HEADER ->
+            " .fontawesome.com .fonts.googleapis.com maps.googleapis.com csi.gstatic.com")
       } else Unauthorized(views.html.invalidSession("Your session expired or you logged out"))
     }getOrElse( NotFound("Something Happened Along the way"))
   }
