@@ -225,17 +225,25 @@ $(document).on('click', '.dataPickerIconDiv', function () {
     xhttp.send();
 });
 
+/**
+ * Method for removing a collaborator from a project. Listens for the click of the appropriate button,
+ * And sends a GET request with the desired username to remove. Reloads the Collaborator Tool with
+ * the response, which is handled for each situation by the server.
+ */
 $(document).on('click', '.collaboratorIconDiv', function () {
     var targetArea = $(this).children("i");
     var urlToPass = $(targetArea).attr('url');
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function (data) {
-        var resultArea = document.getElementById("toolsrow")
+        var resultArea = document.getElementById("toolsrow");
         if (this.readyState == 4 && this.status == 200) {
-            resultArea.innerHTML = data;
+            console.log("Whta is data?")
+            console.log(data)
+            resultArea.innerHTML = this.responseText;
+            $(resultArea).find("#collabMessageArea").text("User Removed");
         } else {
-            resultArea.innerHTML = data;
-            resultArea.find("#collabMessageArea").innerHTML = "Unable to remove user, check permission or try again.";
+            resultArea.innerHTML = this.responseText;
+            $(resultArea).find("#collabMessageArea").text("Unable to remove user, check permission or try again.");
         }
     };
     xhttp.open("GET", urlToPass, true);

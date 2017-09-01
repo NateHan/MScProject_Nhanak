@@ -216,12 +216,27 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
         Ok(views.html.expiredSession("Not Authenticated"))
       } else {
         val projectTitle = request.session.get("projectTitle").getOrElse("No Project Title found in Session")
-        val collaboratorTable = DataRetriever.retrieveCollaboratorsForProject(projectTitle, twDB)
+        val collaboratorTable = mapPermissionNumToDescription(DataRetriever.retrieveCollaboratorsForProject(projectTitle, twDB))
         Ok(views.html.afterLogin.projectworkspace.collaboratortools.viewCollaboratorsTool(collaboratorTable))
       }
   }
 
-  def mapPermissionNumToDescription(permissions: List[Array[String]]) = {
+  /**
+    * Recursive Method iterates over a List of collaborator permission values, replacing the number value
+    * with a text description
+    * @param permissions a List of Arrays of Strings representing Collaborations table
+    *                    Each Array is a row of  UserNames and Permission Level
+    * @param accum an intially empty result accumulator
+    * @return the accumulated List once permissions is empty. 
+    */
+  def mapPermissionNumToDescription(permissions: List[Array[String]], accum:List[Array[String]] = List[Array[String]]()): List[Array[String]] = permissions match {
+    case xs if xs.isEmpty => accum
+    case xs if xs.head(1).equals("100") => mapPermissionNumToDescription(xs.tail, accum ::: List(Array(xs.head(0),"Project Lead: All permissions")))
+    case xs if xs.head(1).equals("200") => mapPermissionNumToDescription(xs.tail, accum ::: List(Array(xs.head(0),"Project Contributor: View all, add notes, upload data")))
+    case xs if xs.head(1).equals("250") => mapPermissionNumToDescription(xs.tail, accum ::: List(Array(xs.head(0),"Project Contributor: View all, add notes, no table data upload/addition")))
+    case xs if xs.head(1).equals("300") => mapPermissionNumToDescription(xs.tail, accum ::: List(Array(xs.head(0),"External Viewer: View all data - no write or upload")))
+    case xs if xs.head(1).equals("400") => mapPermissionNumToDescription(xs.tail, accum ::: List(Array(xs.head(0),"Public: View only")))
+    case xs if xs.head(1).equals("999") => mapPermissionNumToDescription(xs.tail, accum ::: List(Array(xs.head(0),"Forbidden Access")))
   }
 
   def removeCollaborator(userName: String) = Action {

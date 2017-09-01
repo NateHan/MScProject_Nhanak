@@ -5,13 +5,15 @@
     <input type="hidden" class="newCollabInputs" name="currentUser" value="@request.session.get("username")">
 
     <div class="form-group">
-        <label for="userToadd">Enter the email address or username of the User to Add</label>
-        <input type="text" class="newCollabInputs" name="userToAdd" id="userToAdd">
+        <label for="userToAdd">Enter the email address or username of the User to Add</label><br>
+        <input type="text" class="toolsrowInputText newCollabInputs" name="userToAdd" id="userToAdd"
+        pattern="^[a-zA-Z0-9_]{6,12}$|/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+\@@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/"
+        placeholder="Valid email or user name: 6-12 letters, numbers, or underscores" required>
     </div>
 
     <div class="form-group">
-        <label for="permissionSelection">Select user's permission levels for project:</label>
-        <select class="form-control" id="permissionSelection">
+        <label for="permissionSelection newCollabInputs">Select user's permission levels for project:</label>
+        <select class="form-control glassyButton" id="permissionSelection">
             <option>Project Contributor: View all, add notes, upload data</option>
             <option>Project Contributor: View all, add notes, no table data upload/addition</option>
             <option>External Viewer: View all data - no write or upload</option>
@@ -25,3 +27,4 @@
         </button>
     </div>
 </form>
+
