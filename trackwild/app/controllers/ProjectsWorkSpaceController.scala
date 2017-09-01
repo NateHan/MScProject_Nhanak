@@ -264,7 +264,7 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
       }
   }
 
-  val addCollabForm: Form[AddCollaboratorData] = Form{
+  val addCollabForm: Form[AddCollaboratorData] = Form {
     mapping(
       "userToAdd" -> nonEmptyText,
       "permissionSelection" -> nonEmptyText
@@ -275,17 +275,30 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
 
   /**
     * Method which accepts the POST request with the addNewCollaboratorForm.
+    *
     * @return a Result indicating the success or failure of the attempted post
     */
   def addCollaborator() = Action {
-    implicit request:Request[AnyContent] =>
+    implicit request: Request[AnyContent] =>
       addCollabForm.bindFromRequest().fold(
         errorForm => BadRequest(views.html.afterLogin.projectworkspace.itemAddFail("new collaborator")),
         collabForm => {
-
-          val projectTitle = request.session.get("projectTitle").getOrElse("No Project Title found in session")
-          val collaboratorTable = mapPermissionNumToDescription(DataRetriever.retrieveCollaboratorsForProject(projectTitle, twDB))
-          Ok(views.html.afterLogin.projectworkspace.collaboratortools.viewCollaboratorsTool(collaboratorTable))
+          if (DataRetriever.userExists(collabForm.userToAdd, twDB)) {
+            val projectTitle = request.session.get("projectTitle").getOrElse("No Project Title found in session")
+            val collaboratorTable = mapPermissionNumToDescription(DataRetriever.retrieveCollaboratorsForProject(projectTitle, twDB))
+            val rowsInserted = DatabaseUpdate.insertRowInto(twDB, "collaborations",
+              Map("username" -> collabForm.userToAdd,
+                "project_title" -> request.session.get("projectTitle").getOrElse("No Project Title found in session"),
+                "permission_level" -> collabForm.permissionAsInt().toString))
+            if (rowsInserted == 1 ) {
+              Ok(views.html.afterLogin.projectworkspace.collaboratortools.viewCollaboratorsTool(collaboratorTable))
+            } else {
+              BadRequest("Unable to add collaborator, try again")
+            }
+          }
+          else {
+            BadRequest(s"Unable to find user you entered: ${collabForm.userToAdd}")
+          }
         }
       )
   }

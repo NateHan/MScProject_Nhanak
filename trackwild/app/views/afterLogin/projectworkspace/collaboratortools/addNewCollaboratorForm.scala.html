@@ -1,13 +1,16 @@
+@import helper.CSRF
+
 @()(implicit request: RequestHeader, message:Messages)
 
-<form action="">
+<form method="post" action="@routes.ProjectsWorkSpaceController.addCollaborator()" id="addCollabForm">
+    @CSRF.formField
     <input type="hidden" class="newCollabInputs" name="projectTitle" value="@request.session.get("projectTitle")">
     <input type="hidden" class="newCollabInputs" name="currentUser" value="@request.session.get("username")">
 
     <div class="form-group">
         <label for="userToAdd">Enter the Username of the User to Add</label><br>
         <input type="text" class="toolsrowInputText newCollabInputs" name="userToAdd" id="userToAdd"
-        pattern="^[a-zA-Z0-9_]{6,12}$|/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+\@@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/"
+        pattern="^[a-zA-Z0-9_]{6,12}$|/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/"
         placeholder="Valid email or user name: 6-12 letters, numbers, or underscores" required>
     </div>
 

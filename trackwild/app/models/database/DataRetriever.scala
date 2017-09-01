@@ -219,5 +219,26 @@ object DataRetriever {
     }
   }
 
+  /**
+    * Checks if user entered into collaboration form is a valid user
+    * @param userHandle the moniker entered by the user to search for a user
+    * @param db the database where the data is located
+    * @return true if the user moniker is found in verified_users, false if not.
+    */
+  def userExists(userHandle:String, db:Database): Boolean = {
+    var userExists = false
+    db.withConnection { conn =>
+      val prepStmt = conn.prepareStatement("SELECT username, uemail FROM verified_users WHERE username=? OR uemail=?")
+      prepStmt.setString(1, userHandle)
+      prepStmt.setString(2, userHandle)
+      val resultSet= prepStmt.executeQuery()
+      if (resultSet.next()) {
+        if (userHandle.equals(resultSet.getString("username")) ||
+          userHandle.equals(resultSet.getString("uemail"))) userExists = true
+      }
+    }
+    userExists
+  }
+
 
 }

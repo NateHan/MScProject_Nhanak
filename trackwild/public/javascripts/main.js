@@ -208,6 +208,41 @@ $('#toolsrow').on('submit', '#newNoteForm', function (event) {
 
 });
 
+$('#toolsrow').on('submit', '#addCollabForm', function (event) {
+    event.preventDefault();
+
+    var data = {
+        userToAdd: $('#userToAdd').val(),
+        permissionSelection: $('#permissionSelection').val()
+    };
+
+    var token = $('input[name="csrfToken"]').attr('value');
+    $.ajaxSetup({
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('Csrf-Token', token);
+        }
+    });
+
+    var route = jsRoutes.controllers.ProjectsWorkSpaceController.addCollaborator();
+    $.ajax({
+        url: route.url,
+        type: route.type,
+        data: JSON.stringify(data),
+        contentType: 'application/json',
+        headers: {'X-CSRF-TOKEN': $('input[name=csrfToken]').attr('value')},
+        success: function (data) {
+            console.log("Added the collaborator");
+            document.getElementById("toolsRow").innerHTML = data;
+        },
+        error: function (data) {
+            console.log("Did not add the collaborator");
+            document.getElementById("collabMessageArea").innerHTML = data.responseText;
+        }
+
+    });
+
+});
+
 
 //Listens for click on the icon in the data picker table. Appends the content to the Project
 //Data viewspace.
@@ -237,8 +272,6 @@ $(document).on('click', '.collaboratorIconDiv', function () {
     xhttp.onreadystatechange = function (data) {
         var resultArea = document.getElementById("toolsrow");
         if (this.readyState == 4 && this.status == 200) {
-            console.log("Whta is data?")
-            console.log(data)
             resultArea.innerHTML = this.responseText;
             $(resultArea).find("#collabMessageArea").text("User Removed");
         } else {
