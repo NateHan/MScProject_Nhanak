@@ -285,11 +285,11 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
         collabForm => {
           if (DataRetriever.userExists(collabForm.userToAdd, twDB)) {
             val projectTitle = request.session.get("projectTitle").getOrElse("No Project Title found in session")
-            val collaboratorTable = mapPermissionNumToDescription(DataRetriever.retrieveCollaboratorsForProject(projectTitle, twDB))
             val rowsInserted = DatabaseUpdate.insertRowInto(twDB, "collaborations",
               Map("username" -> collabForm.userToAdd,
                 "project_title" -> request.session.get("projectTitle").getOrElse("No Project Title found in session"),
                 "permission_level" -> collabForm.permissionAsInt().toString))
+            val collaboratorTable = mapPermissionNumToDescription(DataRetriever.retrieveCollaboratorsForProject(projectTitle, twDB))
             if (rowsInserted == 1 ) {
               Ok(views.html.afterLogin.projectworkspace.collaboratortools.viewCollaboratorsTool(collaboratorTable))
             } else {

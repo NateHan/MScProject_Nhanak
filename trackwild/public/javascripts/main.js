@@ -208,6 +208,9 @@ $('#toolsrow').on('submit', '#newNoteForm', function (event) {
 
 });
 
+/**
+ * Method to add a new collaborator to a project
+ */
 $('#toolsrow').on('submit', '#addCollabForm', function (event) {
     event.preventDefault();
 
@@ -231,8 +234,8 @@ $('#toolsrow').on('submit', '#addCollabForm', function (event) {
         contentType: 'application/json',
         headers: {'X-CSRF-TOKEN': $('input[name=csrfToken]').attr('value')},
         success: function (data) {
-            console.log("Added the collaborator");
-            document.getElementById("toolsRow").innerHTML = data;
+            console.log(data);
+            $(document.getElementById("toolsrow")).html(data);
         },
         error: function (data) {
             console.log("Did not add the collaborator");
