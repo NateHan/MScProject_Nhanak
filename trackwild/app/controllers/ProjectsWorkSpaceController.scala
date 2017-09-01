@@ -5,14 +5,12 @@ import javax.inject.Singleton
 
 import models.adt.NoteObj
 import models.database._
-import models.formdata.{AddCollaboratorData, NewProjectData, NewProjectNote, TableSQLScript}
+import models.formdata.{AddCollaboratorData, NewProjectNote, TableSQLScript}
 import models.jsonmodels.ManualRowAddContent
-import play.api.libs.json._
 import play.api.data.Form
 import play.api.data.Forms.{mapping, nonEmptyText, text}
 import play.api.db.Database
 import play.api.mvc._
-import play.filters.headers.SecurityHeadersFilter
 
 /**
   * Created by nathanhanak on 7/16/17.
@@ -283,7 +281,7 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
       addCollabForm.bindFromRequest().fold(
         errorForm => BadRequest(views.html.afterLogin.projectworkspace.itemAddFail("new collaborator")),
         collabForm => {
-          if (DataRetriever.userExists(collabForm.userToAdd, twDB)) {
+          if (DataRetriever.userExists(collabForm.userToAdd, twDB) && authController.userHasRequiredPermissionLevel(199, request)) {
             val projectTitle = request.session.get("projectTitle").getOrElse("No Project Title found in session")
             val rowsInserted = DatabaseUpdate.insertRowInto(twDB, "collaborations",
               Map("username" -> collabForm.userToAdd,

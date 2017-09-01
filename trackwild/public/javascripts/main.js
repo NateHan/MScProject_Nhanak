@@ -164,6 +164,47 @@ $(document).on('submit', '#createProjectForm', function (event) {
         }
     })
 });
+/*
+$('#toolsrow').on('submit', '#newDataTableUploadForm', function(event) {
+
+    event.preventDefault();
+    var fileItem = document.getElementById("fileUpload");
+    console.log("What is the file?");
+    console.log(fileItem);
+    var data = {
+        tableName: $('#tableName').val(),
+        uploadingUser: $('#uploadingUser').val(),
+        projectTitle: $('#projectTitle').val(),
+        fileUpload: $('#fileUpload').val()
+    }
+    console.log("here's the csv data: ")
+    console.log($('#fileUpload'));
+    var token = $('input[name="csrfToken"]').attr('value');
+    $.ajaxSetup({
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('Csrf-Token', token);
+        }
+    });
+
+    var route = jsRoutes.controllers.DataUploadController.uploadNewTable();
+    console.log("Listener fired and made it to AJAX call")
+    $.ajax({
+        url: route.url,
+        type: route.type,
+        data: JSON.stringify(data),
+        contentType: 'application/json',
+        headers: {'X-CSRF-TOKEN': $('input[name=csrfToken]').attr('value')},
+        success: function (data) {
+            console.log("did this success fire?");
+            loadDoc('/projectworkspace/dataViewer', 'toolsrow')
+        },
+        error: function (data) {
+            console.log("Did the fail fire?");
+            loadDoc('/projectworkspace/tool/response/' + data.tableName + '/fail', 'toolsrow')
+        }
+    })
+});
+*/
 
 /* Listens for a submission of a #newNoteForm in the Project Workspace
 If successful, the method inserts the notes into the Notes viewspace. If not, displays the error.
@@ -428,7 +469,7 @@ function addWindowToMarker(marker, point, map){
                     "Latitude: " + point.lat +
                 '</li>' +
                 '<li class="contentItem"> ' +
-                "Latitude: " + point.lat +
+                "Longitude: " + point.long +
                 '</li>' +
             ' </ul> ' +
         ' </div>' +

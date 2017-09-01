@@ -11,12 +11,14 @@
     <div class="row workrow" id="newDataUploadRow">
         <div class="col-xs-3"></div>
         <div class="col-xs-6">
-            @helper.form(action = controllers.routes.DataUploadController.uploadNewTable, 'enctype -> "multipart/form-data") {
+            @helper.form(action = controllers.routes.DataUploadController.uploadNewTable, 'id-> "newDataTableUploadForm", 'enctype -> "multipart/form-data") {
                 @CSRF.formField
                 <label for="browsebutton">Select file from your computer</label>
-                <input type="file" name="fileUpload" id="browsebutton" accept=".csv, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" title="Select one file in .csv .xls or .xlsx format" required>
+                <input type="file" name="fileUpload" id="fileUpload" accept=".csv, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" title="Select one file in .csv .xls or .xlsx format" required>
                 <br>
                 @helper.inputText(tableUploadForm("tableName"),
+                    'id -> "tableName",
+                    'name -> "tableName",
                     'placeholder -> "Enter Table Name Here",
                     '_label -> "Enter Table Name",
                     'pattern -> "^[A-Za-z]{1}[a-zA-Z0-9._ -]{3,}$",
@@ -26,8 +28,8 @@
                             "\n -Must be at least 4 characters long" +
                             "\n -Can only contain letters, numbers, spaces,  -  .  or  _")
                 )
-                <input type="hidden" name="uploadingUser" value="@request.session.get("username")">
-                <input type="hidden" name="projectTitle" value="@request.session.get("projectTitle")">
+                <input type="hidden" id="uploadingUser" name="uploadingUser" value="@request.session.get("username")">
+                <input type="hidden" id="projectTitle" name="projectTitle" value="@request.session.get("projectTitle")">
                 <p>
                     <input type="submit" class="importButton btn-primary btn-block" value="Upload Table">
                     <msg>Data must be in .csv or .xls format</msg>

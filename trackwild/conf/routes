@@ -44,7 +44,7 @@ GET     /projectworkspace/notes/:projectTitle   controllers.ProjectsWorkSpaceCon
 GET     /projectworkspace/:projectName          controllers.ProjectsWorkSpaceController.loadWorkspace(projectName:String )
 
 # Controller which handles file upload
-POST    /projectworkspace/uploadNewTable controllers.DataUploadController.uploadNewTable
+POST    /projectworkspace/uploadNewTable        controllers.DataUploadController.uploadNewTable
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
