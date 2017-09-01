@@ -5,7 +5,7 @@ import javax.inject.Singleton
 
 import models.adt.NoteObj
 import models.database._
-import models.formdata.{NewProjectData, NewProjectNote, TableSQLScript}
+import models.formdata.{AddCollaboratorData, NewProjectData, NewProjectNote, TableSQLScript}
 import models.jsonmodels.ManualRowAddContent
 import play.api.libs.json._
 import play.api.data.Form
@@ -224,133 +224,166 @@ class ProjectsWorkSpaceController @Inject()(twDB: Database, authController: Auth
   /**
     * Recursive Method iterates over a List of collaborator permission values, replacing the number value
     * with a text description
+    *
     * @param permissions a List of Arrays of Strings representing Collaborations table
     *                    Each Array is a row of  UserNames and Permission Level
-    * @param accum an intially empty result accumulator
+    * @param accum       an intially empty result accumulator
     * @return the accumulated List once permissions is empty. 
     */
-  def mapPermissionNumToDescription(permissions: List[Array[String]], accum:List[Array[String]] = List[Array[String]]()): List[Array[String]] = permissions match {
+  def mapPermissionNumToDescription(permissions: List[Array[String]], accum: List[Array[String]] = List[Array[String]]()): List[Array[String]] = permissions match {
     case xs if xs.isEmpty => accum
-    case xs if xs.head(1).equals("100") => mapPermissionNumToDescription(xs.tail, accum ::: List(Array(xs.head(0),"Project Lead: All permissions")))
-    case xs if xs.head(1).equals("200") => mapPermissionNumToDescription(xs.tail, accum ::: List(Array(xs.head(0),"Project Contributor: View all, add notes, upload data")))
-    case xs if xs.head(1).equals("250") => mapPermissionNumToDescription(xs.tail, accum ::: List(Array(xs.head(0),"Project Contributor: View all, add notes, no table data upload/addition")))
-    case xs if xs.head(1).equals("300") => mapPermissionNumToDescription(xs.tail, accum ::: List(Array(xs.head(0),"External Viewer: View all data - no write or upload")))
-    case xs if xs.head(1).equals("400") => mapPermissionNumToDescription(xs.tail, accum ::: List(Array(xs.head(0),"Public: View only")))
-    case xs if xs.head(1).equals("999") => mapPermissionNumToDescription(xs.tail, accum ::: List(Array(xs.head(0),"Forbidden Access")))
+    case h :: t if h(1).equals("100") => mapPermissionNumToDescription(t, accum ::: List(Array(h(0), "Project Lead: All permissions")))
+    case h :: t if h(1).equals("200") => mapPermissionNumToDescription(t, accum ::: List(Array(h(0), "Project Contributor: View all, add notes, upload data")))
+    case h :: t if h(1).equals("250") => mapPermissionNumToDescription(t, accum ::: List(Array(h(0), "Project Contributor: View all, add notes, no table data upload/addition")))
+    case h :: t if h(1).equals("300") => mapPermissionNumToDescription(t, accum ::: List(Array(h(0), "External Viewer: View all data - no write or upload")))
+    case h :: t if h(1).equals("400") => mapPermissionNumToDescription(t, accum ::: List(Array(h(0), "Public: View only")))
+    case h :: t if h(1).equals("999") => mapPermissionNumToDescription(t, accum ::: List(Array(h(0), "Forbidden Access")))
   }
 
+  /**
+    * Method receives a request containing the string of the user we wish to remove as collaborator
+    *
+    * @param userName the user we would like to remove from the collaborations table
+    * @return an OK response which will reload the ViewCollaborator tool, containing a new version of the table
+    *         with the desired user removed.
+    */
   def removeCollaborator(userName: String) = Action {
     implicit request: Request[AnyContent] =>
       val projectTitle = request.session.get("projectTitle").getOrElse("No Project Title found in Session")
       if (authController.userHasRequiredPermissionLevel(199, request) && authController.sessionIsAuthenticated(request.session)) {
         if (DatabaseUpdate.removeFromTable(s"username='$userName' AND project_title='$projectTitle'", "collaborations", twDB)) {
-          val collaboratorTable = DataRetriever.retrieveCollaboratorsForProject(projectTitle, twDB)
+          val collaboratorTable = mapPermissionNumToDescription(DataRetriever.retrieveCollaboratorsForProject(projectTitle, twDB))
           Ok(views.html.afterLogin.projectworkspace.collaboratortools.viewCollaboratorsTool(collaboratorTable))
         } else {
-           val collaboratorTable = DataRetriever.retrieveCollaboratorsForProject(projectTitle, twDB)
+          val collaboratorTable = mapPermissionNumToDescription(DataRetriever.retrieveCollaboratorsForProject(projectTitle, twDB))
           BadRequest(views.html.afterLogin.projectworkspace.collaboratortools.viewCollaboratorsTool(collaboratorTable))
         }
       } else {
-        val collaboratorTable = DataRetriever.retrieveCollaboratorsForProject(projectTitle, twDB)
+        val collaboratorTable = mapPermissionNumToDescription(DataRetriever.retrieveCollaboratorsForProject(projectTitle, twDB))
         BadRequest(views.html.afterLogin.projectworkspace.collaboratortools.viewCollaboratorsTool(collaboratorTable))
       }
   }
 
-      /**
-        * Method which retrieves tools needed to process the data tables in the project viewspace.
-        * Performs authentcation and permission checks first.
-        *
-        * @param toolNeeded the name of analysis tool which we would like to return to the user
-        * @return a view template containing the tool requested
-        */
-      def tableToolFactory(toolNeeded: String, tableName: String) = Action {
-        implicit request: Request[AnyContent] => {
-          //auth and permission check first
-          if (!authController.sessionIsAuthenticated(request.session)) {
-            Ok(views.html.expiredSession("Not Authenticated"))
-          } else if (!authController.userHasRequiredPermissionLevel(249, request)) {
-            Ok(views.html.afterLogin.projectworkspace.noPermissionSmall())
-          } else {
-            // return desired tool page
-            toolNeeded match {
-              case "tableQuery" =>
-                Ok(views.html.afterLogin.projectworkspace.querytool.tableQueryFormView(queryForm, SQLViewsQueryExecutor.generateViewFor(tableName, twDB))
-                )
-              case "gmaps" => Ok(views.html.afterLogin.projectworkspace.generateGoogleMaps())
-              case "manuallyAddRow" =>
-                val tableHeaders = DataRetriever.getTableheaders(tableName, twDB).toList
-                Ok(views.html.afterLogin.projectworkspace.manualAddDataRow(tableHeaders, tableName))
-              case _ => NotFound("No page found for request")
-            }
-          }
-        }
-      }
-
-      /**
-        * Method which receives the POST request for the row which manually
-        * adds a new row to the desired table
-        *
-        * @return an Ok response if the insert was succesful.
-        */
-      def manualAddNewRow(tableName: String) = Action(parse.json[List[ManualRowAddContent]]) {
-        implicit request => {
-          val myContentList: List[ManualRowAddContent] = request.body
-          var colsToVals = scala.collection.mutable.Map[String, String]()
-          myContentList.foreach(content => colsToVals += (content.colName -> content.value))
-          colsToVals += ("uploaded_by" -> request.session.get("username").getOrElse("unknown"))
-          val rowsAffected = DatabaseUpdate.insertRowInto(twDB, tableName, colsToVals.toMap)
-          if (rowsAffected == 1) {
-            Ok("replace me")
-          } else {
-            BadRequest(s"DB insert updated $rowsAffected rows, and it should have been only 1")
-          }
-        }
-      }
-
-
-      /**
-        * Method which returns a successful or failure notification for the adding the item
-        *
-        * @param item the name of the item which was added by the user
-        * @return the view template containing an appropriate message.
-        */
-      def getTableToolResponse(item: String, success: Boolean) = Action {
-        implicit request: Request[AnyContent] =>
-          success match {
-            case true => Ok(views.html.afterLogin.projectworkspace.itemAddSuccess(item))
-            case false => Ok(views.html.afterLogin.projectworkspace.itemAddFail(item))
-          }
-      }
-
-      //form which handles a user-created query from the Project Workspace
-      val queryForm: Form[TableSQLScript] = Form {
-        mapping(
-          "viewName" -> nonEmptyText,
-          "query" -> nonEmptyText
-        )(TableSQLScript.apply)(TableSQLScript.unapply)
-      }
-
-      /**
-        * Method handles the POSTing of a form for the custom query creator.
-        * Returns a view template containing a view which renders the resulting SQL
-        *
-        * @return a view template containing the result of the query, or an error view if it didn't work.
-        */
-      def postQueryReturnResult() = Action {
-        implicit request: Request[AnyContent] =>
-          queryForm.bindFromRequest().fold(
-            errorForm => BadRequest("Unable to process your input values, please try again."),
-            qryForm => {
-              val viewName = qryForm.viewName
-              val (qryResult: List[Array[String]], message) = DataRetriever.performQueryOnView(qryForm, twDB)
-              (qryResult, message) match {
-                case (qR, msg) if qR.nonEmpty => Ok(views.html.afterLogin.projectworkspace.projDataTableOnly(qR, viewName))
-                case (qR, msg) if (qR.isEmpty && msg.equals("clean query")) => BadRequest("No results returned, try another query.")
-                case (qR, msg) if (qR.isEmpty && msg.equals("clean query")) => BadRequest(msg)
-                case _ => BadRequest(s"Error: $message")
-              }
-            }
-          )
-      }
-
+  val addCollabForm: Form[AddCollaboratorData] = Form{
+    mapping(
+      "userToAdd" -> nonEmptyText,
+      "permissionSelection" -> nonEmptyText
+    )(AddCollaboratorData.apply)(AddCollaboratorData.unapply)
   }
+
+  //case class AddCollaboratorData(userToAdd:String, permissionSelection:String)
+
+  /**
+    * Method which accepts the POST request with the addNewCollaboratorForm.
+    * @return a Result indicating the success or failure of the attempted post
+    */
+  def addCollaborator() = Action {
+    implicit request:Request[AnyContent] =>
+      addCollabForm.bindFromRequest().fold(
+        errorForm => BadRequest(views.html.afterLogin.projectworkspace.itemAddFail("new collaborator")),
+        collabForm => {
+
+          val projectTitle = request.session.get("projectTitle").getOrElse("No Project Title found in session")
+          val collaboratorTable = mapPermissionNumToDescription(DataRetriever.retrieveCollaboratorsForProject(projectTitle, twDB))
+          Ok(views.html.afterLogin.projectworkspace.collaboratortools.viewCollaboratorsTool(collaboratorTable))
+        }
+      )
+  }
+
+  /**
+    * Method which retrieves tools needed to process the data tables in the project viewspace.
+    * Performs authentcation and permission checks first.
+    *
+    * @param toolNeeded the name of analysis tool which we would like to return to the user
+    * @return a view template containing the tool requested
+    */
+  def tableToolFactory(toolNeeded: String, tableName: String) = Action {
+    implicit request: Request[AnyContent] => {
+      //auth and permission check first
+      if (!authController.sessionIsAuthenticated(request.session)) {
+        Ok(views.html.expiredSession("Not Authenticated"))
+      } else if (!authController.userHasRequiredPermissionLevel(249, request)) {
+        Ok(views.html.afterLogin.projectworkspace.noPermissionSmall())
+      } else {
+        // return desired tool page
+        toolNeeded match {
+          case "tableQuery" =>
+            Ok(views.html.afterLogin.projectworkspace.querytool.tableQueryFormView(queryForm, SQLViewsQueryExecutor.generateViewFor(tableName, twDB))
+            )
+          case "gmaps" => Ok(views.html.afterLogin.projectworkspace.generateGoogleMaps())
+          case "manuallyAddRow" =>
+            val tableHeaders = DataRetriever.getTableheaders(tableName, twDB).toList
+            Ok(views.html.afterLogin.projectworkspace.manualAddDataRow(tableHeaders, tableName))
+          case _ => NotFound("No page found for request")
+        }
+      }
+    }
+  }
+
+  /**
+    * Method which receives the POST request for the row which manually
+    * adds a new row to the desired table
+    *
+    * @return an Ok response if the insert was succesful.
+    */
+  def manualAddNewRow(tableName: String) = Action(parse.json[List[ManualRowAddContent]]) {
+    implicit request => {
+      val myContentList: List[ManualRowAddContent] = request.body
+      var colsToVals = scala.collection.mutable.Map[String, String]()
+      myContentList.foreach(content => colsToVals += (content.colName -> content.value))
+      colsToVals += ("uploaded_by" -> request.session.get("username").getOrElse("unknown"))
+      val rowsAffected = DatabaseUpdate.insertRowInto(twDB, tableName, colsToVals.toMap)
+      if (rowsAffected == 1) {
+        Ok("Row added successfully.")
+      } else {
+        BadRequest(s"DB insert updated $rowsAffected rows, and it should have been only 1")
+      }
+    }
+  }
+
+  /**
+    * Method which returns a successful or failure notification for the adding the item
+    *
+    * @param item the name of the item which was added by the user
+    * @return the view template containing an appropriate message.
+    */
+  def getTableToolResponse(item: String, success: Boolean) = Action {
+    implicit request: Request[AnyContent] =>
+      success match {
+        case true => Ok(views.html.afterLogin.projectworkspace.itemAddSuccess(item))
+        case false => Ok(views.html.afterLogin.projectworkspace.itemAddFail(item))
+      }
+  }
+
+  //form which handles a user-created query from the Project Workspace
+  val queryForm: Form[TableSQLScript] = Form {
+    mapping(
+      "viewName" -> nonEmptyText,
+      "query" -> nonEmptyText
+    )(TableSQLScript.apply)(TableSQLScript.unapply)
+  }
+
+  /**
+    * Method handles the POSTing of a form for the custom query creator.
+    * Returns a view template containing a view which renders the resulting SQL
+    *
+    * @return a view template containing the result of the query, or an error view if it didn't work.
+    */
+  def postQueryReturnResult() = Action {
+    implicit request: Request[AnyContent] =>
+      queryForm.bindFromRequest().fold(
+        errorForm => BadRequest("Unable to process your input values, please try again."),
+        qryForm => {
+          val viewName = qryForm.viewName
+          val (qryResult: List[Array[String]], message) = DataRetriever.performQueryOnView(qryForm, twDB)
+          (qryResult, message) match {
+            case (qR, msg) if qR.nonEmpty => Ok(views.html.afterLogin.projectworkspace.projDataTableOnly(qR, viewName))
+            case (qR, msg) if (qR.isEmpty && msg.equals("clean query")) => BadRequest("No results returned, try another query.")
+            case (qR, msg) if (qR.isEmpty && msg.equals("clean query")) => BadRequest(msg)
+            case _ => BadRequest(s"Error: $message")
+          }
+        }
+      )
+  }
+
+}

@@ -34,7 +34,7 @@ GET     /projectworkspace/addNewNote            controllers.ProjectsWorkSpaceCon
 POST    /projectworkspace/addNewNote            controllers.ProjectsWorkSpaceController.postNewNoteToDb
 GET     /projectworkspace/viewCollabs           controllers.ProjectsWorkSpaceController.renderCollaboratorViewer
 GET     /projectworkspace/removeCollab/:user    controllers.ProjectsWorkSpaceController.removeCollaborator(user:String)
-
+POST    /projectworkspace/addCollaborator
 #the routes associated with the Project WorkSpace are below
 POST    /projectworkspace/manualRowAdd/:tableName           controllers.ProjectsWorkSpaceController.manualAddNewRow(tableName:String)
 GET     /projectworkspace/tool/:toolNeeded/:tableName       controllers.ProjectsWorkSpaceController.tableToolFactory(toolNeeded:String, tableName:String)
