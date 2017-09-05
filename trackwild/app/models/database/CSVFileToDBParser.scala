@@ -30,13 +30,13 @@ class CSVFileToDBParser @Inject()(twDB: Database) extends FileToDBParser {
       val finalTableName = returnUniqueTableName(tableNameSQLFormat, conn)
       try {
         createNewTable(file, finalTableName, stmt)
-        addNewTableToAllDataTables(tableInfo.getOrElse("tableName", "Unspecified Table Name"), finalTableName, tableInfo.getOrElse("projectTitle", "No project found"))
         parseSuccess = addDataRowsToTable(file, Map("tableName" -> finalTableName, "userName" -> tableInfo("userName")), stmt)
+        if (parseSuccess) addNewTableToAllDataTables(tableInfo.getOrElse("tableName", "Unspecified Table Name"), finalTableName, tableInfo.getOrElse("projectTitle", "No project found"))
       } catch {
         case e : SQLException => e.printStackTrace(); 
         case _ : Throwable => println("Some other error");
       } finally {
-        if (!parseSuccess) conn.rollback()
+        if (!parseSuccess) stmt.executeUpdate(s"DROP TABLE $finalTableName;")
       }
     }
     parseSuccess
@@ -77,7 +77,6 @@ class CSVFileToDBParser @Inject()(twDB: Database) extends FileToDBParser {
     * @param file      the CSV file we are parsing
     * @param tableName the SQL formatted name of the table to be created
     * @param stmt      the statement from current DB connection
-    * @return          true if 1
     */
   @throws(classOf[SQLException])
   private def createNewTable(file: File, tableName: String, stmt: Statement): Unit = {
