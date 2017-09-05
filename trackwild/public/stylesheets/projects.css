@@ -47,7 +47,6 @@ li.dropdown:last-child {
     font-weight: 500;
     margin: auto;
     padding: 15px 0 7px 0;
-    max-height: 33px;
     min-height: 33px;
 }
 

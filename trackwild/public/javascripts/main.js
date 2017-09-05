@@ -353,6 +353,12 @@ function initMap(targetElem, tableToMap) {
         center: averageLatLng,
         mapTypeId: 'hybrid'
     });
+/*Add later if time permits
+    var measureTool = new MeasureTool(map, {
+        showSegmentLength: true,
+        unit: MeasureTool.UnitTypeId.IMPERIAL // or just use 'imperial'
+    });
+    */
     displayAllPointData(allMappedPoints, map);
 }
 
