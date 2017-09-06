@@ -12,10 +12,6 @@ function loadDoc(myUrl, id) {
     xhttp.send();
 }
 
-function loadNAlert(url) {
-    window.alert("This thing loaded and passed me this: " + url)
-}
-
 // On the project sliders click, it loads the URL of the controller method route, and then
 // activates a dropdown menu, which animates once the information is loaded
 $(document).ready(function () {
