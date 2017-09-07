@@ -234,6 +234,7 @@ fixeddesc {
     overflow-x: auto;
     white-space: nowrap;
     table-layout: fixed;
+    max-height: 40%;
 }
 
 .tableBoxProjDataWS {

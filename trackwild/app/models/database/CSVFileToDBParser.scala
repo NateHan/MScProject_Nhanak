@@ -88,6 +88,7 @@ class CSVFileToDBParser @Inject()(twDB: Database) extends FileToDBParser {
     for ((colName, dataType) <- headersToTypes) queryBuilder.append(s" $colName $dataType, ")
     queryBuilder.append("uploaded_by text, date_added timestamp DEFAULT DATE_TRUNC('second', NOW()) );")
     stmt.executeUpdate(queryBuilder.toString())
+    csvReader.close()
   }
 
   /**
@@ -129,6 +130,7 @@ class CSVFileToDBParser @Inject()(twDB: Database) extends FileToDBParser {
   override def addDataRowsToTable(file: File, tableInfo: Map[String, String], stmt: Statement): Boolean = {
     val csvReader = CSVReader.open(file)
     val data = csvReader.allWithHeaders()
+    csvReader.close()
     val queryBuilder = StringBuilder.newBuilder
     val rowTotalBefore = {
       val result = stmt.executeQuery(s"SELECT COUNT(*) AS count FROM ${tableInfo("tableName")};")

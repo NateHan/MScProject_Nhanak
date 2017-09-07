@@ -118,7 +118,7 @@ $('#projectDataContent').on('submit', '.tableSQLViewQuery', function (event) {
         },
         error: function (data) {
             var errMsgElemId = viewName + "ErrMsgTxt";
-            document.getElementById(errMsgElemId).innerHTML = data.responseText
+            document.getElementById(errMsgElemId).innerHTML = data.responseText;
             successDisplayArea.innerHTML = "";
         }
     })
@@ -160,7 +160,8 @@ $(document).on('submit', '#createProjectForm', function (event) {
         }
     })
 });
-/*
+
+/* This was an attempt to post CSV data via Ajax/jQuery
 $('#toolsrow').on('submit', '#newDataTableUploadForm', function(event) {
 
     event.preventDefault();
@@ -202,8 +203,9 @@ $('#toolsrow').on('submit', '#newDataTableUploadForm', function(event) {
 });
 */
 
-/* Listens for a submission of a #newNoteForm in the Project Workspace
-If successful, the method inserts the notes into the Notes viewspace. If not, displays the error.
+/**
+ * Listens for a submission of a #newNoteForm in the Project Workspace
+ * If successful, the method inserts the notes into the Notes viewspace. If not, displays the error.
 */
 $('#toolsrow').on('submit', '#newNoteForm', function (event) {
 
@@ -337,8 +339,10 @@ $(document).on('click', '.gmapInit', function () {
     initMap(mapTarget, tableToBeMapped);
 });
 
-//Function initializes a Google Maps map within the table's processing area. The targetELem is
-//a reserved Div for Google maps in the Project Data Workspace for each data table.
+/**
+ * Function initializes a Google Maps map within the table's processing area. The targetELem is
+ * a reserved Div for Google maps in the Project Data Workspace for each data table.
+ */
 function initMap(targetElem, tableToMap) {
     var indexesOfLatAndLong = findIndexesOfLatAndLong(tableToMap);
     var allMappedPoints = getAllPointsAsObj(tableToMap, indexesOfLatAndLong);
@@ -349,12 +353,6 @@ function initMap(targetElem, tableToMap) {
         center: averageLatLng,
         mapTypeId: 'hybrid'
     });
-/*Add later if time permits
-    var measureTool = new MeasureTool(map, {
-        showSegmentLength: true,
-        unit: MeasureTool.UnitTypeId.IMPERIAL // or just use 'imperial'
-    });
-    */
     displayAllPointData(allMappedPoints, map);
 }
 

@@ -167,7 +167,7 @@ object DataRetriever {
     * Checks to see if the incoming query string is strictly a SELECT statement and
     * is neither destructive or additive
     *
-    * @param qryObj the incoming query wrapped in a case class
+    * @param qryObj› the incoming query wrapped in a case class
     * @return "clean" if the String is legal, an error message if it contains bad SQL.
     */
   private def returnIllegalSQLifPresent(qryObj: TableSQLScript): String = {
@@ -177,7 +177,7 @@ object DataRetriever {
       if (qryObj.query.toUpperCase.contains(key)) queryStatus = "Cannot run your query, " +
         "it contains SQL which is not allowed: " + key
     }
-    val requiredFromStmt = s"FROM ${qryObj.viewName}".toUpperCase
+    val requiredFromStmt = s"FROM ${qryObj.viewName}"
     if (!qryObj.query.toUpperCase.contains(requiredFromStmt)) queryStatus =
       s"""Query must contain 'FROM ${qryObj.viewName}'"""
     queryStatus
