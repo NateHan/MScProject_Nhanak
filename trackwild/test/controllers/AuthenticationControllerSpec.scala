@@ -33,7 +33,7 @@ class AuthenticationControllerSpec extends PlaySpec with GuiceOneAppPerTest with
         .withSession("authenticated" -> "true", "username" -> "testuser"))
 
       status(dashRequest) mustBe OK
-      contentAsString(dashRequest) must include ("<h1>Project Dashboard</h1>")
+      contentAsString(dashRequest) must include ("<h1>PROJECT DASHBOARD</h1>")
     }
 
     "return false when given a session that has no authentication in the header" in {

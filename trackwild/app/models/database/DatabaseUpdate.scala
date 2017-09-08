@@ -33,7 +33,7 @@ object DatabaseUpdate {
     * Takes the map collection and prepares the values as strings for use in a prepared statement
     *
     * @param colsToVals a row mapped out as columnNames -> column values
-    * @return a flattened string the columns and a list of values to put into an SQL query
+    * @return a flattened string of the columns' names and a list of values to put into an SQL query
     */
   private def prepareColumnsAndRows(colsToVals: Map[String, String]): (String, List[String]) = {
     val columnBuilder = new StringBuilder

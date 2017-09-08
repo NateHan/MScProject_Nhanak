@@ -520,6 +520,7 @@ function mapCoordArrayForIds(allPoints, idsToColours){
     }
     allPoints.forEach(function(point){
         idsToCoords[point.animalId].push({lat: point.lat, lng:point.long})
+        //gets json object for specific animalID, then pushes a point into its coordinate array.
     });
     return idsToCoords;
 }
