@@ -178,8 +178,8 @@ object DataRetriever {
         "it contains SQL which is not allowed: " + key
     }
     val requiredFromStmt = s"FROM ${qryObj.viewName}"
-    if (!qryObj.query.toUpperCase.contains(requiredFromStmt)) queryStatus =
-      s"""Query must contain 'FROM ${qryObj.viewName}'"""
+    if (!qryObj.query.toUpperCase.contains(requiredFromStmt.toUpperCase())) queryStatus =
+      s"""Query must contain 'FROM $requiredFromStmt'"""
     queryStatus
   }
 

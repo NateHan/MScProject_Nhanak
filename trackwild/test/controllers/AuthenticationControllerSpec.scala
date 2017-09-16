@@ -21,7 +21,7 @@ class AuthenticationControllerSpec extends PlaySpec with GuiceOneAppPerTest with
       // test method directly
       val validRequest = FakeRequest(GET, "/dashboard")
         .withSession("authenticated" -> "true", "username" -> "testuser")
-      val authController = new AuthenticationController(stubControllerComponents(), testDb)
+      val authController = inject[AuthenticationController]
 
       authController.sessionIsAuthenticated(validRequest.session) mustBe true
 
