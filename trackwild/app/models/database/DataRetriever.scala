@@ -184,7 +184,7 @@ object DataRetriever {
   }
 
   /**
-    * Method returns all the column name labels from a succesfully executed ResultSet
+    * Method returns all the column name labels from a successfully executed ResultSet
     *
     * @param resultSet the succesfully executed result Set
     * @return an Array of Column Labels in String format
