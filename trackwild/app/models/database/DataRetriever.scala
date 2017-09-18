@@ -179,7 +179,7 @@ object DataRetriever {
     }
     val requiredFromStmt = s"FROM ${qryObj.viewName}"
     if (!qryObj.query.toUpperCase.contains(requiredFromStmt.toUpperCase())) queryStatus =
-      s"""Query must contain 'FROM $requiredFromStmt'"""
+      s"""Query must contain '$requiredFromStmt'"""
     queryStatus
   }
 
