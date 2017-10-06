@@ -30,15 +30,15 @@ This JavaScript library was used to boost the dynamic responsiveness of the appl
 
 SBT
    
-   Scala Build Tool (SBT) was used to compile the Scala classes, execute tests, and to act as the trigger to start the local server and begin running the application. In the application tier, SBT handles some of the configuration between the other tiers. SBT is responsible for importing the application’s library dependencies, such as the version of Scala to use, the Java Database Connection (JDBC) drivers, the unit testing frameworks, and any other third-party libraries used for the application.
+Scala Build Tool (SBT) was used to compile the Scala classes, execute tests, and to act as the trigger to start the local server and begin running the application. In the application tier, SBT handles some of the configuration between the other tiers. SBT is responsible for importing the application’s library dependencies, such as the version of Scala to use, the Java Database Connection (JDBC) drivers, the unit testing frameworks, and any other third-party libraries used for the application.
     
 Play! Framework
     
-    The full stack web development service Play! Framework was used to build most of the Track Wild application. It was chosen because it offers scalability and fast processing without necessarily needing a lot of computing power from the server. Its documentation claims to help reduce the need for server power, advertising a reduction of 80% when a social media management company, HootSuite, switched to using Play! to host their web application (Lightbend, 2016). This was important for this project, as most of it would be run on a single local machine and would eventually be hosted by a limited free service when deployed. It is built using Akka, an Actor system which utilizes the multi-core capabilities of most modern computer hardware. Its capabilities are enabled by its use of asynchronous and non-blocking code, working with Java or Scala’s concurrency libraries. Other Scala frameworks considered were Lift and Scalatra, but Play! was chosen because it had extensive documentation and offered the ability to begin creating the application without a lengthy setup process. 
+The full stack web development service Play! Framework was used to build most of the Track Wild application. It was chosen because it offers scalability and fast processing without necessarily needing a lot of computing power from the server. Its documentation claims to help reduce the need for server power, advertising a reduction of 80% when a social media management company, HootSuite, switched to using Play! to host their web application (Lightbend, 2016). This was important for this project, as most of it would be run on a single local machine and would eventually be hosted by a limited free service when deployed. It is built using Akka, an Actor system which utilizes the multi-core capabilities of most modern computer hardware. Its capabilities are enabled by its use of asynchronous and non-blocking code, working with Java or Scala’s concurrency libraries. Other Scala frameworks considered were Lift and Scalatra, but Play! was chosen because it had extensive documentation and offered the ability to begin creating the application without a lengthy setup process. 
 
 PostgreSQL version 9.6
    
-   PostgreSQL, an object relational database management system (ORDBMS), was used to create the persistent storage necessary for a web application. It was chosen for its strong multiversion concurrency controls, which are necessary for an application which will allow multiple simultaneous users to view and add information to the data tier through the application. It was also selected because it is often used with other similar GIS applications (Urbano et al. 2010). This is likely because it offers many of the familiar conventions as other common SQL databases such as MySQL, but also incorporates geometric data types such as Point (an X,Y coordinate) and Path (two consecutive points) which are often used when plotting points into a visualized GIS. Play! utilizes a JDBC connection with direct support for PostgreSQL databases, making the configuration between the application and the database very simple.
+PostgreSQL, an object relational database management system (ORDBMS), was used to create the persistent storage necessary for a web application. It was chosen for its strong multiversion concurrency controls, which are necessary for an application which will allow multiple simultaneous users to view and add information to the data tier through the application. It was also selected because it is often used with other similar GIS applications (Urbano et al. 2010). This is likely because it offers many of the familiar conventions as other common SQL databases such as MySQL, but also incorporates geometric data types such as Point (an X,Y coordinate) and Path (two consecutive points) which are often used when plotting points into a visualized GIS. Play! utilizes a JDBC connection with direct support for PostgreSQL databases, making the configuration between the application and the database very simple.
 
 Scala-CSV by Tototoshi
 
@@ -50,15 +50,15 @@ To enable the GIS component of this application, the Google Maps Javascript API 
 
 Bootstrap 3.3.7
 
-    Bootstrap was used to help provide styling and responsiveness within the HTML to the client tier of the application. Bootstrap, as defined on their site, “is an open source toolkit for developing with HTML, CSS, and JS” (Bootstrap, 2017). It utilizes an easy-to-use grid system of columns and rows which allows the different blocks of HTML to maintain their positioning and which will responsively adjust the on-screen elements as necessary depending on the size of the user’s browser window or device. It was chosen for its ease of integration and use, and for its vast support community. 
+Bootstrap was used to help provide styling and responsiveness within the HTML to the client tier of the application. Bootstrap, as defined on their site, “is an open source toolkit for developing with HTML, CSS, and JS” (Bootstrap, 2017). It utilizes an easy-to-use grid system of columns and rows which allows the different blocks of HTML to maintain their positioning and which will responsively adjust the on-screen elements as necessary depending on the size of the user’s browser window or device. It was chosen for its ease of integration and use, and for its vast support community. 
 
 Font Awesome
 
-    Font Awesome is a font toolkit which provides glyphicons that are recognized as text by the browser. This toolkit provides a way to make buttons and other interactive pieces of the GUI visually pleasing without using any JavaScript. They are easy to insert as HTML elements and since they are recognized as text, can be very quickly styled with CSS.
+Font Awesome is a font toolkit which provides glyphicons that are recognized as text by the browser. This toolkit provides a way to make buttons and other interactive pieces of the GUI visually pleasing without using any JavaScript. They are easy to insert as HTML elements and since they are recognized as text, can be very quickly styled with CSS.
 
 Google Fonts
 
-    Google Fonts was used to provide a few additional custom fonts, lending a unique feel to the UX of the application.
+Google Fonts was used to provide a few additional custom fonts, lending a unique feel to the UX of the application.
  
 # Running the program
 
